@@ -1,0 +1,15 @@
+Enhance PHP
+
+A unit testing framework with mocks and stubs. Build for PHP, in PHP!
+
+v1.1
+    Command Line Output
+    XML Output
+
+v1.0
+	First official release
+	Assertions
+	Mocks
+	Stubs
+	Method Coverage
+	HTML Output
