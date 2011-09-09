@@ -1,14 +1,27 @@
 <?php
 // Enhance Unit Testing Framework For PHP
-// ©2011 Steve Fenton
-//
+// Copyright 2011 Steve Fenton, Mark Jones
+// 
 // Version 1.1
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 //
 // http://www.enhance-php.com/
 // http://www.stevefenton.co.uk/
 // - Contributors
 // - PHP Code: Steve Fenton
 // - Code Reviews and Design Discussions: Mark Jones
+//
 ini_set('error_reporting', (string)E_ALL);
 ini_set('display_errors', '1');
 
