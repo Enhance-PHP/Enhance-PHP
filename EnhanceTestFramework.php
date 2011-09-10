@@ -2,7 +2,7 @@
 // Enhance Unit Testing Framework For PHP
 // Copyright 2011 Steve Fenton, Mark Jones
 // 
-// Version 1.1
+// Version 1.2
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -67,6 +67,9 @@ class MockFactory {
 	}
 }
 
+// Public API
+// Get a stub object by calling the static method:
+//     StubFactory::CreateStub('MyClass');
 class StubFactory {
 	public static function CreateStub($typeName) {
 		return new EnhanceMock($typeName, $isMock = false);
