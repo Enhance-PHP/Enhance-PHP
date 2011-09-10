@@ -21,6 +21,7 @@ include('AssertIsNotInstanceOfTypeTestFixture.php');
 include('AssertFailTestFixture.php');
 include('AssertInconclusiveTestFixture.php');
 include('AssertThrowsTestFixture.php');
+include('EnhanceOutputTemplateFactoryTestFixture.php');
 
 // Run the tests
 Enhance::RunTests();

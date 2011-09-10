@@ -159,19 +159,18 @@ class MockTestFixture {
 	}
 	
 	public function CreateStubExpectCallsSucceedTest() {
-		$Mock = StubFactory::CreateStub('ExampleClass');
-		$Mock->AddExpectation(Expect::Method('DoSomething')->Returns('Some Value'));
-		$Mock->AddExpectation(Expect::Method('AnotherMethod')->Returns(5));
+		$Stub = StubFactory::CreateStub('ExampleClass');
+		$Stub->AddExpectation(Expect::Method('DoSomething')->Returns('Some Value'));
+		$Stub->AddExpectation(Expect::Method('AnotherMethod')->Returns(5));
 
-		$result1 = $Mock->DoSomething();
-		$result2 = $Mock->DoSomething();
-		$result3 = $Mock->AnotherMethod();
-		$Mock->CallNotExpectedMethod();
+		$result1 = $Stub->DoSomething();
+		$result2 = $Stub->DoSomething();
+		$result3 = $Stub->AnotherMethod();
+		$Stub->CallNotExpectedMethod();
 
 		Assert::AreIdentical('Some Value', $result1);
 		Assert::AreIdentical('Some Value', $result2);
 		Assert::AreIdentical(5, $result3);
-		$Mock->VerifyExpectations();
 	}
 }
 ?>

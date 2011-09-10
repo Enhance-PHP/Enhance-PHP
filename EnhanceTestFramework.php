@@ -33,7 +33,7 @@ ini_set('display_errors', '1');
 class Enhance {
 	private static $Instance;
 
-	public static function RunTests($output = 'html') {
+	public static function RunTests($output = EnhanceOutputTemplateType::Html) {
 		if (self::$Instance === null) {
 			self::$Instance = new EnhanceTestFramework();
 		}
@@ -220,23 +220,11 @@ class EnhanceTestFramework {
 		$this->Run();
 		
 		if(PHP_SAPI === 'cli') {
-			$output = 'cli';
+			$output = EnhanceOutputTemplateType::Cli;
 		}
 		
-		switch ($output) {
-			case 'xml':
-				$EnhanceXmlTemplate = new EnhanceXmlTemplate();
-				echo $EnhanceXmlTemplate->Get($this->Errors, $this->Results, $this->Text, $this->Duration, $this->MethodCalls);
-				break;
-			case 'cli':
-				$EnhanceCliTemplate = new EnhanceCliTemplate();
-				echo $EnhanceCliTemplate->Get($this->Errors, $this->Results, $this->Text, $this->Duration, $this->MethodCalls);
-				break;
-			default:
-				$EnhanceHtmlTemplate = new EnhanceHtmlTemplate();
-				echo $EnhanceHtmlTemplate->Get($this->Errors, $this->Results, $this->Text, $this->Duration, $this->MethodCalls);
-				break;
-		}
+		$OutputTemplate = EnhanceOutputTemplateFactory::CreateOutputTemplate($output);
+		echo $OutputTemplate->Get($this->Errors, $this->Results, $this->Text, $this->Duration, $this->MethodCalls);
 	}
 	
 	public function Log($className, $methodName) {
@@ -683,8 +671,19 @@ class EnhanceAssertions {
 	}
 }
 
-class EnhanceHtmlTemplate {
+interface iOutputTemplate
+{
+    public function GetTemplateType();
+    public function Get($errors, $results, $text, $duration, $methodCalls);
+}
+
+class EnhanceHtmlTemplate implements iOutputTemplate {
 	private $Text;
+	
+	public function GetTemplateType()
+	{
+		return EnhanceOutputTemplateType::Html;
+	} 	
 	
 	public function EnhanceHtmlTemplate() {
 		$this->Text = TextFactory::GetLanguageText();
@@ -803,8 +802,13 @@ class EnhanceHtmlTemplate {
 	}
 }
 
-class EnhanceXmlTemplate {
+class EnhanceXmlTemplate implements iOutputTemplate{
 	private $Text;
+	
+	public function GetTemplateType()
+	{
+		return EnhanceOutputTemplateType::Xml;
+	} 	
 	
 	public function EnhanceXmlTemplate() {
 		$this->Text = TextFactory::GetLanguageText();
@@ -836,18 +840,22 @@ class EnhanceXmlTemplate {
 		
 		$message .= $tab . '<codeCoverage>' . $cr;
 		foreach ($methodCalls as $key => $value) {
-			$message .= $tab . $tab . '<method>' . $cr .
-				$tab . $tab . $tab . '<name>' . str_replace('#', '-&gt;', $key) . '</name>' . $cr .
-				$tab . $tab . $tab . '<timesCalled>' . $value . '</timesCalled>' . $cr .
-				$tab . $tab . '</method>' . $cr;
+			$message .= $this->BuildCodeCoverageMessage($key, $value, $tab, $cr); 
 		}
+		
 		$message .= $tab . '</codeCoverage>' . $cr;
-		
-		
+				
 		$message .= $tab . '<testRunDuration>' . $duration . '</testRunDuration>' . $cr;
 		$message .= '</enhance>' . $cr;
 		
 		return $this->GetTemplateWithMessage($message);
+	}
+
+	private function BuildCodeCoverageMessage($key, $value, $tab, $cr){
+		return $tab . $tab . '<method>' . $cr .
+				$tab . $tab . $tab . '<name>' . str_replace('#', '-&gt;', $key) . '</name>' . $cr .
+				$tab . $tab . $tab . '<timesCalled>' . $value . '</timesCalled>' . $cr .
+				$tab . $tab . '</method>' . $cr;
 	}
 
 	private function GetTemplateWithMessage($content) {
@@ -856,8 +864,13 @@ class EnhanceXmlTemplate {
 	}
 }
 
-class EnhanceCliTemplate {
+class EnhanceCliTemplate implements iOutputTemplate {
 	private $Text;
+	
+	public function GetTemplateType()
+	{
+		return EnhanceOutputTemplateType::Cli;
+	} 	
 	
 	public function EnhanceCliTemplate() {
 		$this->Text = TextFactory::GetLanguageText();
@@ -893,4 +906,31 @@ class EnhanceCliTemplate {
 		return $message;
 	}
 }
+
+class EnhanceOutputTemplateFactory {
+
+	public static function CreateOutputTemplate($type){
+		switch ($type) {
+			case EnhanceOutputTemplateType::Xml:
+				return new EnhanceXmlTemplate();
+				break;			
+			case EnhanceOutputTemplateType::Html:
+				return new EnhanceHtmlTemplate();				
+				break;
+			case EnhanceOutputTemplateType::Cli:
+				return new EnhanceCliTemplate();				
+				break;
+			default:
+				break;
+		}
+	}		
+}
+
+class EnhanceOutputTemplateType{
+	const Xml = 0;
+    const Html = 1;
+    const Cli = 2;	
+}
+
+
 ?>
