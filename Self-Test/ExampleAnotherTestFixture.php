@@ -1,21 +1,21 @@
 <?php
 class ExampleAnotherTestFixture {
 
-	private $Assert;
+    private $Assert;
 
-	public function SetUp() {
-	}
-	
-	public function TearDown() {
-	
-	}
+    public function SetUp() {
+    }
+    
+    public function TearDown() {
+    
+    }
 
-	public function GetJoinedStringWithTwoStringsExpectJoinedResultTest() {
-		$target = Enhance::GetCodeCoverageWrapper('ExampleAnotherClass', array('xx', 'yy'));
+    public function GetJoinedStringWithTwoStringsExpectJoinedResultTest() {
+        $target = Enhance::getCodeCoverageWrapper('ExampleAnotherClass', array('xx', 'yy'));
 
-		$result = $target->GetJoinedString('A', 'B');
+        $result = $target->GetJoinedString('A', 'B');
 
-		Assert::AreIdentical('ABxx', $result);
-	}
+        Assert::areIdentical('ABxx', $result);
+    }
 }
 ?>

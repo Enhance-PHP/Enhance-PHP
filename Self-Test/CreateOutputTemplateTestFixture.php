@@ -1,10 +1,10 @@
 <?php
 class CreateOutputTemplateTestFixture {
 
-	public function CreateOutputTemplateWithXmlExpectXmlTemplateTest() {
-		$Output = MockFactory::CreateOutputTemplate('Xml');
+    public function CreateOutputTemplateWithXmlExpectXmlTemplateTest() {
+        $Output = MockFactory::CreateOutputTemplate('Xml');
 
-		Assert::AreIdentical('Xml', $Output.TemplateType);
-	}	
+        Assert::areIdentical('Xml', $Output.TemplateType);
+    }    
 }
 ?>

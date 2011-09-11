@@ -9,6 +9,6 @@ include('ExampleAnotherClass.php');
 include('ExampleAnotherTestFixture.php');
 
 // Run the tests
-Enhance::RunTests();
+Enhance::runTests();
 ?>
 

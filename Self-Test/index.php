@@ -24,6 +24,6 @@ include('AssertThrowsTestFixture.php');
 include('EnhanceOutputTemplateFactoryTestFixture.php');
 
 // Run the tests
-Enhance::RunTests();
+Enhance::runTests();
 ?>
 
