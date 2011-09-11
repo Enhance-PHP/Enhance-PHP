@@ -9,6 +9,13 @@ Unless required by applicable law or agreed to in writing, software distributed 
 http://www.enhance-php.com/
 https://github.com/Enhance-PHP/Enhance-PHP
 
+v1.3
+Adjustments to meet PHP coding standards
+
+v1.2
+Output factory
+Output template interface
+
 v1.1
 Command Line Output
 XML Output
