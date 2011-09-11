@@ -22,7 +22,7 @@ class ExampleTestFixture
     // SetUp
     // Naming: The method is optional, but if present you must call it "SetUp".
     // Usage: You can use the SetUp method to pre-configure things you want to use in all your tests.
-    public function SetUp() 
+    public function setUp() 
     {
 
     }
@@ -30,7 +30,7 @@ class ExampleTestFixture
     // TearDown
     // Naming: The method is optional, but if present you must call it "TearDown".
     // Usage: You can use the TearDown method to re-set things after all you tests.
-    public function TearDown()
+    public function tearDown()
     {
     
     }
@@ -42,7 +42,7 @@ class ExampleTestFixture
     //     for example, you could use underscores or "with" and "Expect" keywords to construct the name
     //     AddTwoNumbers_3And2_Expect5Test or AddTwoNumbersWith3and2Expect5Test
     // Usage: We recommend using the Arrange, Act, Assert syntax as shown below
-    public function AddTwoNumbersWith3and2Expect5Test() 
+    public function addTwoNumbersWith3and2Expect5Test() 
     {
         // Arrange
         $target = Enhance::getCodeCoverageWrapper('ExampleClass');
