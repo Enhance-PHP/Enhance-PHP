@@ -1,43 +1,49 @@
 <?php
-class AssertNotContainsTestFixture {
-    private $Target;
+class AssertNotContainsTestFixture 
+{
+    private $target;
     
-    public function SetUp() {
-        $this->Target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
+    public function setUp()
+    {
+        $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
     }
     
-    public function AssertNotContainsWithStringThatContainsTest() {
-        $VerifyFailed = false;
+    public function assertNotContainsWithStringThatContainsTest() 
+    {
+        $verifyFailed = false;
         try {
-            $this->Target->notContains('Test', 'Some Test String');
+            $this->target->notContains('Test', 'Some Test String');
         } catch (Exception $e) {
-            $VerifyFailed = true;
+            $verifyFailed = true;
         }
-        Assert::isTrue($VerifyFailed);
+        Assert::isTrue($verifyFailed);
     }
     
-    public function AssertNotContainsWithStringThatEndsWithTest() {
-        $VerifyFailed = false;
+    public function assertNotContainsWithStringThatEndsWithTest()
+    {
+        $verifyFailed = false;
         try {
-            $this->Target->notContains('Test', 'Some Test');
+            $this->target->notContains('Test', 'Some Test');
         } catch (Exception $e) {
-            $VerifyFailed = true;
+            $verifyFailed = true;
         }
-        Assert::isTrue($VerifyFailed);
+        Assert::isTrue($verifyFailed);
     }
     
-    public function AssertNotContainsWithStringThatStartsWithTest() {
-        $VerifyFailed = false;
+    public function assertNotContainsWithStringThatStartsWithTest()
+    {
+        $verifyFailed = false;
         try {
-            $this->Target->notContains('Test', 'Test Some String');
+            $this->target->notContains('Test', 'Test Some String');
         } catch (Exception $e) {
-            $VerifyFailed = true;
+            $verifyFailed = true;
         }
-        Assert::isTrue($VerifyFailed);
+        Assert::isTrue($verifyFailed);
     }
     
-    public function AssertNotContainsWithStringThatDoesNotContainTest() {
-        $this->Target->notContains('Test', 'Some Other String');
+    public function assertNotContainsWithStringThatDoesNotContainTest()
+    {
+        $this->target->notContains('Test', 'Some Other String');
     }
 }
 ?>

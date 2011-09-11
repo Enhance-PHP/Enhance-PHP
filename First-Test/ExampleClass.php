@@ -1,6 +1,8 @@
 <?php
-class ExampleClass {
-    public function AddTwoNumbers($a, $b) {
+class ExampleClass
+{
+    public function addTwoNumbers($a, $b)
+    {
         return $a + $b;
     }
 }

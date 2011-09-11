@@ -3,9 +3,12 @@
 include('../EnhanceTestFramework.php');
 
 // Tests
-include('MockTestFixture.php');
+
 include('CodeCoverageLoggerTestFixture.php');
+include('CreateOutputTemplateTestFixture.php');
+include('EnhanceOutputTemplateFactoryTestFixture.php');
 include('ExpectationTestFixture.php');
+include('MockTestFixture.php');
 
 // Assertion Tests
 include('AssertAreIdenticalTestFixture.php');
@@ -21,7 +24,6 @@ include('AssertIsNotInstanceOfTypeTestFixture.php');
 include('AssertFailTestFixture.php');
 include('AssertInconclusiveTestFixture.php');
 include('AssertThrowsTestFixture.php');
-include('EnhanceOutputTemplateFactoryTestFixture.php');
 
 // Run the tests
 Enhance::runTests();

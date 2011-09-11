@@ -1,34 +1,40 @@
 <?php
-class TestClassForCodeCoverageLogger {
-    public $Property = 1;
-    public function GetNumberPlusTwo($number) {
+class TestClassForCodeCoverageLogger
+{
+    public $property = 1;
+    
+    public function getNumberPlusTwo($number)
+    {
         return $number + 2;
     }
 }
 
-class CodeCoverageLoggerTestFixture {
-
-    public function UseCodeCoverageLoggerToCallMethodTest() {
+class CodeCoverageLoggerTestFixture
+{
+    public function useCodeCoverageLoggerToCallMethodTest()
+    {
         $target = Enhance::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
         
-        $result = $target->GetNumberPlusTwo(5);
+        $result = $target->getNumberPlusTwo(5);
         
         Assert::areIdentical(7, $result);
     }
     
-    public function UseCodeCoverageLoggerToGetPropertyTest() {
+    public function useCodeCoverageLoggerToGetPropertyTest()
+    {
         $target = Enhance::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
         
-        $result = $target->Property;
+        $result = $target->property;
         
         Assert::areIdentical(1, $result);
     }
     
-    public function UseCodeCoverageLoggerToSetPropertyTest() {
+    public function useCodeCoverageLoggerToSetPropertyTest() 
+    {
         $target = Enhance::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
         
-        $target->Property = 8;
-        $result = $target->Property;
+        $target->property = 8;
+        $result = $target->property;
         
         Assert::areIdentical(8, $result);
     }

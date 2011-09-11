@@ -1,172 +1,186 @@
 <?php
-class MockTestFixture {
+class MockTestFixture
+{
+    public function createMockWithArgumentsAndOneTimeExpectReturnValueAndVerifiesTest()
+    {
+        $mock = MockFactory::createMock('ExampleClass');
+        $mock->AddExpectation(Expect::method('doSomething')->with('hello', 3, 'world')->returns('Some Value')->times(1));
 
-    public function CreateMockWithArgumentsAndOneTimeExpectReturnValueAndVerifiesTest() {
-        $Mock = MockFactory::createMock('ExampleClass');
-        $Mock->AddExpectation(Expect::method('DoSomething')->with('hello', 3, 'world')->returns('Some Value')->times(1));
-
-        $result = $Mock->DoSomething('hello', 3, 'world');
+        $result = $mock->doSomething('hello', 3, 'world');
 
         Assert::areIdentical('Some Value', $result);
-        $Mock->VerifyExpectations();
+        $mock->VerifyExpectations();
     }
     
-    public function CreateMockWithNoRequiredArgumentsAndOneTimeExpectReturnValueAndVerifiesTest() {
-        $Mock = MockFactory::createMock('ExampleClass');
-        $Mock->AddExpectation(Expect::method('DoSomething')->returns('Some Value')->times(1));
+    public function createMockWithNoRequiredArgumentsAndOneTimeExpectReturnValueAndVerifiesTest()
+    {
+        $mock = MockFactory::createMock('ExampleClass');
+        $mock->AddExpectation(Expect::method('doSomething')->returns('Some Value')->times(1));
 
-        $result = $Mock->DoSomething();
+        $result = $mock->doSomething();
 
         Assert::areIdentical('Some Value', $result);
-        $Mock->VerifyExpectations();
+        $mock->VerifyExpectations();
     }
     
-    public function CreateMockWithAnyArgumentsAndOneTimeExpectReturnValueAndVerifiesTest() {
-        $Mock = MockFactory::createMock('ExampleClass');
-        $Mock->AddExpectation(Expect::method('DoSomething')->with(Expect::AnyValue, Expect::AnyValue, Expect::AnyValue)->returns('Some Value')->times(1));
+    public function createMockWithAnyArgumentsAndOneTimeExpectReturnValueAndVerifiesTest()
+    {
+        $mock = MockFactory::createMock('ExampleClass');
+        $mock->AddExpectation(Expect::method('doSomething')->with(Expect::AnyValue, Expect::AnyValue, Expect::AnyValue)->returns('Some Value')->times(1));
 
-        $result = $Mock->DoSomething('lalalala', 7, 'blahblah');
+        $result = $mock->doSomething('lalalala', 7, 'blahblah');
 
         Assert::areIdentical('Some Value', $result);
-        $Mock->VerifyExpectations();
+        $mock->VerifyExpectations();
     }
 
-    public function CreateMockWithArgumentsAndTwoTimesExpectReturnValueAndVerifiesTest() {
-        $Mock = MockFactory::createMock('ExampleClass');
-        $Mock->AddExpectation(Expect::method('DoSomething')->with('hello', 3, 'world')->returns('Some Value')->times(2));
+    public function createMockWithArgumentsAndTwoTimesExpectReturnValueAndVerifiesTest()
+    {
+        $mock = MockFactory::createMock('ExampleClass');
+        $mock->AddExpectation(Expect::method('doSomething')->with('hello', 3, 'world')->returns('Some Value')->times(2));
 
-        $result1 = $Mock->DoSomething('hello', 3, 'world');
-        $result2 = $Mock->DoSomething('hello', 3, 'world');
+        $result1 = $mock->doSomething('hello', 3, 'world');
+        $result2 = $mock->doSomething('hello', 3, 'world');
 
         Assert::areIdentical('Some Value', $result1);
         Assert::areIdentical('Some Value', $result2);
-        $Mock->VerifyExpectations();
+        $mock->VerifyExpectations();
     }
     
-    public function CreateMockWithArgumentsAndOneTimeButTwoCallsExpectErrorOnVerifyTest() {
-        $Mock = MockFactory::createMock('ExampleClass');
-        $Mock->AddExpectation(Expect::method('DoSomething')->with('hello', 3, 'world')->returns('Some Value')->times(1));
+    public function createMockWithArgumentsAndOneTimeButTwoCallsExpectErrorOnVerifyTest()
+    {
+        $mock = MockFactory::createMock('ExampleClass');
+        $mock->AddExpectation(Expect::method('doSomething')->with('hello', 3, 'world')->returns('Some Value')->times(1));
 
-        $result1 = $Mock->DoSomething('hello', 3, 'world');
-        $result2 = $Mock->DoSomething('hello', 3, 'world');
+        $result1 = $mock->doSomething('hello', 3, 'world');
+        $result2 = $mock->doSomething('hello', 3, 'world');
 
-        $VerifyFailed = false;
+        $verifyFailed = false;
         try {
-            $Mock->VerifyExpectations();
+            $mock->VerifyExpectations();
         } catch (Exception $e) {
-            $VerifyFailed = true;
+            $verifyFailed = true;
         }
         
-        Assert::isTrue($VerifyFailed);
+        Assert::isTrue($verifyFailed);
     }
     
-    public function CreateMockWithZeroTimesButOneCallExpectErrorOnVerifyTest() {
-        $Mock = MockFactory::createMock('ExampleClass');
-        $Mock->AddExpectation(Expect::method('DoSomething')->with('hello', 3, 'world')->times(0));
+    public function createMockWithZeroTimesButOneCallExpectErrorOnVerifyTest()
+    {
+        $mock = MockFactory::createMock('ExampleClass');
+        $mock->AddExpectation(Expect::method('doSomething')->with('hello', 3, 'world')->times(0));
 
-        $result1 = $Mock->DoSomething('hello', 3, 'world');
+        $result1 = $mock->doSomething('hello', 3, 'world');
 
-        $VerifyFailed = false;
+        $verifyFailed = false;
         try {
-            $Mock->VerifyExpectations();
+            $mock->VerifyExpectations();
         } catch (Exception $e) {
-            $VerifyFailed = true;
+            $verifyFailed = true;
         }
         
-        Assert::isTrue($VerifyFailed);
+        Assert::isTrue($verifyFailed);
     }
     
-    public function CreateMockWithArgumentsAndTwoTimesButOneCallExpectErrorOnVerifyTest() {
-        $Mock = MockFactory::createMock('ExampleClass');
-        $Mock->AddExpectation(Expect::method('DoSomething')->with('hello', 3, 'world')->returns('Some Value')->times(2));
+    public function createMockWithArgumentsAndTwoTimesButOneCallExpectErrorOnVerifyTest()
+    {
+        $mock = MockFactory::createMock('ExampleClass');
+        $mock->AddExpectation(Expect::method('doSomething')->with('hello', 3, 'world')->returns('Some Value')->times(2));
 
-        $result1 = $Mock->DoSomething('hello', 3, 'world');
+        $result1 = $mock->doSomething('hello', 3, 'world');
 
-        $VerifyFailed = false;
+        $verifyFailed = false;
         try {
-            $Mock->VerifyExpectations();
+            $mock->VerifyExpectations();
         } catch (Exception $e) {
-            $VerifyFailed = true;
+            $verifyFailed = true;
         }
         
-        Assert::isTrue($VerifyFailed);
+        Assert::isTrue($verifyFailed);
     }
     
-    public function CreateMockWithExceptionAsReturnExpectReturnsExceptionTest() {
-        $Mock = MockFactory::createMock('ExampleClass');
-        $Mock->AddExpectation(Expect::method('DoSomething')->with('hello', 3, 'world')->throws('Test Exception')->times(1));
+    public function createMockWithExceptionAsReturnExpectReturnsExceptionTest()
+    {
+        $mock = MockFactory::createMock('ExampleClass');
+        $mock->AddExpectation(Expect::method('doSomething')->with('hello', 3, 'world')->throws('Test Exception')->times(1));
         
-        $VerifyFailed = false;
+        $verifyFailed = false;
         try {
-            $result = $Mock->DoSomething('hello', 3, 'world');
+            $result = $mock->doSomething('hello', 3, 'world');
         } catch (Exception $e) {
-            $VerifyFailed = true;
+            $verifyFailed = true;
         }
         
-        Assert::isTrue($VerifyFailed);
+        Assert::isTrue($verifyFailed);
     }
     
-    public function CreateMockWithAnyArgumentsExpectVerifyTest() {
-        $Mock = MockFactory::createMock('ExampleClass');
-        $Mock->AddExpectation(Expect::method('DoSomething')->returns('Some Value')->times(1));
+    public function createMockWithAnyArgumentsExpectVerifyTest()
+    {
+        $mock = MockFactory::createMock('ExampleClass');
+        $mock->AddExpectation(Expect::method('doSomething')->returns('Some Value')->times(1));
 
-        $result = $Mock->DoSomething('hello', 3, 'world');
+        $result = $mock->doSomething('hello', 3, 'world');
 
         Assert::areIdentical('Some Value', $result);
-        $Mock->VerifyExpectations();
+        $mock->VerifyExpectations();
     }
     
-    public function CreateMockWithNoArgumentsExpectVerifyTest() {
-        $Mock = MockFactory::createMock('ExampleClass');
-        $Mock->AddExpectation(Expect::method('DoSomething')->returns('Some Value')->times(1));
+    public function createMockWithNoArgumentsExpectVerifyTest()
+    {
+        $mock = MockFactory::createMock('ExampleClass');
+        $mock->AddExpectation(Expect::method('doSomething')->returns('Some Value')->times(1));
 
-        $result = $Mock->DoSomething();
+        $result = $mock->doSomething();
 
         Assert::areIdentical('Some Value', $result);
-        $Mock->VerifyExpectations();
+        $mock->VerifyExpectations();
     }
     
-    public function CreateMockWithMultipleExpectationsExpectVerifyTest() {
-        $Mock = MockFactory::createMock('ExampleClass');
-        $Mock->AddExpectation(Expect::method('DoSomething')->returns('Some Value')->times(1));
-        $Mock->AddExpectation(Expect::method('AnotherMethod')->returns(5)->times(1));
+    public function createMockWithMultipleExpectationsExpectVerifyTest() 
+    {
+        $mock = MockFactory::createMock('ExampleClass');
+        $mock->AddExpectation(Expect::method('doSomething')->returns('Some Value')->times(1));
+        $mock->AddExpectation(Expect::method('AnotherMethod')->returns(5)->times(1));
 
-        $result1 = $Mock->DoSomething();
-        $result2 = $Mock->AnotherMethod();
+        $result1 = $mock->doSomething();
+        $result2 = $mock->AnotherMethod();
 
         Assert::areIdentical('Some Value', $result1);
         Assert::areIdentical(5, $result2);
-        $Mock->VerifyExpectations();
+        $mock->VerifyExpectations();
     }
     
-    public function CreateMockWithGetPropertyExpectVerifyTest() {
-        $Mock = MockFactory::createMock('ExampleClass');
-        $Mock->AddExpectation(Expect::getProperty('Number')->returns(1)->times(1));
+    public function createMockWithGetPropertyExpectVerifyTest()
+    {
+        $mock = MockFactory::createMock('ExampleClass');
+        $mock->AddExpectation(Expect::getProperty('Number')->returns(1)->times(1));
 
-        $result = $Mock->Number;
+        $result = $mock->Number;
 
         Assert::areIdentical(1, $result);
-        $Mock->VerifyExpectations();
+        $mock->VerifyExpectations();
     }
     
-    public function CreateMockWithSetPropertyExpectVerifyTest() {
-        $Mock = MockFactory::createMock('ExampleClass');
-        $Mock->AddExpectation(Expect::setProperty('Number')->with(5)->times(1));
+    public function createMockWithSetPropertyExpectVerifyTest()
+    {
+        $mock = MockFactory::createMock('ExampleClass');
+        $mock->AddExpectation(Expect::setProperty('Number')->with(5)->times(1));
 
-        $Mock->Number = 5;
+        $mock->Number = 5;
 
-        $Mock->VerifyExpectations();
+        $mock->VerifyExpectations();
     }
     
-    public function CreateStubExpectCallsSucceedTest() {
-        $Stub = StubFactory::createStub('ExampleClass');
-        $Stub->AddExpectation(Expect::method('DoSomething')->returns('Some Value'));
-        $Stub->AddExpectation(Expect::method('AnotherMethod')->returns(5));
+    public function createStubExpectCallsSucceedTest()
+    {
+        $stub = StubFactory::createStub('ExampleClass');
+        $stub->AddExpectation(Expect::method('doSomething')->returns('Some Value'));
+        $stub->AddExpectation(Expect::method('anotherMethod')->returns(5));
 
-        $result1 = $Stub->DoSomething();
-        $result2 = $Stub->DoSomething();
-        $result3 = $Stub->AnotherMethod();
-        $Stub->CallNotExpectedMethod();
+        $result1 = $stub->doSomething();
+        $result2 = $stub->doSomething();
+        $result3 = $stub->anotherMethod();
+        $stub->CallNotExpectedMethod();
 
         Assert::areIdentical('Some Value', $result1);
         Assert::areIdentical('Some Value', $result2);

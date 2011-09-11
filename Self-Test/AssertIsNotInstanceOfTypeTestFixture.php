@@ -1,29 +1,34 @@
 <?php
-class SomeOtherType {
-    public $Value;
+class SomeOtherType
+{
+    public $value;
 }
 
-class AssertIsNotInstanceOfTypeTestFixture {
-    private $Target;
+class AssertIsNotInstanceOfTypeTestFixture
+{
+    private $target;
     
-    public function SetUp() {
-        $this->Target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
+    public function setUp()
+    {
+        $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
     }
 
-    public function AssertIsNotInstanceOfTypeWithDifferentTypeTest() {
+    public function assertIsNotInstanceOfTypeWithDifferentTypeTest()
+    {
         $object = new SomeOtherType();
-        $this->Target->isNotInstanceOfType('SomeType', $object);
+        $this->target->isNotInstanceOfType('SomeType', $object);
     }
     
-    public function AssertIsNotInstanceOfTypeWithIdenticalTypesTest() {
-        $VerifyFailed = false;
+    public function assertIsNotInstanceOfTypeWithIdenticalTypesTest()
+    {
+        $verifyFailed = false;
         $object = new SomeOtherType();
         try {
-            $this->Target->isNotInstanceOfType('SomeOtherType', $object);
+            $this->target->isNotInstanceOfType('SomeOtherType', $object);
         } catch (Exception $e) {
-            $VerifyFailed = true;
+            $verifyFailed = true;
         }
-        Assert::isTrue($VerifyFailed);
+        Assert::isTrue($verifyFailed);
     }
 }
 ?>

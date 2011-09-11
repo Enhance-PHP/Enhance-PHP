@@ -1,31 +1,37 @@
 <?php
-class AssertContainsTestFixture {
-    private $Target;
+class AssertContainsTestFixture 
+{
+    private $target;
     
-    public function SetUp() {
-        $this->Target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
+    public function setUp()
+    {
+        $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
     }
 
-    public function AssertContainsWithStringThatContainsTest() {
-        $this->Target->contains('Test', 'Some Test String');
+    public function assertContainsWithStringThatContainsTest()
+    {
+        $this->target->contains('Test', 'Some Test String');
     }
     
-    public function AssertContainsWithStringThatEndsWithTest() {
-        $this->Target->contains('Test', 'Some Test');
+    public function assertContainsWithStringThatEndsWithTest() 
+    {
+        $this->target->contains('Test', 'Some Test');
     }
     
-    public function AssertContainsWithStringThatStartsWithTest() {
-        $this->Target->contains('Test', 'Test Some String');
+    public function assertContainsWithStringThatStartsWithTest()
+    {
+        $this->target->contains('Test', 'Test Some String');
     }
     
-    public function AssertContainsWithStringThatDoesNotContainTest() {
-        $VerifyFailed = false;
+    public function assertContainsWithStringThatDoesNotContainTest()
+    {
+        $verifyFailed = false;
         try {
-            $this->Target->contains('Test', 'Some Other String');
+            $this->target->contains('Test', 'Some Other String');
         } catch (Exception $e) {
-            $VerifyFailed = true;
+            $verifyFailed = true;
         }
-        Assert::isTrue($VerifyFailed);
+        Assert::isTrue($verifyFailed);
     }
 }
 ?>

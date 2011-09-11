@@ -2,27 +2,33 @@
 // Example built using TDD
 include('../EnhanceTestFramework.php');
 
-class ExampleClass {
-    public function AddTwoNumbers($a, $b) {
+class ExampleClass 
+{
+    public function addTwoNumbers($a, $b)
+    {
         return $a + $b;
     }
 }
 
-class ExampleTestFixture {
-    private $Target;
+class ExampleTestFixture 
+{
+    private $target;
     
-    public function SetUp() {
-        $this->Target = Enhance::getCodeCoverageWrapper('ExampleClass');
+    public function setUp()
+    {
+        $this->target = Enhance::getCodeCoverageWrapper('ExampleClass');
     }
     
-    public function AddTwoNumbersWith3and2Expect5Test() {
-        $result = $this->Target->AddTwoNumbers(3, 2);
+    public function addTwoNumbersWith3and2Expect5Test()
+    {
+        $result = $this->target->addTwoNumbers(3, 2);
 
         Assert::areIdentical(5, $result);
     }
     
-    public function AddTwoNumbersWith4and2Expect6Test() {
-        $result = $this->Target->AddTwoNumbers(4, 2);
+    public function addTwoNumbersWith4and2Expect6Test()
+    {
+        $result = $this->target->addTwoNumbers(4, 2);
 
         Assert::areIdentical(6, $result);
     }

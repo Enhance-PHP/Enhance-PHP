@@ -1,19 +1,22 @@
 <?php
-class AssertFailTestFixture {
-    private $Target;
+class AssertFailTestFixture
+ {
+    private $target;
     
-    public function SetUp() {
-        $this->Target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
+    public function setUp()
+    {
+        $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
     }
 
-    public function AssertFailExpectErrorTest() {
-        $VerifyFailed = false;
+    public function assertFailExpectErrorTest()
+    {
+        $verifyFailed = false;
         try {
-            $this->Target->fail();
+            $this->target->fail();
         } catch (Exception $e) {
-            $VerifyFailed = true;
+            $verifyFailed = true;
         }
-        Assert::isTrue($VerifyFailed);
+        Assert::isTrue($verifyFailed);
     }
 }
 ?>

@@ -1,19 +1,22 @@
 <?php
-class AssertInconclusiveTestFixture {
-    private $Target;
+class AssertInconclusiveTestFixture
+ {
+    private $target;
     
-    public function SetUp() {
-        $this->Target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
+    public function setUp()
+    {
+        $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
     }
 
-    public function AssertInconclusiveExpectErrorTest() {
-        $VerifyFailed = false;
+    public function assertInconclusiveExpectErrorTest()
+    {
+        $verifyFailed = false;
         try {
-            $this->Target->inconclusive();
+            $this->target->inconclusive();
         } catch (Exception $e) {
-            $VerifyFailed = true;
+            $verifyFailed = true;
         }
-        Assert::isTrue($VerifyFailed);
+        Assert::isTrue($verifyFailed);
     }
 }
 ?>

@@ -1,23 +1,27 @@
 <?php
-class AssertIsNullTestFixture {
-    private $Target;
+class AssertIsNullTestFixture
+{
+    private $target;
     
-    public function SetUp() {
-        $this->Target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
+    public function setUp()
+    {
+        $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
     }
 
-    public function AssertIsNullWithNullTest() {
-        $this->Target->isNull(null);
+    public function assertIsNullWithNullTest()
+    {
+        $this->target->isNull(null);
     }
     
-    public function AssertIsNullWithNotNullTest() {
-        $VerifyFailed = false;
+    public function assertIsNullWithNotNullTest()
+    {
+        $verifyFailed = false;
         try {
-            $this->Target->isNull('');
+            $this->target->isNull('');
         } catch (Exception $e) {
-            $VerifyFailed = true;
+            $verifyFailed = true;
         }
-        Assert::isTrue($VerifyFailed);
+        Assert::isTrue($verifyFailed);
     }
 }
 ?>

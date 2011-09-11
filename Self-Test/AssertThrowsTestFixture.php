@@ -1,20 +1,25 @@
 <?php
-class StubThrowsClass {
-    public function DoesThrow() {
+class StubThrowsClass
+{
+    public function doesThrow()
+    {
         throw new Exception('Test exception.');
     }
     
-    public function DoesNotThrow() {
+    public function doesNotThrow()
+    {
 
     }
     
-    public function DoesThrowWithArgs($a, $b) {
+    public function doesThrowWithArgs($a, $b)
+    {
         if ($a === $b) {
             throw new Exception('Test exception.');
         }
     }
     
-    public function DoesNotThrowWithArgs($a, $b) {
+    public function doesNotThrowWithArgs($a, $b)
+    {
         if ($a !== $b) {
             throw new Exception('Test exception.');
         }
@@ -22,42 +27,47 @@ class StubThrowsClass {
 }
 
 class AssertThrowsTestFixture {
-    private $Target;
+    private $target;
     
-    public function SetUp() {
-        $this->Target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
+    public function setUp()
+    {
+        $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
     }
 
-    public function AssertThrowsWithExceptionExpectPassTest() {
+    public function assertThrowsWithExceptionExpectPassTest()
+    {
         $Stub = new StubThrowsClass();
-        $this->Target->throws($Stub, 'DoesThrow');
+        $this->target->throws($Stub, 'doesThrow');
     }
     
-    public function AssertThrowsWithNoExceptionExpectFailTest() {
+    public function assertThrowsWithNoExceptionExpectFailTest()
+    {
         $Stub = new StubThrowsClass();
-        $VerifyFailed = false;
+        $verifyFailed = false;
         try {
-            $this->Target->throws($Stub, 'DoesNotThrow');
+            $this->target->throws($Stub, 'doesNotThrow');
         } catch (Exception $e) {
-            $VerifyFailed = true;
+            $verifyFailed = true;
         }
-        Assert::isTrue($VerifyFailed);
+        Assert::isTrue($verifyFailed);
     }
     
-    public function AssertThrowsWithArgumentsAndExceptionExpectPassTest() {
+    public function assertThrowsWithArgumentsAndExceptionExpectPassTest()
+    {
         $Stub = new StubThrowsClass();
-        $this->Target->throws($Stub, 'DoesThrowWithArgs', array(3, 3));
+        $this->target->throws($Stub, 'doesThrowWithArgs', array(3, 3));
     }
     
-    public function AssertThrowsWithArgumentsAndNoExceptionExpectFailTest() {
+    public function assertThrowsWithArgumentsAndNoExceptionExpectFailTest()
+    {
         $Stub = new StubThrowsClass();
-        $VerifyFailed = false;
+        $verifyFailed = false;
         try {
-            $this->Target->throws($Stub, 'DoesNotThrowWithArgs', array(4, 4));
+            $this->target->throws($Stub, 'doesNotThrowWithArgs', array(4, 4));
         } catch (Exception $e) {
-            $VerifyFailed = true;
+            $verifyFailed = true;
         }
-        Assert::isTrue($VerifyFailed);
+        Assert::isTrue($verifyFailed);
     }
 }
 ?>

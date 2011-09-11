@@ -1,19 +1,11 @@
 <?php
-class ExampleAnotherTestFixture {
-
-    private $Assert;
-
-    public function SetUp() {
-    }
-    
-    public function TearDown() {
-    
-    }
-
-    public function GetJoinedStringWithTwoStringsExpectJoinedResultTest() {
+class ExampleAnotherTestFixture 
+{
+    public function getJoinedStringWithTwoStringsExpectJoinedResultTest()
+    {
         $target = Enhance::getCodeCoverageWrapper('ExampleAnotherClass', array('xx', 'yy'));
 
-        $result = $target->GetJoinedString('A', 'B');
+        $result = $target->getJoinedString('A', 'B');
 
         Assert::areIdentical('ABxx', $result);
     }

@@ -1,33 +1,38 @@
 <?php
-class AssertIsFalseTestFixture {
-    private $Target;
+class AssertIsFalseTestFixture 
+{
+    private $target;
     
-    public function SetUp() {
-        $this->Target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
+    public function setUp()
+    {
+        $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
     }
 
-    public function AssertIsFalseWithFalseExpectPassTest() {
-        $this->Target->isFalse(false);
+    public function assertIsFalseWithFalseExpectPassTest()
+    {
+        $this->target->isFalse(false);
     }
     
-    public function AssertIsFalseWithTrueExpectFailTest() {
+    public function assertIsFalseWithTrueExpectFailTest()
+    {
         $VerifyFailed = false;
         try {
-            $this->Target->isFalse(true);
+            $this->target->isFalse(true);
         } catch (Exception $e) {
             $VerifyFailed = true;
         }
         Assert::isTrue($VerifyFailed);
     }
     
-    public function AssertIsFalseWith0ExpectFailTest() {
-        $VerifyFailed = false;
+    public function assertIsFalseWith0ExpectFailTest()
+    {
+        $verifyFailed = false;
         try {
-            $this->Target->isFalse(0);
+            $this->target->isFalse(0);
         } catch (Exception $e) {
-            $VerifyFailed = true;
+            $verifyFailed = true;
         }
-        Assert::isTrue($VerifyFailed);
+        Assert::isTrue($verifyFailed);
     }
 }
 ?>

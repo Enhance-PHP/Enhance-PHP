@@ -1,51 +1,59 @@
 <?php
-class AssertAreIdenticalTestFixture {
-    private $Target;
+class AssertAreIdenticalTestFixture
+{
+    private $target;
     
-    public function SetUp() {
-        $this->Target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
+    public function setUp() 
+    {
+        $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
     }
 
-    public function AssertAreIdenticalWithIdenticalIntegersTest() {
-        $this->Target->areIdentical(5, 5);
+    public function assertAreIdenticalWithIdenticalIntegersTest()
+    {
+        $this->target->areIdentical(5, 5);
     }
     
-    public function AssertAreIdenticalWithDifferentIntegersTest() {
-        $VerifyFailed = false;
+    public function assertAreIdenticalWithDifferentIntegersTest()
+    {
+        $verifyFailed = false;
         try {
-            $this->Target->areIdentical(5, 4);
+            $this->target->areIdentical(5, 4);
         } catch (Exception $e) {
-            $VerifyFailed = true;
+            $verifyFailed = true;
         }
-        Assert::isTrue($VerifyFailed);
+        Assert::isTrue($verifyFailed);
     }
     
-    public function AssertAreIdenticalWithIdenticalStringsTest() {
-        $this->Target->areIdentical('Test', 'Test');
+    public function assertAreIdenticalWithIdenticalStringsTest()
+    {
+        $this->target->areIdentical('Test', 'Test');
     }
     
-    public function AssertAreIdenticalWithDifferentStringsTest() {
-        $VerifyFailed = false;
+    public function assertAreIdenticalWithDifferentStringsTest()
+    {
+        $verifyFailed = false;
         try {
-            $this->Target->areIdentical('Test', 'test');
+            $this->target->areIdentical('Test', 'test');
         } catch (Exception $e) {
-            $VerifyFailed = true;
+            $verifyFailed = true;
         }
-        Assert::isTrue($VerifyFailed);
+        Assert::isTrue($verifyFailed);
     }
     
-    public function AssertAreIdenticalWithIdenticalFloatsTest() {
-        $this->Target->areIdentical(15.123346575, 15.123346575);
+    public function assertAreIdenticalWithIdenticalFloatsTest()
+    {
+        $this->target->areIdentical(15.123346575, 15.123346575);
     }
     
-    public function AssertAreIdenticalWithDifferentFloatsTest() {
-        $VerifyFailed = false;
+    public function assertAreIdenticalWithDifferentFloatsTest() 
+    {
+        $verifyFailed = false;
         try {
-            $this->Target->areIdentical(15.123346575, 15.123346574);
+            $this->target->areIdentical(15.123346575, 15.123346574);
         } catch (Exception $e) {
-            $VerifyFailed = true;
+            $verifyFailed = true;
         }
-        Assert::isTrue($VerifyFailed);
+        Assert::isTrue($verifyFailed);
     }
 }
 ?>

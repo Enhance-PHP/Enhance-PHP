@@ -1,7 +1,8 @@
 <?php
-class ExpectationTestFixture {
-
-    public function ExpectWithMethodWithReturnsTimesTest() {
+class ExpectationTestFixture
+{
+    public function expectWithMethodWithReturnsTimesTest()
+    {
         $target = Expect::method('TestA')->with('A', 'B')->returns('TestC')->times(1);
         
         Assert::isTrue($target->ExpectArguments);
@@ -12,7 +13,8 @@ class ExpectationTestFixture {
         Assert::areIdentical(1, $target->ExpectedCalls);
     }
     
-    public function ExpectWithMethodWithReturnsTest() {
+    public function expectWithMethodWithReturnsTest()
+    {
         $target = Expect::method('TestA')->with('A', 'B')->returns('TestC');
         
         Assert::isTrue($target->ExpectArguments);
@@ -23,7 +25,8 @@ class ExpectationTestFixture {
         Assert::areIdentical(-1, $target->ExpectedCalls);
     }
     
-    public function ExpectWithMethodReturnsTimesTest() {
+    public function expectWithMethodReturnsTimesTest()
+    {
         $target = Expect::method('TestA')->returns('TestC')->times(1);
         
         Assert::isFalse($target->ExpectArguments);
@@ -32,7 +35,8 @@ class ExpectationTestFixture {
         Assert::areIdentical(1, $target->ExpectedCalls);
     }
     
-    public function ExpectWithMethodTimesTest() {
+    public function expectWithMethodTimesTest()
+    {
         $target = Expect::method('TestA')->times(1);
         
         Assert::isFalse($target->ExpectArguments);

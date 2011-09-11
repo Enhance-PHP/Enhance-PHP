@@ -228,8 +228,8 @@ class TextEn
     public $ButWas = 'but was';
     public $ContainedInString = 'contained in string';
     public $InconclusiveOrNotImplemented = 'inconclusive or not implemented';
-    public $Times = 'times';
-    public $MethodCoverage = 'method Coverage';
+    public $Times = 'Times';
+    public $MethodCoverage = 'Method Coverage';
     public $Copyright = 'Copyright';
     public $Exception = 'Exception';
     public $CannotCallVerifyOnStub = 'Cannot call VerifyExpectations on a stub';
@@ -366,8 +366,8 @@ class EnhanceTest
         $className = get_class($class);
         $this->ClassName = $className;
         $this->TestMethod = array($className, $method);
-        $this->SetUpMethod = array($className, 'SetUp');
-        $this->TearDownMethod = array($className, 'TearDown');
+        $this->SetUpMethod = array($className, 'setUp');
+        $this->TearDownMethod = array($className, 'tearDown');
         $this->TestName = $method;
     }
     
