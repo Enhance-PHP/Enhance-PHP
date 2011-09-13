@@ -4,7 +4,7 @@ class SomeType
     public $value;
 }
 
-class AssertIsInstanceOfTypeTestFixture
+class AssertIsInstanceOfTypeTestFixture extends EnhanceTestFixture
 {
     private $target;
     
@@ -13,13 +13,13 @@ class AssertIsInstanceOfTypeTestFixture
         $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
     }
 
-    public function assertIsInstanceOfTypeWithIdenticalTypeTest()
+    public function assertIsInstanceOfTypeWithIdenticalType()
     {
         $object = new SomeType();
         $this->target->isInstanceOfType('SomeType', $object);
     }
     
-    public function assertIsInstanceOfTypeWithDifferentTypesTest()
+    public function assertIsInstanceOfTypeWithDifferentTypes()
     {
         $verifyFailed = false;
         $object = new SomeType();

@@ -3,13 +3,13 @@
 include('enhance/EnhanceTestFramework.php');
 // Include your classes and test fixtures
 include('ExampleClass.php');
-include('test/ExampleTestFixture.php');
+include('test/ExampleClassTests.php');
 // Run the tests
 Enhance::runTests();
 ?>
 
 <?php
-class ExampleTestFixture 
+class ExampleClassTests extends EnhanceTestFixture
 {
         private $target;
 

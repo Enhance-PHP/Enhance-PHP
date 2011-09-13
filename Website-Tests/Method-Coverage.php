@@ -1,5 +1,5 @@
 <?php
-class ExampleTestFixture
+class ExampleClassTests extends EnhanceTestFixture
 {
         public function addTwoNumbersWith3and2Expect5Test()
         {
@@ -18,7 +18,7 @@ class ExampleTestFixture
 ?>
 
 <?php
-class ExampleTestFixture 
+class ExampleClassTests  extends EnhanceTestFixture
 {
         public function addTwoNumbersWith3and2Expect5Test()
         {

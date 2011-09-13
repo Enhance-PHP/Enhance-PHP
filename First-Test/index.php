@@ -4,9 +4,9 @@ include('../EnhanceTestFramework.php');
 
 // Include your classes and test fixtures
 include('ExampleClass.php');
-include('ExampleTestFixture.php');
+include('ExampleClassTests.php');
 include('ExampleAnotherClass.php');
-include('ExampleAnotherTestFixture.php');
+include('ExampleAnotherClassTests.php');
 
 // Run the tests
 Enhance::runTests();

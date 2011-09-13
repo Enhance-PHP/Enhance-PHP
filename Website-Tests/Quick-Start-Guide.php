@@ -11,12 +11,9 @@ class ExampleClass
     }
 }
 
-// Naming: Each fixture must end with the word "TestFixture".
-//     Suggested naming is to include the following
-//     [class name]TestFixture
-//     for example
-//     MyClassTestFixture
-class ExampleTestFixture
+// Naming: By using "extends EnhanceTestFixture" you signal that the public methods in
+// your class are tests.
+class ExampleClassTests extends EnhanceTestFixture
 {
 
     // SetUp
@@ -36,12 +33,8 @@ class ExampleTestFixture
     }
 
     // Test
-    // Naming: Each test function must end with the word "Test".
-    //        Suggested naming is to include the following
-    //     [function name][test scenario][expected result]Test
-    //     for example, you could use underscores or "with" and "Expect" keywords to construct the name
-    //     AddTwoNumbers_3And2_Expect5Test or AddTwoNumbersWith3and2Expect5Test
-    // Usage: We recommend using the Arrange, Act, Assert syntax as shown below
+    // You can name tests as you like, but they must be public.
+    // All public methods other than setUp and tearDown are treated as tests.
     public function addTwoNumbersWith3and2Expect5Test() 
     {
         // Arrange

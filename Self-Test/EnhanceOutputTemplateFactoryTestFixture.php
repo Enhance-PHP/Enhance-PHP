@@ -1,21 +1,21 @@
 <?php
-class EnhanceOutputTemplateFactoryTestFixture
+class EnhanceOutputTemplateFactoryTestFixture extends EnhanceTestFixture
 {
-    public function createOutputTemplateWithXmlExpectXmlTemplateTest()
+    public function createOutputTemplateWithXmlExpectXmlTemplate()
     {
         $output = EnhanceOutputTemplateFactory::CreateOutputTemplate(EnhanceOutputTemplateType::Xml);
 
         Assert::areIdentical(EnhanceOutputTemplateType::Xml, $output->GetTemplateType());
     }    
 
-    public function createOutputTemplateWithHtmlExpectHtmlTemplateTest()
+    public function createOutputTemplateWithHtmlExpectHtmlTemplate()
     {
         $output = EnhanceOutputTemplateFactory::CreateOutputTemplate(EnhanceOutputTemplateType::Html);
 
         Assert::areIdentical(EnhanceOutputTemplateType::Html, $output->GetTemplateType());
     }    
 
-    public function createOutputTemplateWithCliExpectCliTemplateTest()
+    public function createOutputTemplateWithCliExpectCliTemplate()
     {
         $output = EnhanceOutputTemplateFactory::CreateOutputTemplate(EnhanceOutputTemplateType::Cli);
 

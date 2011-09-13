@@ -1,7 +1,7 @@
 <?php
-class CreateOutputTemplateTestFixture
+class CreateOutputTemplateTestFixture extends EnhanceTestFixture
 {
-    public function createOutputTemplateWithXmlExpectXmlTemplateTest()
+    public function createOutputTemplateWithXmlExpectXmlTemplate()
     {
         $output = EnhanceOutputTemplateFactory::createOutputTemplate('Xml');
 

@@ -1,5 +1,5 @@
 <?php
-class AssertIsNullTestFixture
+class AssertIsNullTestFixture extends EnhanceTestFixture
 {
     private $target;
     
@@ -8,12 +8,12 @@ class AssertIsNullTestFixture
         $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
     }
 
-    public function assertIsNullWithNullTest()
+    public function assertIsNullWithNull()
     {
         $this->target->isNull(null);
     }
     
-    public function assertIsNullWithNotNullTest()
+    public function assertIsNullWithNotNull()
     {
         $verifyFailed = false;
         try {

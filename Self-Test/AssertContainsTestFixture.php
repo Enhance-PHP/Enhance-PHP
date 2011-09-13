@@ -1,5 +1,5 @@
 <?php
-class AssertContainsTestFixture 
+class AssertContainsTestFixture extends EnhanceTestFixture
 {
     private $target;
     
@@ -8,22 +8,22 @@ class AssertContainsTestFixture
         $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
     }
 
-    public function assertContainsWithStringThatContainsTest()
+    public function assertContainsWithStringThatContains()
     {
         $this->target->contains('Test', 'Some Test String');
     }
     
-    public function assertContainsWithStringThatEndsWithTest() 
+    public function assertContainsWithStringThatEndsWith() 
     {
         $this->target->contains('Test', 'Some Test');
     }
     
-    public function assertContainsWithStringThatStartsWithTest()
+    public function assertContainsWithStringThatStartsWith()
     {
         $this->target->contains('Test', 'Test Some String');
     }
     
-    public function assertContainsWithStringThatDoesNotContainTest()
+    public function assertContainsWithStringThatDoesNotContain()
     {
         $verifyFailed = false;
         try {

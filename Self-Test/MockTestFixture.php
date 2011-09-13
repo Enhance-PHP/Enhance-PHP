@@ -1,7 +1,7 @@
 <?php
-class MockTestFixture
+class MockTestFixture extends EnhanceTestFixture
 {
-    public function createMockWithArgumentsAndOneTimeExpectReturnValueAndVerifiesTest()
+    public function createMockWithArgumentsAndOneTimeExpectReturnValueAndVerifies()
     {
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->with('hello', 3, 'world')->returns('Some Value')->times(1));
@@ -12,7 +12,7 @@ class MockTestFixture
         $mock->VerifyExpectations();
     }
     
-    public function createMockWithNoRequiredArgumentsAndOneTimeExpectReturnValueAndVerifiesTest()
+    public function createMockWithNoRequiredArgumentsAndOneTimeExpectReturnValueAndVerifies()
     {
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->returns('Some Value')->times(1));
@@ -23,7 +23,7 @@ class MockTestFixture
         $mock->VerifyExpectations();
     }
     
-    public function createMockWithAnyArgumentsAndOneTimeExpectReturnValueAndVerifiesTest()
+    public function createMockWithAnyArgumentsAndOneTimeExpectReturnValueAndVerifies()
     {
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->with(Expect::AnyValue, Expect::AnyValue, Expect::AnyValue)->returns('Some Value')->times(1));
@@ -34,7 +34,7 @@ class MockTestFixture
         $mock->VerifyExpectations();
     }
 
-    public function createMockWithArgumentsAndTwoTimesExpectReturnValueAndVerifiesTest()
+    public function createMockWithArgumentsAndTwoTimesExpectReturnValueAndVerifies()
     {
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->with('hello', 3, 'world')->returns('Some Value')->times(2));
@@ -47,7 +47,7 @@ class MockTestFixture
         $mock->VerifyExpectations();
     }
     
-    public function createMockWithArgumentsAndOneTimeButTwoCallsExpectErrorOnVerifyTest()
+    public function createMockWithArgumentsAndOneTimeButTwoCallsExpectErrorOnVerify()
     {
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->with('hello', 3, 'world')->returns('Some Value')->times(1));
@@ -65,7 +65,7 @@ class MockTestFixture
         Assert::isTrue($verifyFailed);
     }
     
-    public function createMockWithZeroTimesButOneCallExpectErrorOnVerifyTest()
+    public function createMockWithZeroTimesButOneCallExpectErrorOnVerify()
     {
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->with('hello', 3, 'world')->times(0));
@@ -82,7 +82,7 @@ class MockTestFixture
         Assert::isTrue($verifyFailed);
     }
     
-    public function createMockWithArgumentsAndTwoTimesButOneCallExpectErrorOnVerifyTest()
+    public function createMockWithArgumentsAndTwoTimesButOneCallExpectErrorOnVerify()
     {
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->with('hello', 3, 'world')->returns('Some Value')->times(2));
@@ -99,7 +99,7 @@ class MockTestFixture
         Assert::isTrue($verifyFailed);
     }
     
-    public function createMockWithExceptionAsReturnExpectReturnsExceptionTest()
+    public function createMockWithExceptionAsReturnExpectReturnsException()
     {
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->with('hello', 3, 'world')->throws('Test Exception')->times(1));
@@ -114,7 +114,7 @@ class MockTestFixture
         Assert::isTrue($verifyFailed);
     }
     
-    public function createMockWithAnyArgumentsExpectVerifyTest()
+    public function createMockWithAnyArgumentsExpectVerify()
     {
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->returns('Some Value')->times(1));
@@ -125,7 +125,7 @@ class MockTestFixture
         $mock->VerifyExpectations();
     }
     
-    public function createMockWithNoArgumentsExpectVerifyTest()
+    public function createMockWithNoArgumentsExpectVerify()
     {
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->returns('Some Value')->times(1));
@@ -136,7 +136,7 @@ class MockTestFixture
         $mock->VerifyExpectations();
     }
     
-    public function createMockWithMultipleExpectationsExpectVerifyTest() 
+    public function createMockWithMultipleExpectationsExpectVerify() 
     {
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->returns('Some Value')->times(1));
@@ -150,7 +150,7 @@ class MockTestFixture
         $mock->VerifyExpectations();
     }
     
-    public function createMockWithGetPropertyExpectVerifyTest()
+    public function createMockWithGetPropertyExpectVerify()
     {
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::getProperty('Number')->returns(1)->times(1));
@@ -161,7 +161,7 @@ class MockTestFixture
         $mock->VerifyExpectations();
     }
     
-    public function createMockWithSetPropertyExpectVerifyTest()
+    public function createMockWithSetPropertyExpectVerify()
     {
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::setProperty('Number')->with(5)->times(1));
@@ -171,7 +171,7 @@ class MockTestFixture
         $mock->VerifyExpectations();
     }
     
-    public function createStubExpectCallsSucceedTest()
+    public function createStubExpectCallsSucceed()
     {
         $stub = StubFactory::createStub('ExampleClass');
         $stub->AddExpectation(Expect::method('doSomething')->returns('Some Value'));

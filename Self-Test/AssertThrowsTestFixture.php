@@ -26,7 +26,8 @@ class StubThrowsClass
     }
 }
 
-class AssertThrowsTestFixture {
+class AssertThrowsTestFixture extends EnhanceTestFixture
+{
     private $target;
     
     public function setUp()
@@ -34,13 +35,13 @@ class AssertThrowsTestFixture {
         $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
     }
 
-    public function assertThrowsWithExceptionExpectPassTest()
+    public function assertThrowsWithExceptionExpectPass()
     {
         $Stub = new StubThrowsClass();
         $this->target->throws($Stub, 'doesThrow');
     }
     
-    public function assertThrowsWithNoExceptionExpectFailTest()
+    public function assertThrowsWithNoExceptionExpectFail()
     {
         $Stub = new StubThrowsClass();
         $verifyFailed = false;
@@ -52,13 +53,13 @@ class AssertThrowsTestFixture {
         Assert::isTrue($verifyFailed);
     }
     
-    public function assertThrowsWithArgumentsAndExceptionExpectPassTest()
+    public function assertThrowsWithArgumentsAndExceptionExpectPass()
     {
         $Stub = new StubThrowsClass();
         $this->target->throws($Stub, 'doesThrowWithArgs', array(3, 3));
     }
     
-    public function assertThrowsWithArgumentsAndNoExceptionExpectFailTest()
+    public function assertThrowsWithArgumentsAndNoExceptionExpectFail()
     {
         $Stub = new StubThrowsClass();
         $verifyFailed = false;

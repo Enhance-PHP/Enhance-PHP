@@ -2,7 +2,7 @@
 // Enhance Unit Testing Framework For PHP
 // Copyright 2011 Steve Fenton, Mark Jones
 // 
-// Version 1.3
+// Version 1.4
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ ini_set('display_errors', '1');
 // Public API
 // Run tests by calling the static method:
 //     Enhance::runTests();
-// Prototype method coverage results, call the following each time you test a method:
+// For method coverage results, call the following each time you test a method:
 //     Enhance::log($class, 'MethodName');
 class Enhance 
 {
@@ -57,6 +57,13 @@ class Enhance
 }
 
 // Public API
+// If you extend this class, all public methods in your class will be run as tests.
+class EnhanceTestFixture
+{
+    
+}
+
+// Public API
 // Get a mock object by calling the static method:
 //     MockFactory::createMock('MyClass');
 class MockFactory 
@@ -81,9 +88,9 @@ class StubFactory
 // Public API
 // Set an expectation using the following syntax:
 //      $MyMock->AddExpectation(
-//          Expect::method("MethodName")
-//              ->with("Argument1", "Argument2")
-//              ->returns("Return Value")
+//          Expect::method('MethodName')
+//              ->with('Argument1', 'Argument2')
+//              ->returns('Return Value') - or throws('My Exception')
 //              ->times(1)
 //      );
 // And verify the call has been made with the correct arguments and the correct 
@@ -252,7 +259,7 @@ class EnhanceTestFramework
     
     public function runTests($output) 
     {
-        $this->getTestFixtures();
+        $this->getTestFixturesByParent();
         $this->run();
         
         if(PHP_SAPI === 'cli') {
@@ -293,11 +300,10 @@ class EnhanceTestFramework
         return $className . '#' . $methodName;
     }
     
-    private function getTestFixtures() 
-    {
+    private function getTestFixturesByParent() {
         $classes = get_declared_classes();
         foreach($classes as $className) {
-            if (substr($className, -11) === 'TestFixture') {
+            if (get_parent_class($className) === 'EnhanceTestFixture') {
                 $instance = new $className();
                 $this->addFixture($instance);
             }
@@ -308,8 +314,11 @@ class EnhanceTestFramework
     {
         $classMethods = get_class_methods($class);
         foreach($classMethods as $method) {
-            if (substr($method, -4) === 'Test') {
-                $this->addTest($class, $method);
+            if ($method !== 'setUp' && $method !== 'tearDown') {
+                $reflection = new ReflectionMethod($class, $method);
+                if ($reflection->isPublic()) {
+                    $this->addTest($class, $method);
+                }
             }
         }
     }

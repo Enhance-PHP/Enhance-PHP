@@ -1,5 +1,5 @@
 <?php
-class ExampleWithMockTestFixture
+class ExampleDependencyClassTests extends EnhanceTestFixture
 {
         public function verifyWithAMockTest() 
         {

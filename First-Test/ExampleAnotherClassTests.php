@@ -1,7 +1,7 @@
 <?php
-class ExampleAnotherTestFixture 
+class ExampleAnotherClassTests extends EnhanceTestFixture
 {
-    public function getJoinedStringWithTwoStringsExpectJoinedResultTest()
+    public function getJoinedStringWithTwoStringsExpectJoinedResult()
     {
         $target = Enhance::getCodeCoverageWrapper('ExampleAnotherClass', array('xx', 'yy'));
 

@@ -1,5 +1,5 @@
 <?php
-class AssertIsTrueTestFixture
+class AssertIsTrueTestFixture extends EnhanceTestFixture
 {
     private $target;
     
@@ -8,12 +8,12 @@ class AssertIsTrueTestFixture
         $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
     }
 
-    public function assertIsTrueWithTrueExpectPassTest()
+    public function assertIsTrueWithTrueExpectPass()
     {
         $this->target->isTrue(true);
     }
     
-    public function assertIsTrueWithFalseExpectFailTest()
+    public function assertIsTrueWithFalseExpectFail()
     {
         $verifyFailed = false;
         try {
@@ -24,7 +24,7 @@ class AssertIsTrueTestFixture
         Assert::isTrue($verifyFailed);
     }
     
-    public function assertIsTrueWith1ExpectFailTest()
+    public function assertIsTrueWith1ExpectFail()
     {
         $verifyFailed = false;
         try {
