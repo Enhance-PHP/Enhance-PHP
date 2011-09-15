@@ -24,6 +24,7 @@ include('AssertIsNotInstanceOfTypeTestFixture.php');
 include('AssertFailTestFixture.php');
 include('AssertInconclusiveTestFixture.php');
 include('AssertThrowsTestFixture.php');
+include('ScenarioTestFixture.php');
 
 // Run the tests
 Enhance::runTests();

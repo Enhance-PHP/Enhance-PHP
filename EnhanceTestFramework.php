@@ -241,6 +241,7 @@ class TextEn
     public $Exception = 'Exception';
     public $CannotCallVerifyOnStub = 'Cannot call VerifyExpectations on a stub';
     public $ReturnsOrThrowsNotBoth = 'You must only set a single return value (1 returns() or 1 throws())';
+    public $ScenarioWithExpectMismatch = 'Scenario must be initialised with the same number of \'with\' and \'expect\' calls';
 }
 
 class EnhanceTestFramework 
@@ -461,12 +462,12 @@ class EnhanceProxy
     }
 }
 
-class EnhanceMock 
+class EnhanceMock
 {
-    private $Text;
+    private $IsMock;
+    private $Text;	
     private $ClassName;
     private $Expectations = array();
-    private $IsMock;
 
     public function EnhanceMock($className, $isMock)
     {
@@ -579,6 +580,60 @@ class EnhanceMock
             $isMatch = false;
         }
         return $isMatch;
+    }
+}
+
+class EnhanceScenario
+{
+    private $Text;	
+    private $ClassName;	
+	private $FunctionName;
+	private $Inputs = array();
+	private $Expectations = array();
+	private $Output= array();
+	
+    public function EnhanceScenario($className, $functionName)
+    {
+        $this->ClassName = $className;
+		$this->FunctionName = $functionName;
+        $this->Text = TextFactory::getLanguageText();
+    }
+    
+	public function with()
+	{
+		$this->Inputs[] = func_get_args();
+		return $this;
+	}
+	
+	public function expect()
+	{
+		$this->Expectations[] = func_get_args();
+		return $this;
+	}	
+	
+    public function verifyExpectations()
+    {
+    	if (count($this->Inputs) !== count($this->Expectations)) {
+            throw new Exception($this->Text->ScenarioWithExpectMismatch);
+        }
+		
+    	$exceptionText = "";		
+		
+		while(count($this->Inputs) > 0){			
+	    	$input = array_shift($this->Inputs);
+			$expected = array_shift($this->Expectations);
+
+ 			$actual = call_user_func_array(array(new $this->ClassName, $this->FunctionName), $input);
+			
+			if ($expected[0] != $actual)
+			{
+	            $exceptionText .= $this->Text->Expected . ' ' . $expected[0] . ' ' . $this->Text->ButWas . ' ' . $actual . ' '; 
+			}			
+		}
+		
+		if ($exceptionText !== ""){
+			throw new Exception($exceptionText, 0);				
+		}
     }
 }
 
