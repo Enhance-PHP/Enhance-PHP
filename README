@@ -9,6 +9,12 @@ Unless required by applicable law or agreed to in writing, software distributed 
 http://www.enhance-php.com/
 https://github.com/Enhance-PHP/Enhance-PHP
 
+v1.5
+Auto-detect code and tests
+
+v1.4
+EnhanceTestFixture base class to marking test classes
+
 v1.3
 Adjustments to meet PHP coding standards
 

@@ -9,9 +9,9 @@ class TestClassForCodeCoverageLogger
     }
 }
 
-class CodeCoverageLoggerTestFixture
+class CodeCoverageLoggerTestFixture extends EnhanceTestFixture
 {
-    public function useCodeCoverageLoggerToCallMethodTest()
+    public function useCodeCoverageLoggerToCallMethod()
     {
         $target = Enhance::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
         
@@ -20,7 +20,7 @@ class CodeCoverageLoggerTestFixture
         Assert::areIdentical(7, $result);
     }
     
-    public function useCodeCoverageLoggerToGetPropertyTest()
+    public function useCodeCoverageLoggerToGetProperty()
     {
         $target = Enhance::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
         
@@ -29,7 +29,7 @@ class CodeCoverageLoggerTestFixture
         Assert::areIdentical(1, $result);
     }
     
-    public function useCodeCoverageLoggerToSetPropertyTest() 
+    public function useCodeCoverageLoggerToSetProperty() 
     {
         $target = Enhance::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
         

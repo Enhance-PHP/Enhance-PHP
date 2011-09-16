@@ -1,7 +1,7 @@
 <?php
-class ExampleWithMockTestFixture
+class ExampleDependencyClassTests extends EnhanceTestFixture
 {
-        public function verifyWithAMockTest() 
+        public function verifyWithAMock() 
         {
                 $mock = MockFactory::createMock('ExampleDependencyClass');
                 $mock->addExpectation(

@@ -1,5 +1,5 @@
 <?php
-class AssertFailTestFixture
+class AssertFailTestFixture extends EnhanceTestFixture
  {
     private $target;
     
@@ -8,7 +8,7 @@ class AssertFailTestFixture
         $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
     }
 
-    public function assertFailExpectErrorTest()
+    public function assertFailExpectError()
     {
         $verifyFailed = false;
         try {

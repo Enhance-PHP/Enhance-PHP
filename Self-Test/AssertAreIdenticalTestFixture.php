@@ -1,5 +1,5 @@
 <?php
-class AssertAreIdenticalTestFixture
+class AssertAreIdenticalTestFixture extends EnhanceTestFixture
 {
     private $target;
     
@@ -8,12 +8,12 @@ class AssertAreIdenticalTestFixture
         $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
     }
 
-    public function assertAreIdenticalWithIdenticalIntegersTest()
+    public function assertAreIdenticalWithIdenticalIntegers()
     {
         $this->target->areIdentical(5, 5);
     }
     
-    public function assertAreIdenticalWithDifferentIntegersTest()
+    public function assertAreIdenticalWithDifferentIntegers()
     {
         $verifyFailed = false;
         try {
@@ -24,12 +24,12 @@ class AssertAreIdenticalTestFixture
         Assert::isTrue($verifyFailed);
     }
     
-    public function assertAreIdenticalWithIdenticalStringsTest()
+    public function assertAreIdenticalWithIdenticalStrings()
     {
         $this->target->areIdentical('Test', 'Test');
     }
     
-    public function assertAreIdenticalWithDifferentStringsTest()
+    public function assertAreIdenticalWithDifferentStrings()
     {
         $verifyFailed = false;
         try {
@@ -40,12 +40,12 @@ class AssertAreIdenticalTestFixture
         Assert::isTrue($verifyFailed);
     }
     
-    public function assertAreIdenticalWithIdenticalFloatsTest()
+    public function assertAreIdenticalWithIdenticalFloats()
     {
         $this->target->areIdentical(15.123346575, 15.123346575);
     }
     
-    public function assertAreIdenticalWithDifferentFloatsTest() 
+    public function assertAreIdenticalWithDifferentFloats() 
     {
         $verifyFailed = false;
         try {
