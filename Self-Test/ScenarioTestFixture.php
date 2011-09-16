@@ -1,74 +1,87 @@
 <?php
-
 class ScenarioExampleClass
 {
     public function addTwoNumbers($a, $b)
     {
         return $a + $b;
     }
+	
     public function returnParameter($a)
     {
         return $a;
     }
-	public function helloWorld()
-	{
-		echo "Hello World";
-	}
 }
 
 class ScenarioTestFixture extends EnhanceTestFixture
-{
-	private $Assertions;
-	
-	public function setUp()
-	{
-		$this->Assertions = new EnhanceAssertions();
-	}
-	
+{	
     public function scenarioTestWithOneArgFunctionExpectReturnValue()
     {
-        $scenario = new EnhanceScenario('ScenarioExampleClass', 'returnParameter');
+	   	$target = Enhance::getCodeCoverageWrapper('ScenarioExampleClass');
+        $scenario = Enhance::getScenario($target, 'returnParameter');
+		
         $scenario->with(1)->expect(1);
         $scenario->with(2)->expect(2);
         $scenario->with('Hello')->expect('Hello');
+        $scenario->with(array(1, 2, 3))->expect(array(1, 2, 3));
+        $scenario->with(new ScenarioExampleClass())->expect(new ScenarioExampleClass());
 
         $scenario->VerifyExpectations();
     }
 
     public function scenarioTestWithTwoArgsFunctionExpectReturnValues()
     {
-        $scenario = new EnhanceScenario('ScenarioExampleClass', 'addTwoNumbers');
-        $scenario->with(1,2)->expect(3);
-        $scenario->with(3,4)->expect(7);
+	   	$target = Enhance::getCodeCoverageWrapper('ScenarioExampleClass');
+        $scenario = Enhance::getScenario($target, 'addTwoNumbers');
+
+        $scenario->with(1, 2)->expect(3);
+        $scenario->with(3, 4)->expect(7);
+        $scenario->with(3, -4)->expect(-1);
+        $scenario->with(-3, -4)->expect(-7);
+        $scenario->with(3.14, 4.14)->expect(7.28);
+
+        $scenario->VerifyExpectations();
+    }
+
+    public function scenarioTestWithCodeCoverageExpectReturnValues()
+    {
+    	$target = Enhance::getCodeCoverageWrapper('ScenarioExampleClass');
+        $scenario = Enhance::getScenario($target, 'addTwoNumbers');
+
+        $scenario->with(1, 2)->expect(3);
+        $scenario->with(3, 4)->expect(7);
+        $scenario->with(3, -4)->expect(-1);
+        $scenario->with(-3, -4)->expect(-7);
+        $scenario->with(3.14, 4.14)->expect(7.28);
 
         $scenario->VerifyExpectations();
     }
 
     public function scenarioTestWithIncorrectReturnValueExpectException()
     {
-        $scenario = new EnhanceScenario('ScenarioExampleClass', 'addTwoNumbers');
-        $scenario->with(1,2)->expect(5);
+	   	$target = Enhance::getCodeCoverageWrapper('ScenarioExampleClass');
+        $scenario = Enhance::getScenario($target, 'addTwoNumbers');
 
-		try{
+        $scenario->with(1, 2)->expect(5);
+
+		try {
 	        $scenario->VerifyExpectations();
-		}
-		catch(exception $e){
-//			$this->Assertions->AreIdentical('Expected 5 but was 3', $e->getMessage());
+		} catch(exception $e) {			
+			Assert::AreIdentical('Expected 5 but was 3 ', $e->getMessage());
 		}
 	}
 
     public function scenarioTestWithMismatchWithAndExpectExpectException()
     {
-        $scenario = new EnhanceScenario('ScenarioExampleClass', 'addTwoNumbers');
-        $scenario->with(1,2); // missing expect
-        $scenario->with(1,2)->expect(5);
-		try{
+	   	$target = Enhance::getCodeCoverageWrapper('ScenarioExampleClass');
+        $scenario = Enhance::getScenario($target, 'addTwoNumbers');
+
+        $scenario->with(1, 2); // missing the expectation, this is the point of this test
+        $scenario->with(1, 2)->expect(5);
+		try {
     	    $scenario->VerifyExpectations();
-		}
-		catch(exception $e){
-			EnhanceAssertions::AreIdentical($e->getMessage(), 'Scenario must be initialised with the same number of \'with\' and \'expect\' calls');
+		} catch(exception $e) {
+			EnhanceAssertions::AreIdentical('Scenario must be initialised with the same number of \'with\' and \'expect\' calls', $e->getMessage());
 		}
 	}
 }
-
 ?>

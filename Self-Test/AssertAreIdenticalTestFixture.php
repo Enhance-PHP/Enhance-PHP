@@ -45,6 +45,11 @@ class AssertAreIdenticalTestFixture extends EnhanceTestFixture
         $this->target->areIdentical(15.123346575, 15.123346575);
     }
     
+    public function assertAreIdenticalWithIdenticalFloatsAsResultOfAddition()
+    {
+        $this->target->areIdentical(7.28, 3.14 + 4.14);
+    }
+    
     public function assertAreIdenticalWithDifferentFloats() 
     {
         $verifyFailed = false;

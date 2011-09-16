@@ -2,7 +2,7 @@
 // Enhance Unit Testing Framework For PHP
 // Copyright 2011 Steve Fenton, Mark Jones
 // 
-// Version 1.4
+// Version 1.6
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,8 +19,7 @@
 // http://www.enhance-php.com/
 // http://www.stevefenton.co.uk/
 // - Contributors
-// - PHP Code: Steve Fenton
-// - Code Reviews and Design Discussions: Mark Jones
+// - PHP Code: Steve Fenton, Mark Jones
 //
 ini_set('error_reporting', (string)E_ALL);
 ini_set('display_errors', '1');
@@ -53,6 +52,11 @@ class Enhance
     {
         $className = get_class($class);
         self::$Instance->log($className, $methodName);
+    }
+	    
+    public static function getScenario($className, $args = null) 
+    {
+        return new EnhanceScenario($className, $args);
     }
 }
 
@@ -229,7 +233,7 @@ class TextEn
     public $TestRunTook = 'Test run took';
     public $Seconds = 'seconds';
     public $ExpectationFailed = 'Expectation failed';
-    public $Expected = ' Expected';
+    public $Expected = 'Expected';
     public $Called = 'Called';
     public $ExpectedNot = 'Expected NOT';
     public $ButWas = 'but was';
@@ -586,15 +590,15 @@ class EnhanceMock
 class EnhanceScenario
 {
     private $Text;	
-    private $ClassName;	
+    private $Class;	
 	private $FunctionName;
 	private $Inputs = array();
 	private $Expectations = array();
 	private $Output= array();
 	
-    public function EnhanceScenario($className, $functionName)
+    public function EnhanceScenario($class, $functionName)
     {
-        $this->ClassName = $className;
+        $this->Class = $class;
 		$this->FunctionName = $functionName;
         $this->Text = TextFactory::getLanguageText();
     }
@@ -617,21 +621,25 @@ class EnhanceScenario
             throw new Exception($this->Text->ScenarioWithExpectMismatch);
         }
 		
-    	$exceptionText = "";		
+    	$exceptionText = '';		
 		
-		while(count($this->Inputs) > 0){			
+		while(count($this->Inputs) > 0) {			
 	    	$input = array_shift($this->Inputs);
 			$expected = array_shift($this->Expectations);
+			$expected = $expected[0];
 
- 			$actual = call_user_func_array(array(new $this->ClassName, $this->FunctionName), $input);
+ 			$actual = call_user_func_array(array($this->Class, $this->FunctionName), $input);
 			
-			if ($expected[0] != $actual)
-			{
-	            $exceptionText .= $this->Text->Expected . ' ' . $expected[0] . ' ' . $this->Text->ButWas . ' ' . $actual . ' '; 
+			if (is_float($expected)) {
+				if ((string)$expected !== (string)$actual) {
+					$exceptionText .= $this->Text->Expected . ' ' . $expected . ' ' . $this->Text->ButWas . ' ' . $actual . ' ';
+				}
+			} elseif ($expected != $actual) {
+	            $exceptionText .= $this->Text->Expected . ' ' . $expected . ' ' . $this->Text->ButWas . ' ' . $actual . ' '; 
 			}			
 		}
 		
-		if ($exceptionText !== ""){
+		if ($exceptionText !== ''){
 			throw new Exception($exceptionText, 0);				
 		}
     }
@@ -735,8 +743,15 @@ class EnhanceAssertions
     }
 
     public function areIdentical($expected, $actual) 
-    {
-        if ($expected !== $actual) {
+    {    	
+		if (is_float($expected)) {
+			if ((string)$expected !== (string)$actual) {
+	            throw new Exception(
+	                $this->Text->Expected . ' ' . $expected . ' ' . $this->Text->ButWas . ' ' . $actual . ' ', 
+	                0
+	            );
+			}
+		} elseif ($expected !== $actual) {
             throw new Exception(
                 $this->Text->Expected . ' ' . $expected . ' ' . $this->Text->ButWas . ' ' . $actual . ' ', 
                 0
@@ -746,7 +761,14 @@ class EnhanceAssertions
     
     public function areNotIdentical($expected, $actual)
     {
-        if ($expected === $actual) {
+        if (is_float($expected)) {
+			if ((string)$expected === (string)$actual) {
+	            throw new Exception(
+	                $this->Text->ExpectedNot . ' ' . $expected . ' ' . $this->Text->ButWas . ' ' . $actual . ' ', 
+	                0
+	            );
+			}
+		} elseif ($expected === $actual) {
             throw new Exception(
                 $this->Text->ExpectedNot . ' ' . $expected . ' ' . $this->Text->ButWas . ' ' . $actual . ' ', 
                 0
