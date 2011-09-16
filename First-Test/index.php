@@ -1,13 +1,8 @@
 <?php
 // Include the test framework
 include('../EnhanceTestFramework.php');
-
-// Include your classes and test fixtures
-include('ExampleClass.php');
-include('ExampleClassTests.php');
-include('ExampleAnotherClass.php');
-include('ExampleAnotherClassTests.php');
-
+// Find the tests - '.' is the current folder
+Enhance::discoverTests('.');
 // Run the tests
 Enhance::runTests();
 ?>

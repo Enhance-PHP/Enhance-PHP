@@ -33,6 +33,15 @@ class Enhance
 {
     private static $Instance;
 
+    public static function discoverTests($path) 
+    {
+        if (self::$Instance === null) {
+            self::$Instance = new EnhanceTestFramework();
+        }
+        
+        self::$Instance->discoverTests($path);
+    }
+
     public static function runTests($output = EnhanceOutputTemplateType::Html) 
     {
         if (self::$Instance === null) {
@@ -260,6 +269,28 @@ class EnhanceTestFramework
     public function EnhanceTestFramework() 
     {
         $this->Text = TextFactory::getLanguageText();
+    }
+    
+    public function discoverTests($path) {
+        $phpFiles = $this->readDirectory($path);
+        foreach ($phpFiles as $file) {
+            include_once($file);
+        }
+    }
+    
+    public function readDirectory($path) {
+        $phpFiles = array();
+        $files = scandir($path);
+        foreach($files as $file) {
+            if ($file !== '.' && $file !== '..') {
+                if (strpos($file, '.') === false) {
+                    array_merge($phpFiles, $this->readDirectory($file, $phpFiles));
+                } elseif (substr($file, -4) === '.php') {
+                    array_push($phpFiles, $file);
+                }
+            }
+        }
+        return $phpFiles;
     }
     
     public function runTests($output) 
