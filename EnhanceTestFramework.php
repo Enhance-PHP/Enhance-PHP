@@ -2,7 +2,7 @@
 // Enhance Unit Testing Framework For PHP
 // Copyright 2011 Steve Fenton, Mark Jones
 // 
-// Version 1.7
+// Version 1.8
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -354,7 +354,7 @@ class EnhanceTestFramework
     {
         $classMethods = get_class_methods($class);
         foreach($classMethods as $method) {
-            if ($method !== 'setUp' && $method !== 'tearDown') {
+            if (strtolower($method) !== 'setup' && strtolower($method) !== 'teardown') {
                 $reflection = new ReflectionMethod($class, $method);
                 if ($reflection->isPublic()) {
                     $this->addTest($class, $method);

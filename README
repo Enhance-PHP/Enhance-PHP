@@ -9,6 +9,9 @@ Unless required by applicable law or agreed to in writing, software distributed 
 http://www.enhance-php.com/
 https://github.com/Enhance-PHP/Enhance-PHP
 
+v1.8
+Fixed case sensitivity for setUp and tearDown methods as not everyone will follow normal PHP conventions
+
 v1.7
 Fixed auto-discovery bug
 
