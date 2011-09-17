@@ -2,7 +2,7 @@
 // Enhance Unit Testing Framework For PHP
 // Copyright 2011 Steve Fenton, Mark Jones
 // 
-// Version 1.6
+// Version 1.7
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -280,15 +280,19 @@ class EnhanceTestFramework
     
     public function readDirectory($path) {
         $phpFiles = array();
-        $files = scandir($path);
-        foreach($files as $file) {
-            if ($file !== '.' && $file !== '..') {
-                if (strpos($file, '.') === false) {
-                    array_merge($phpFiles, $this->readDirectory($file, $phpFiles));
-                } elseif (substr($file, -4) === '.php') {
-                    array_push($phpFiles, $file);
+        if (file_exists($path)) {
+            $files = scandir($path);
+            foreach($files as $file) {
+                if ($file !== '.' && $file !== '..') {
+                    if (strpos($file, '.') === false) {
+                        array_merge($phpFiles, $this->readDirectory($path . $file, $phpFiles));
+                    } elseif (substr($file, -4) === '.php') {
+                        array_push($phpFiles, $path . $file);
+                    }
                 }
             }
+        } else {
+            echo '404: ' . $path;
         }
         return $phpFiles;
     }
