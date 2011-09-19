@@ -212,28 +212,31 @@ class TextFactory
 
 class TextEn 
 {
+    public $FormatForTestRunTook = 'Test run took {0} seconds';
+    public $FormatForExpectedButWas = 'Expected {0} but was {1}';
+    public $FormatForExpectedButWas = 'Expected NOT {0} but was {1}';
+    public $FormatForExpectedContainsButWas = 'Expected to contain {0} but was {1}';
+    public $FormatForExpectedNotContainsButWas = 'Expected NOT to contain {0} but was {1}';
+
     public $EnhanceTestFramework = 'Enhance Test Framework';
     public $EnhanceTestFrameworkFull = 'Enhance PHP Unit Testing Framework';
     public $TestResults = 'Test Results';
     public $Test = 'Test';
+    public $TestPassed = 'Test Passed';
+    public $TestFailed = 'Test Failed';
     public $Passed = 'Passed';
     public $Failed = 'Failed';
-    public $TestRunTook = 'Test run took';
-    public $Seconds = 'seconds';
     public $ExpectationFailed = 'Expectation failed';
     public $Expected = 'Expected';
     public $Called = 'Called';
-    public $ExpectedNot = 'Expected NOT';
-    public $ButWas = 'but was';
-    public $ContainedInString = 'contained in string';
-    public $InconclusiveOrNotImplemented = 'inconclusive or not implemented';
+    public $InconclusiveOrNotImplemented = 'Inconclusive or not implemented';
     public $Times = 'Times';
     public $MethodCoverage = 'Method Coverage';
     public $Copyright = 'Copyright';
-    public $Exception = 'Exception';
+    public $ExpectedExceptionNotThrown = 'Expected exception was not thrown';
     public $CannotCallVerifyOnStub = 'Cannot call VerifyExpectations on a stub';
     public $ReturnsOrThrowsNotBoth = 'You must only set a single return value (1 returns() or 1 throws())';
-    public $ScenarioWithExpectMismatch = 'Scenario must be initialised with the same number of \'with\' and \'expect\' calls';
+    public $ScenarioWithExpectMismatch = 'Scenario must be initialised with the same number of "with" and "expect" calls';
 }
 
 class EnhanceTestFramework 
@@ -663,10 +666,10 @@ class EnhanceScenario
 			
 			if (is_float($expected)) {
 				if ((string)$expected !== (string)$actual) {
-					$exceptionText .= $this->Text->Expected . ' ' . $expected . ' ' . $this->Text->ButWas . ' ' . $actual . ' ';
+					$exceptionText .= str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas));
 				}
 			} elseif ($expected != $actual) {
-	            $exceptionText .= $this->Text->Expected . ' ' . $expected . ' ' . $this->Text->ButWas . ' ' . $actual . ' '; 
+	            $exceptionText .= str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas));
 			}			
 		}
 		
@@ -777,16 +780,10 @@ class EnhanceAssertions
     {    	
 		if (is_float($expected)) {
 			if ((string)$expected !== (string)$actual) {
-	            throw new Exception(
-	                $this->Text->Expected . ' ' . $expected . ' ' . $this->Text->ButWas . ' ' . $actual . ' ', 
-	                0
-	            );
+                throw new Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
 			}
 		} elseif ($expected !== $actual) {
-            throw new Exception(
-                $this->Text->Expected . ' ' . $expected . ' ' . $this->Text->ButWas . ' ' . $actual . ' ', 
-                0
-            );
+            throw new Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
@@ -794,36 +791,24 @@ class EnhanceAssertions
     {
         if (is_float($expected)) {
 			if ((string)$expected === (string)$actual) {
-	            throw new Exception(
-	                $this->Text->ExpectedNot . ' ' . $expected . ' ' . $this->Text->ButWas . ' ' . $actual . ' ', 
-	                0
-	            );
+                throw new Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedNotButWas)), 0);
 			}
 		} elseif ($expected === $actual) {
-            throw new Exception(
-                $this->Text->ExpectedNot . ' ' . $expected . ' ' . $this->Text->ButWas . ' ' . $actual . ' ', 
-                0
-            );
+            throw new Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedNotButWas)), 0);
         }
     }
     
     public function isTrue($actual)
     {
         if ($actual !== true) {
-            throw new Exception(
-                $this->Text->Expected . ' true ' . $this->Text->ButWas . ' ' . $actual . ' ', 
-                0
-            );
+            throw new Exception(str_replace('{0}', 'true', str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
     public function isFalse($actual)
     {
         if ($actual !== false) {
-            throw new Exception(
-                $this->Text->Expected . ' false ' . $this->Text->ButWas . ' ' . $actual . ' ', 
-                0
-            );
+            throw new Exception(str_replace('{0}', 'false', str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
@@ -831,11 +816,7 @@ class EnhanceAssertions
     {
         $result = strpos($actual, $expected);
         if ($result === false) {
-            throw new Exception(
-                $this->Text->Expected . ' ' . $expected . ' ' . $this->Text->ContainedInString . ' ' . 
-                    $this->Text->ButWas . ' ' . $actual . ' ', 
-                0
-            );
+            throw new Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedContainsButWas)), 0);
         }
     }
     
@@ -843,31 +824,21 @@ class EnhanceAssertions
     {
         $result = strpos($actual, $expected);
         if ($result !== false) {
-            throw new Exception(
-                $this->Text->ExpectedNot . ' ' . $expected . ' ' . $this->Text->ContainedInString . ' ' . 
-                    $this->Text->ButWas . ' ' . $actual . ' ', 
-                0
-            );
+            throw new Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedNotContainsButWas)), 0);
         }
     }
     
     public function isNull($actual)
     {
         if ($actual !== null) {
-            throw new Exception(
-                $this->Text->Expected . ' null ' . $this->Text->ButWas . ' ' . $actual . ' ', 
-                0
-            );
+            throw new Exception(str_replace('{0}', 'null', str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
     public function isNotNull($actual)
     {
         if ($actual === null) {
-            throw new Exception(
-                $this->Text->ExpectedNot . ' null ' . $this->Text->ButWas . ' ' . $actual . ' ', 
-                0
-            );
+            throw new Exception(str_replace('{0}', 'null', str_replace('{1}', $actual, $this->Text->FormatForExpectedNotButWas)), 0);
         }
     }
 
@@ -885,10 +856,7 @@ class EnhanceAssertions
     {
         $actualType = get_class($actual);
         if ($expected !== $actualType) {
-            throw new Exception(
-                $this->Text->Expected . ' ' . $expected . ' ' . $this->Text->ButWas . ' ' . $actualType . ' ', 
-                0
-            );
+            throw new Exception(str_replace('{0}', $expected, str_replace('{1}', $actualType, $this->Text->FormatForExpectedButWas)), 0);
         };
     }
     
@@ -896,10 +864,7 @@ class EnhanceAssertions
     {
         $actualType = get_class($actual);
         if ($expected === $actualType) {
-            throw new Exception(
-                $this->Text->Expected . ' ' . $expected . ' ' . $this->Text->ButWas . ' ' . $actualType . ' ', 
-                0
-            );
+            throw new Exception(str_replace('{0}', $expected, str_replace('{1}', $actualType, $this->Text->FormatForExpectedNotButWas)), 0);
         };
     }
     
@@ -918,7 +883,7 @@ class EnhanceAssertions
         }
         
         if (!$exception) {
-            throw new Exception($this->Text->Expected . ' ' . $this->Text->Exception, 0);
+            throw new Exception($this->Text->ExpectedExceptionNotThrown, 0);
         }
     }
 }
@@ -970,7 +935,7 @@ class EnhanceHtmlTemplate implements iOutputTemplate
             }
             $message .= '</ul></li></ul>';
         } else {
-            $message .= '<h2 class="ok">' . $text->Test . ' ' . $text->Passed . '</h2>';
+            $message .= '<h2 class="ok">' . $text->TestPassed . '</h2>';
         }
         
         $currentClass = '';
@@ -1008,7 +973,7 @@ class EnhanceHtmlTemplate implements iOutputTemplate
             $message .= '</ul>';
         }
         
-        $message .= '<p>' . $text->TestRunTook . ' ' . $duration . ' ' . $text->Seconds . '</p>';
+        $message .= '<p>' . str_replace('{0}', $duration, $text->FormatForTestRunTook) . '</p>';
         
         return $this->getTemplateWithMessage($message);
     }
@@ -1086,9 +1051,9 @@ class EnhanceXmlTemplate implements iOutputTemplate
         
         $message .= '<enhance>' . $cr;
         if ($failCount > 0) {
-            $message .= $tab . '<result>' . $text->Test . ' ' . $text->Failed . '</result>' . $cr;
+            $message .= $tab . '<result>' . $text->TestFailed . '</result>' . $cr;
         } else {
-            $message .= $tab . '<result>' . $text->Test . ' ' . $text->Passed . '</result>' . $cr;
+            $message .= $tab . '<result>' . $text->TestPassed . '</result>' . $cr;
         }
         
         $message .= $tab . '<testResults>' . $cr;
@@ -1152,9 +1117,9 @@ class EnhanceCliTemplate implements iOutputTemplate
         $methodCallCount = count($methodCalls);
         
         if ($failCount > 0) {
-            $message .= $text->Test . ' ' . $text->Failed . $cr;
+            $message .= $text->TestFailed . $cr;
         } else {
-            $message .= $text->Test . ' ' . $text->Passed . $cr;
+            $message .= $text->TestPassed . $cr;
         }
         
         foreach ($errors as $error) {
@@ -1169,7 +1134,7 @@ class EnhanceCliTemplate implements iOutputTemplate
             $message .= str_replace('#', '->', $key) . ':' . $value . $cr;
         }
         
-        $message .= $duration . ' ' . $text->Seconds . $cr;
+        $message .= str_replace('{0}', $duration, $text->FormatForTestRunTook) . $cr;
         
         return $message;
     }
