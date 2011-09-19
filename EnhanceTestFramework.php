@@ -2,7 +2,7 @@
 // Enhance Unit Testing Framework For PHP
 // Copyright 2011 Steve Fenton, Mark Jones
 // 
-// Version 1.8
+// Version 1.9
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,10 +25,6 @@ ini_set('error_reporting', (string)E_ALL);
 ini_set('display_errors', '1');
 
 // Public API
-// Run tests by calling the static method:
-//     Enhance::runTests();
-// For method coverage results, call the following each time you test a method:
-//     Enhance::log($class, 'MethodName');
 class Enhance 
 {
     private static $Instance;
@@ -70,15 +66,12 @@ class Enhance
 }
 
 // Public API
-// If you extend this class, all public methods in your class will be run as tests.
 class EnhanceTestFixture
 {
     
 }
 
 // Public API
-// Get a mock object by calling the static method:
-//     MockFactory::createMock('MyClass');
 class MockFactory 
 {
     public static function createMock($typeName) 
@@ -88,8 +81,6 @@ class MockFactory
 }
 
 // Public API
-// Get a stub object by calling the static method:
-//     StubFactory::createStub('MyClass');
 class StubFactory 
 {
     public static function createStub($typeName) 
@@ -99,16 +90,6 @@ class StubFactory
 }
 
 // Public API
-// Set an expectation using the following syntax:
-//      $MyMock->AddExpectation(
-//          Expect::method('MethodName')
-//              ->with('Argument1', 'Argument2')
-//              ->returns('Return Value') - or throws('My Exception')
-//              ->times(1)
-//      );
-// And verify the call has been made with the correct arguments and the correct 
-// number of times by calling the verify function on your mock object
-//     $MyMock->verify();
 class Expect 
 {
     const AnyValue = 'ENHANCE_ANY_VALUE_WILL_DO';
@@ -133,8 +114,6 @@ class Expect
 }
 
 // Public API
-// Prove that a certain condition is correct
-//     Assert::areIdentical(5, 5);
 class Assert 
 {
     private static $EnhanceAssertions;
@@ -259,6 +238,7 @@ class TextEn
 
 class EnhanceTestFramework 
 {
+    private $FileSystem;
     private $Text;
     private $Tests = array();
     private $Results = array();
@@ -269,32 +249,14 @@ class EnhanceTestFramework
     public function EnhanceTestFramework() 
     {
         $this->Text = TextFactory::getLanguageText();
+        $this->FileSystem = new EnhanceFileSystem();
     }
     
-    public function discoverTests($path) {
-        $phpFiles = $this->readDirectory($path);
+    public function discoverTests($path, $isResursive = true) {
+        $phpFiles = $this->FileSystem->getFilesFromDirectory($path, $isResursive);
         foreach ($phpFiles as $file) {
             include_once($file);
         }
-    }
-    
-    public function readDirectory($path) {
-        $phpFiles = array();
-        if (file_exists($path)) {
-            $files = scandir($path);
-            foreach($files as $file) {
-                if ($file !== '.' && $file !== '..') {
-                    if (strpos($file, '.') === false) {
-                        array_merge($phpFiles, $this->readDirectory($path . $file, $phpFiles));
-                    } elseif (substr($file, -4) === '.php') {
-                        array_push($phpFiles, $path . $file);
-                    }
-                }
-            }
-        } else {
-            echo '404: ' . $path;
-        }
-        return $phpFiles;
     }
     
     public function runTests($output) 
@@ -384,6 +346,40 @@ class EnhanceTestFramework
             }
         }
         $this->Duration = time() - $start;
+    }
+}
+
+class EnhanceFileSystem
+{
+    public function getFilesFromDirectory($directory, $isRecursive) {
+        $files = array();
+        if ($handle = opendir($directory)) {
+            while (false !== ($file = readdir($handle))) {
+                if ($file != '.' && $file != '..') {
+                    if(is_dir($directory . '/' . $file)) {
+                        if ($isRecursive) {
+                            $dir2 = $directory . '/' . $file;
+                            $files[] = $this->getFilesFromDirectory($dir2, $isRecursive);
+                        }
+                    } else {
+                        $files[] = $directory . '/' . $file;
+                    }
+                }
+            }
+            closedir($handle);
+        }
+        return $this->flattenArray($files);
+    }
+
+    public function flattenArray($array) {
+        foreach($array as $a) {
+            if(is_array($a)) {
+                $tmp = array_merge($tmp, $this->flattenArray($a));
+            } else {
+                $tmp[] = $a;
+            }
+        }
+        return $tmp;
     }
 }
 
