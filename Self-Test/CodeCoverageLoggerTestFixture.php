@@ -13,6 +13,7 @@ class CodeCoverageLoggerTestFixture extends EnhanceTestFixture
 {
     public function useCodeCoverageLoggerToCallMethod()
     {
+        /** @var TestClassForCodeCoverageLogger $target */
         $target = Enhance::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
         
         $result = $target->getNumberPlusTwo(5);
@@ -22,6 +23,7 @@ class CodeCoverageLoggerTestFixture extends EnhanceTestFixture
     
     public function useCodeCoverageLoggerToGetProperty()
     {
+        /** @var TestClassForCodeCoverageLogger $target */
         $target = Enhance::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
         
         $result = $target->property;
@@ -31,6 +33,7 @@ class CodeCoverageLoggerTestFixture extends EnhanceTestFixture
     
     public function useCodeCoverageLoggerToSetProperty() 
     {
+        /** @var TestClassForCodeCoverageLogger $target */
         $target = Enhance::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
         
         $target->property = 8;

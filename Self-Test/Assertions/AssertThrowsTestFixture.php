@@ -28,6 +28,7 @@ class StubThrowsClass
 
 class AssertThrowsTestFixture extends EnhanceTestFixture
 {
+    /** @var EnhanceAssertions $target */
     private $target;
     
     public function setUp()

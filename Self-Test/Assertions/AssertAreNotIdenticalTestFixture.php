@@ -1,6 +1,7 @@
 <?php
 class AssertAreNotIdenticalTestFixture extends EnhanceTestFixture
  {
+    /** @var EnhanceAssertions $target */
     private $target;
     
     public function setUp()

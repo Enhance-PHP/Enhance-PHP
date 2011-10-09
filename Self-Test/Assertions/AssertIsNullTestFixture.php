@@ -1,6 +1,7 @@
 <?php
 class AssertIsNullTestFixture extends EnhanceTestFixture
 {
+    /** @var EnhanceAssertions $target */
     private $target;
     
     public function setUp()

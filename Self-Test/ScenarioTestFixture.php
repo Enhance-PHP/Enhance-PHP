@@ -80,7 +80,7 @@ class ScenarioTestFixture extends EnhanceTestFixture
 		try {
     	    $scenario->VerifyExpectations();
 		} catch(exception $e) {
-			EnhanceAssertions::AreIdentical('Scenario must be initialised with the same number of "with" and "expect" calls', $e->getMessage());
+			Assert::AreIdentical('Scenario must be initialised with the same number of "with" and "expect" calls', $e->getMessage());
 		}
 	}
 }

@@ -1,8 +1,16 @@
 <?php
+interface IMockExample
+{
+    function doSomething();
+    function anotherMethod();
+    function callNotExpectedMethod();
+}
+
 class MockTestFixture extends EnhanceTestFixture
 {
     public function createMockWithArgumentsAndOneTimeExpectReturnValueAndVerifies()
     {
+        /** @var IMockExample $mock */
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->with('hello', 3, 'world')->returns('Some Value')->times(1));
 
@@ -14,6 +22,7 @@ class MockTestFixture extends EnhanceTestFixture
     
     public function createMockWithNoRequiredArgumentsAndOneTimeExpectReturnValueAndVerifies()
     {
+        /** @var IMockExample $mock */
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->returns('Some Value')->times(1));
 
@@ -25,6 +34,7 @@ class MockTestFixture extends EnhanceTestFixture
     
     public function createMockWithAnyArgumentsAndOneTimeExpectReturnValueAndVerifies()
     {
+        /** @var IMockExample $mock */
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->with(Expect::AnyValue, Expect::AnyValue, Expect::AnyValue)->returns('Some Value')->times(1));
 
@@ -36,6 +46,7 @@ class MockTestFixture extends EnhanceTestFixture
 
     public function createMockWithArgumentsAndTwoTimesExpectReturnValueAndVerifies()
     {
+        /** @var IMockExample $mock */
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->with('hello', 3, 'world')->returns('Some Value')->times(2));
 
@@ -49,11 +60,12 @@ class MockTestFixture extends EnhanceTestFixture
     
     public function createMockWithArgumentsAndOneTimeButTwoCallsExpectErrorOnVerify()
     {
+        /** @var IMockExample $mock */
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->with('hello', 3, 'world')->returns('Some Value')->times(1));
 
-        $result1 = $mock->doSomething('hello', 3, 'world');
-        $result2 = $mock->doSomething('hello', 3, 'world');
+        $mock->doSomething('hello', 3, 'world');
+        $mock->doSomething('hello', 3, 'world');
 
         $verifyFailed = false;
         try {
@@ -67,10 +79,11 @@ class MockTestFixture extends EnhanceTestFixture
     
     public function createMockWithZeroTimesButOneCallExpectErrorOnVerify()
     {
+        /** @var IMockExample $mock */
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->with('hello', 3, 'world')->times(0));
 
-        $result1 = $mock->doSomething('hello', 3, 'world');
+        $mock->doSomething('hello', 3, 'world');
 
         $verifyFailed = false;
         try {
@@ -84,10 +97,11 @@ class MockTestFixture extends EnhanceTestFixture
     
     public function createMockWithArgumentsAndTwoTimesButOneCallExpectErrorOnVerify()
     {
+        /** @var IMockExample $mock */
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->with('hello', 3, 'world')->returns('Some Value')->times(2));
 
-        $result1 = $mock->doSomething('hello', 3, 'world');
+        $mock->doSomething('hello', 3, 'world');
 
         $verifyFailed = false;
         try {
@@ -101,12 +115,13 @@ class MockTestFixture extends EnhanceTestFixture
     
     public function createMockWithExceptionAsReturnExpectReturnsException()
     {
+        /** @var IMockExample $mock */
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->with('hello', 3, 'world')->throws('Test Exception')->times(1));
         
         $verifyFailed = false;
         try {
-            $result = $mock->doSomething('hello', 3, 'world');
+            $mock->doSomething('hello', 3, 'world');
         } catch (Exception $e) {
             $verifyFailed = true;
         }
@@ -116,6 +131,7 @@ class MockTestFixture extends EnhanceTestFixture
     
     public function createMockWithAnyArgumentsExpectVerify()
     {
+        /** @var IMockExample $mock */
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->returns('Some Value')->times(1));
 
@@ -127,6 +143,7 @@ class MockTestFixture extends EnhanceTestFixture
     
     public function createMockWithNoArgumentsExpectVerify()
     {
+        /** @var IMockExample $mock */
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->returns('Some Value')->times(1));
 
@@ -138,12 +155,13 @@ class MockTestFixture extends EnhanceTestFixture
     
     public function createMockWithMultipleExpectationsExpectVerify() 
     {
+        /** @var IMockExample $mock */
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::method('doSomething')->returns('Some Value')->times(1));
-        $mock->AddExpectation(Expect::method('AnotherMethod')->returns(5)->times(1));
+        $mock->AddExpectation(Expect::method('anotherMethod')->returns(5)->times(1));
 
         $result1 = $mock->doSomething();
-        $result2 = $mock->AnotherMethod();
+        $result2 = $mock->anotherMethod();
 
         Assert::areIdentical('Some Value', $result1);
         Assert::areIdentical(5, $result2);
@@ -155,6 +173,7 @@ class MockTestFixture extends EnhanceTestFixture
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::getProperty('Number')->returns(1)->times(1));
 
+        /** @noinspection PhpUndefinedFieldInspection */
         $result = $mock->Number;
 
         Assert::areIdentical(1, $result);
@@ -166,6 +185,7 @@ class MockTestFixture extends EnhanceTestFixture
         $mock = MockFactory::createMock('ExampleClass');
         $mock->AddExpectation(Expect::setProperty('Number')->with(5)->times(1));
 
+        /** @noinspection PhpUndefinedFieldInspection */
         $mock->Number = 5;
 
         $mock->VerifyExpectations();
@@ -173,6 +193,7 @@ class MockTestFixture extends EnhanceTestFixture
     
     public function createStubExpectCallsSucceed()
     {
+        /** @var IMockExample $stub */
         $stub = StubFactory::createStub('ExampleClass');
         $stub->AddExpectation(Expect::method('doSomething')->returns('Some Value'));
         $stub->AddExpectation(Expect::method('anotherMethod')->returns(5));
@@ -180,7 +201,7 @@ class MockTestFixture extends EnhanceTestFixture
         $result1 = $stub->doSomething();
         $result2 = $stub->doSomething();
         $result3 = $stub->anotherMethod();
-        $stub->CallNotExpectedMethod();
+        $stub->callNotExpectedMethod();
 
         Assert::areIdentical('Some Value', $result1);
         Assert::areIdentical('Some Value', $result2);

@@ -12,6 +12,7 @@ class ExampleClass
 
 class ExampleTestFixture extends EnhanceTestFixture
 {
+    /** @var ExampleClass $target */
     private $target;
     
     public function setUp()

@@ -1,6 +1,7 @@
 <?php
 class AssertFailTestFixture extends EnhanceTestFixture
  {
+    /** @var EnhanceAssertions $target */
     private $target;
     
     public function setUp()
