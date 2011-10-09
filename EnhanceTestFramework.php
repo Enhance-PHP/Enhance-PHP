@@ -1,32 +1,11 @@
 <?php
-// Enhance Unit Testing Framework For PHP
-// Copyright 2011 Steve Fenton, Mark Jones
-// 
-// Version 1.9
-// 
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-// 
-// http://www.apache.org/licenses/LICENSE-2.0
-// 
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
-// http://www.enhance-php.com/
-// http://www.stevefenton.co.uk/
-// - Contributors
-// - PHP Code: Steve Fenton, Mark Jones
-//
 ini_set('error_reporting', (string)E_ALL);
 ini_set('display_errors', '1');
 
 // Public API
 class Enhance 
 {
+    /** @var EnhanceTestFramework $Instance */
     private static $Instance;
 
     public static function discoverTests($path) 
@@ -76,7 +55,7 @@ class MockFactory
 {
     public static function createMock($typeName) 
     {
-        return new EnhanceMock($typeName, $isMock = true);
+        return new EnhanceMock($typeName, true);
     }
 }
 
@@ -85,7 +64,7 @@ class StubFactory
 {
     public static function createStub($typeName) 
     {
-        return new EnhanceMock($typeName, $isMock = false);
+        return new EnhanceMock($typeName, false);
     }
 }
 
@@ -116,6 +95,7 @@ class Expect
 // Public API
 class Assert 
 {
+    /** @var EnhanceAssertions $EnhanceAssertions */
     private static $EnhanceAssertions;
     
     private static function GetEnhanceAssertionsInstance() 
@@ -255,8 +235,8 @@ class EnhanceTestFramework
         $this->FileSystem = new EnhanceFileSystem();
     }
     
-    public function discoverTests($path, $isResursive = true) {
-        $phpFiles = $this->FileSystem->getFilesFromDirectory($path, $isResursive);
+    public function discoverTests($path, $isRecursive = true) {
+        $phpFiles = $this->FileSystem->getFilesFromDirectory($path, $isRecursive);
         foreach ($phpFiles as $file) {
             include_once($file);
         }
@@ -337,7 +317,7 @@ class EnhanceTestFramework
     private function run() 
     {
         $start = time();
-        foreach($this->Tests as $test) {
+        foreach($this->Tests as /** @var EnhanceTest $test */ $test) {
             $result = $test->run();
             if ($result) {
                 $message = $test->getTestName() . ' - ' . $this->Text->Passed;
@@ -375,14 +355,15 @@ class EnhanceFileSystem
     }
 
     public function flattenArray($array) {
+        $merged = array();
         foreach($array as $a) {
             if(is_array($a)) {
-                $tmp = array_merge($tmp, $this->flattenArray($a));
+                $merged = array_merge($merged, $this->flattenArray($a));
             } else {
-                $tmp[] = $a;
+                $merged[] = $a;
             }
         }
-        return $tmp;
+        return $merged;
     }
 }
 
@@ -436,8 +417,6 @@ class EnhanceTest
     
     public function run()
     {
-        $result = false;
-        
         $testClass = new $this->ClassName();
     
         try {
@@ -527,7 +506,7 @@ class EnhanceMock
             );
         }
         
-        foreach ($this->Expectations as $expectation) {
+        foreach ($this->Expectations as /** @var EnhanceExpectation $expectation */ $expectation) {
             if (!$expectation->verify()) {
                 $Arguments = '';
                 foreach($expectation->MethodArguments as $argument) {
@@ -558,7 +537,7 @@ class EnhanceMock
     
     public function __set($propertyName, $value)
     {
-        $Expectation = $this->getReturnValue('setProperty', $propertyName, array($value));
+        $this->getReturnValue('setProperty', $propertyName, array($value));
     }
     
     private function getReturnValue($type, $methodName, $args)
@@ -628,8 +607,7 @@ class EnhanceScenario
 	private $FunctionName;
 	private $Inputs = array();
 	private $Expectations = array();
-	private $Output= array();
-	
+
     public function EnhanceScenario($class, $functionName)
     {
         $this->Class = $class;
@@ -1047,8 +1025,7 @@ class EnhanceXmlTemplate implements iOutputTemplate
         $cr = "\n";
         $tab = "    ";
         $failCount = count($errors);
-        $methodCallCount = count($methodCalls);
-        
+
         $message .= '<enhance>' . $cr;
         if ($failCount > 0) {
             $message .= $tab . '<result>' . $text->TestFailed . '</result>' . $cr;
@@ -1112,10 +1089,8 @@ class EnhanceCliTemplate implements iOutputTemplate
     {
         $message = '';
         $cr = "\n";
-        $tab = "    ";
         $failCount = count($errors);
-        $methodCallCount = count($methodCalls);
-        
+
         if ($failCount > 0) {
             $message .= $text->TestFailed . $cr;
         } else {
@@ -1154,10 +1129,10 @@ class EnhanceOutputTemplateFactory
             case EnhanceOutputTemplateType::Cli:
                 return new EnhanceCliTemplate();                
                 break;
-            default:
-                break;
         }
-    }        
+
+        return new EnhanceHtmlTemplate();
+    }
 }
 
 class EnhanceOutputTemplateType
