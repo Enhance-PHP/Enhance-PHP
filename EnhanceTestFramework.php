@@ -335,7 +335,8 @@ class EnhanceTestFramework
 
 class EnhanceFileSystem
 {
-    public function getFilesFromDirectory($directory, $isRecursive) {
+    public function getFilesFromDirectory($directory, $isRecursive)
+    {
         $files = array();
         if ($handle = opendir($directory)) {
             while (false !== ($file = readdir($handle))) {
@@ -355,7 +356,8 @@ class EnhanceFileSystem
         return $this->flattenArray($files);
     }
 
-    public function flattenArray($array) {
+    public function flattenArray($array)
+    {
         $merged = array();
         foreach($array as $a) {
             if(is_array($a)) {
@@ -1149,6 +1151,4 @@ class EnhanceOutputTemplateType
     const Html = 1;
     const Cli = 2;
 }
-
-
 ?>
