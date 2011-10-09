@@ -1,5 +1,4 @@
 <?php
-// Strict errors!
 ini_set('error_reporting', (string)E_ALL);
 ini_set('display_errors', '1');
 
@@ -239,6 +238,7 @@ class EnhanceTestFramework
     public function discoverTests($path, $isRecursive = true) {
         $phpFiles = $this->FileSystem->getFilesFromDirectory($path, $isRecursive);
         foreach ($phpFiles as $file) {
+            /** @noinspection PhpIncludeInspection */
             include_once($file);
         }
     }
@@ -463,6 +463,7 @@ class EnhanceProxy
     {
         Enhance::log($this->Instance, $methodName);
         if ($args !== null) {
+            /** @noinspection PhpParamsInspection */
             return call_user_func_array(array($this->Instance, $methodName), $args);
         } else {
             return $this->Instance->{$methodName}();
@@ -556,6 +557,7 @@ class EnhanceMock
             }
             return $Expectation->ReturnValue;
         }
+        return null;
     }
     
     private function getMatchingExpectation($type, $methodName, $arguments)
@@ -576,6 +578,7 @@ class EnhanceMock
                 }
             }
         }
+        return null;
     }
     
     private function argumentsMatch($arguments1, $arguments2)
@@ -669,6 +672,7 @@ class EnhanceExpectation
     public $ExpectArguments;
     public $ExpectTimes;
     public $Type;
+    public $Text;
     
     public function EnhanceExpectation()
     {
@@ -678,6 +682,8 @@ class EnhanceExpectation
         $this->ExpectTimes = false;
         $this->ReturnException = false;
         $this->ReturnValue = null;
+        $textFactory = new TextFactory();
+        $this->Text = $textFactory->getLanguageText();
     }
 
     public function method($methodName)
@@ -853,6 +859,7 @@ class EnhanceAssertions
 
         try {
             if ($args !== null) {
+                /** @noinspection PhpParamsInspection */
                 call_user_func_array(array($class, $methodName), $args);
             } else {
                 $class->{$methodName}();
