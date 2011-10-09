@@ -1,4 +1,5 @@
 <?php
+// Strict errors!
 ini_set('error_reporting', (string)E_ALL);
 ini_set('display_errors', '1');
 
