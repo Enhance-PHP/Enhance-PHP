@@ -190,14 +190,13 @@ class TextFactory
     }
 }
 
-class TextEn 
+class TextEn
 {
     public $FormatForTestRunTook = 'Test run took {0} seconds';
     public $FormatForExpectedButWas = 'Expected {0} but was {1}';
     public $FormatForExpectedNotButWas = 'Expected NOT {0} but was {1}';
     public $FormatForExpectedContainsButWas = 'Expected to contain {0} but was {1}';
     public $FormatForExpectedNotContainsButWas = 'Expected NOT to contain {0} but was {1}';
-
     public $EnhanceTestFramework = 'Enhance Test Framework';
     public $EnhanceTestFrameworkFull = 'Enhance PHP Unit Testing Framework';
     public $TestResults = 'Test Results';
@@ -217,6 +216,34 @@ class TextEn
     public $CannotCallVerifyOnStub = 'Cannot call VerifyExpectations on a stub';
     public $ReturnsOrThrowsNotBoth = 'You must only set a single return value (1 returns() or 1 throws())';
     public $ScenarioWithExpectMismatch = 'Scenario must be initialised with the same number of "with" and "expect" calls';
+}
+
+class TextDe
+{
+    public $FormatForTestRunTook = 'Test run took {0} seconds';
+    public $FormatForExpectedButWas = 'Expected {0} but was {1}';
+    public $FormatForExpectedNotButWas = 'Expected NOT {0} but was {1}';
+    public $FormatForExpectedContainsButWas = 'Expected to contain {0} but was {1}';
+    public $FormatForExpectedNotContainsButWas = 'Expected NOT to contain {0} but was {1}';
+    public $EnhanceTestFramework = 'Enhance Test-Rahmen';
+    public $EnhanceTestFrameworkFull = 'Maßeinheits-Prüfungs-Rahmen';
+    public $TestResults = 'Testergebnisse';
+    public $Test = 'Test';
+    public $TestPassed = 'Test bestehen';
+    public $TestFailed = 'Test durchfallen';
+    public $Passed = 'Bestehen';
+    public $Failed = 'Durchfallen';
+    public $ExpectationFailed = 'Erwartung durchfallen';
+    public $Expected = 'Erwartet';
+    public $Called = 'Benannt';
+    public $InconclusiveOrNotImplemented = 'Unbestimmt oder nicht durchgefuert';
+    public $Times = 'Ereignisse';
+    public $MethodCoverage = 'Methodenbehandlung';
+    public $Copyright = 'Copyright';
+    public $ExpectedExceptionNotThrown = 'Die Ausnahme wird nicht ausgeloest';
+    public $CannotCallVerifyOnStub = 'Kann VerifyExpectations auf einem Stub nicht aufrufen';
+    public $ReturnsOrThrowsNotBoth = 'Sie müssen einen einzelnen Return Value nur einstellen';
+    public $ScenarioWithExpectMismatch = 'Szenarium muss mit der gleichen Zahl von "With" und "Expect" calls initialisiert werden';
 }
 
 class EnhanceTestFramework 
@@ -289,9 +316,16 @@ class EnhanceTestFramework
     private function getTestFixturesByParent() {
         $classes = get_declared_classes();
         foreach($classes as $className) {
-            if (get_parent_class($className) === 'EnhanceTestFixture') {
+            $parentClassName = get_parent_class($className);
+            if ($parentClassName === 'EnhanceTestFixture') {
                 $instance = new $className();
                 $this->addFixture($instance);
+            } else {
+                $ancestorClassName = get_parent_class($parentClassName);
+                if ($ancestorClassName === 'EnhanceTestFixture') {
+                    $instance = new $className();
+                    $this->addFixture($instance);
+                }
             }
         }
     }
