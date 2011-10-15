@@ -547,11 +547,13 @@ class EnhanceMock
         foreach ($this->Expectations as /** @var EnhanceExpectation $expectation */ $expectation) {
             if (!$expectation->verify()) {
                 $Arguments = '';
-                foreach($expectation->MethodArguments as $argument) {
-                    if (isset($Arguments[0])) {
-                        $Arguments .= ', ';
+                if (isset($expectation->MethodArguments)) {
+                    foreach($expectation->MethodArguments as $argument) {
+                        if (isset($Arguments[0])) {
+                            $Arguments .= ', ';
+                        }
+                        $Arguments .= $argument;
                     }
-                    $Arguments .= $argument;
                 }
                 
                 throw new Exception(
