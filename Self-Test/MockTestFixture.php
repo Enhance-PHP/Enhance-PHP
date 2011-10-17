@@ -128,6 +128,22 @@ class MockTestFixture extends EnhanceTestFixture
         
         Assert::isTrue($verifyFailed);
     }
+
+    public function createMockWithCallToUnexpectedMethodExpectReturnsException()
+    {
+        /** @var IMockExample $mock */
+        $mock = MockFactory::createMock('ExampleClass');
+
+        $verifyFailed = false;
+
+        try {
+            $mock->doSomething();
+        } catch (Exception $e) {
+            $verifyFailed = true;
+        }
+
+        Assert::isTrue($verifyFailed);
+    }
     
     public function createMockWithAnyArgumentsExpectVerify()
     {
@@ -152,7 +168,7 @@ class MockTestFixture extends EnhanceTestFixture
         Assert::areIdentical('Some Value', $result);
         $mock->VerifyExpectations();
     }
-    
+
     public function createMockWithMultipleExpectationsExpectVerify() 
     {
         /** @var IMockExample $mock */

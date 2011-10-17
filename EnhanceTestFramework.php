@@ -611,6 +611,14 @@ class EnhanceMock
             }
             return $Expectation->ReturnValue;
         }
+
+        if ($this->IsMock)  {
+            throw new Exception(
+                $this->Text->ExpectationFailed . ' ' .
+                $this->ClassName . '->' . $methodName . '(' . $args . ') ' .
+                $this->Text->Expected . ' #0 ' .
+                $this->Text->Called . ' #1', 0);
+        }
         return null;
     }
     

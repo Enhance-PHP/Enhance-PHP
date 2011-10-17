@@ -11,7 +11,7 @@ class AssertIsNotInstanceOfTypeTestFixture extends EnhanceTestFixture
     
     public function setUp()
     {
-        $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions');
+        $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions', array(EnhanceLanguage::English));
     }
 
     public function assertIsNotInstanceOfTypeWithDifferentType()
