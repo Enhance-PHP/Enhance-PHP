@@ -7,40 +7,54 @@ class Enhance
 {
     /** @var EnhanceTestFramework $Instance */
     private static $Instance;
+    private static $Language = EnhanceLanguage::English;
 
-    public static function discoverTests($path) 
+    public static function getLanguage()
     {
-        if (self::$Instance === null) {
-            self::$Instance = new EnhanceTestFramework();
-        }
-        
+        return self::$Language;
+    }
+
+    public static function setLanguage($language)
+    {
+        self::$Language = $language;
+    }
+
+    public static function discoverTests($path)
+    {
+        self::setInstance();
         self::$Instance->discoverTests($path);
     }
 
     public static function runTests($output = EnhanceOutputTemplateType::Html) 
     {
-        if (self::$Instance === null) {
-            self::$Instance = new EnhanceTestFramework();
-        }
-        
+        self::setInstance();
         self::$Instance->runTests($output);
     }
     
     public static function getCodeCoverageWrapper($className, $args = null) 
     {
+        self::setInstance();
         self::$Instance->registerForCodeCoverage($className);
         return new EnhanceProxy($className, $args);
     }
     
     public static function log($class, $methodName) 
     {
+        self::setInstance();
         $className = get_class($class);
         self::$Instance->log($className, $methodName);
     }
 	    
     public static function getScenario($className, $args = null) 
     {
-        return new EnhanceScenario($className, $args);
+        return new EnhanceScenario($className, $args, self::$Language);
+    }
+
+    public static function setInstance()
+    {
+        if (self::$Instance === null) {
+            self::$Instance = new EnhanceTestFramework(self::$Language);
+        }
     }
 }
 
@@ -55,7 +69,7 @@ class MockFactory
 {
     public static function createMock($typeName) 
     {
-        return new EnhanceMock($typeName, true);
+        return new EnhanceMock($typeName, true, Enhance::getLanguage());
     }
 }
 
@@ -64,7 +78,7 @@ class StubFactory
 {
     public static function createStub($typeName) 
     {
-        return new EnhanceMock($typeName, false);
+        return new EnhanceMock($typeName, false, Enhance::getLanguage());
     }
 }
 
@@ -75,19 +89,19 @@ class Expect
 
     public static function method($methodName) 
     {
-        $expectation = new EnhanceExpectation();
+        $expectation = new EnhanceExpectation(Enhance::getLanguage());
         return $expectation->method($methodName);
     }
     
     public static function getProperty($propertyName) 
     {
-        $expectation = new EnhanceExpectation();
+        $expectation = new EnhanceExpectation(Enhance::getLanguage());
         return $expectation->getProperty($propertyName);
     }
     
     public static function setProperty($propertyName) 
     {
-        $expectation = new EnhanceExpectation();
+        $expectation = new EnhanceExpectation(Enhance::getLanguage());
         return $expectation->setProperty($propertyName);
     }
 }
@@ -101,7 +115,7 @@ class Assert
     private static function GetEnhanceAssertionsInstance() 
     {
         if(self::$EnhanceAssertions === null) {
-            self::$EnhanceAssertions = new EnhanceAssertions();
+            self::$EnhanceAssertions = new EnhanceAssertions(Enhance::getLanguage());
         }
         return self::$EnhanceAssertions;
     }
@@ -180,11 +194,11 @@ class TextFactory
 {
     public static $Text;
 
-    public static function getLanguageText() 
+    public static function getLanguageText($language)
     {
         if (self::$Text === null) {
-            // Currently supports "en"
-            self::$Text = new TextEn();
+            $languageClass = 'Text' . $language;
+            self::$Text = new $languageClass();
         }
         return self::$Text;
     }
@@ -220,11 +234,11 @@ class TextEn
 
 class TextDe
 {
-    public $FormatForTestRunTook = 'Test run took {0} seconds';
-    public $FormatForExpectedButWas = 'Expected {0} but was {1}';
-    public $FormatForExpectedNotButWas = 'Expected NOT {0} but was {1}';
-    public $FormatForExpectedContainsButWas = 'Expected to contain {0} but was {1}';
-    public $FormatForExpectedNotContainsButWas = 'Expected NOT to contain {0} but was {1}';
+    public $FormatForTestRunTook = 'Fertig nach {0} Sekunden';
+    public $FormatForExpectedButWas = 'Erwartet {0} aber war {1}';
+    public $FormatForExpectedNotButWas = 'Erwartet nicht {0} aber war {1}';
+    public $FormatForExpectedContainsButWas = 'Erwartet {0} zu enthalten, aber war {1}';
+    public $FormatForExpectedNotContainsButWas = 'Erwartet {0} nicht zu enthalten, aber war {1}';
     public $EnhanceTestFramework = 'Enhance Test-Rahmen';
     public $EnhanceTestFrameworkFull = 'Maßeinheits-Prüfungs-Rahmen';
     public $TestResults = 'Testergebnisse';
@@ -255,13 +269,15 @@ class EnhanceTestFramework
     private $Errors = array();
     private $Duration;
     private $MethodCalls = array();
-    
-    public function EnhanceTestFramework() 
+    private $Language;
+
+    public function EnhanceTestFramework($language)
     {
-        $this->Text = TextFactory::getLanguageText();
+        $this->Text = TextFactory::getLanguageText($language);
         $this->FileSystem = new EnhanceFileSystem();
+        $this->Language = $language;
     }
-    
+
     public function discoverTests($path, $isRecursive = true) {
         $phpFiles = $this->FileSystem->getFilesFromDirectory($path, $isRecursive);
         foreach ($phpFiles as $file) {
@@ -279,7 +295,7 @@ class EnhanceTestFramework
             $output = EnhanceOutputTemplateType::Cli;
         }
         
-        $OutputTemplate = EnhanceOutputTemplateFactory::createOutputTemplate($output);
+        $OutputTemplate = EnhanceOutputTemplateFactory::createOutputTemplate($output, $this->Language);
         echo $OutputTemplate->get(
             $this->Errors, 
             $this->Results, 
@@ -524,11 +540,11 @@ class EnhanceMock
     private $ClassName;
     private $Expectations = array();
 
-    public function EnhanceMock($className, $isMock)
+    public function EnhanceMock($className, $isMock, $language)
     {
         $this->IsMock = $isMock;
         $this->ClassName = $className;
-        $this->Text = TextFactory::getLanguageText();
+        $this->Text = TextFactory::getLanguageText($language);
     }
     
     public function AddExpectation($expectation)
@@ -650,11 +666,11 @@ class EnhanceScenario
 	private $Inputs = array();
 	private $Expectations = array();
 
-    public function EnhanceScenario($class, $functionName)
+    public function EnhanceScenario($class, $functionName, $language)
     {
         $this->Class = $class;
 		$this->FunctionName = $functionName;
-        $this->Text = TextFactory::getLanguageText();
+        $this->Text = TextFactory::getLanguageText($language);
     }
     
 	public function with()
@@ -712,7 +728,7 @@ class EnhanceExpectation
     public $Type;
     public $Text;
     
-    public function EnhanceExpectation()
+    public function EnhanceExpectation($language)
     {
         $this->ExpectedCalls = -1;
         $this->ActualCalls = 0;
@@ -721,7 +737,7 @@ class EnhanceExpectation
         $this->ReturnException = false;
         $this->ReturnValue = null;
         $textFactory = new TextFactory();
-        $this->Text = $textFactory->getLanguageText();
+        $this->Text = $textFactory->getLanguageText($language);
     }
 
     public function method($methodName)
@@ -794,9 +810,9 @@ class EnhanceAssertions
 {
     private $Text;
     
-    public function EnhanceAssertions() 
+    public function EnhanceAssertions($language)
     {
-        $this->Text = TextFactory::getLanguageText();
+        $this->Text = TextFactory::getLanguageText($language);
     }
 
     public function areIdentical($expected, $actual) 
@@ -922,9 +938,9 @@ class EnhanceHtmlTemplate implements iOutputTemplate
 {
     private $Text;
     
-    public function EnhanceHtmlTemplate()
+    public function EnhanceHtmlTemplate($language)
     {
-        $this->Text = TextFactory::getLanguageText();
+        $this->Text = TextFactory::getLanguageText($language);
     }
     
     public function getTemplateType()
@@ -1055,9 +1071,9 @@ class EnhanceXmlTemplate implements iOutputTemplate
 {
     private $Text;
     
-    public function EnhanceXmlTemplate()
+    public function EnhanceXmlTemplate($language)
     {
-        $this->Text = TextFactory::getLanguageText();
+        $this->Text = TextFactory::getLanguageText($language);
     }
     
     public function getTemplateType()
@@ -1121,9 +1137,9 @@ class EnhanceCliTemplate implements iOutputTemplate
 {
     private $Text;
     
-    public function EnhanceCliTemplate()
+    public function EnhanceCliTemplate($language)
     {
-        $this->Text = TextFactory::getLanguageText();
+        $this->Text = TextFactory::getLanguageText($language);
     }
     
     public function getTemplateType()
@@ -1163,21 +1179,21 @@ class EnhanceCliTemplate implements iOutputTemplate
 
 class EnhanceOutputTemplateFactory 
 {
-    public static function createOutputTemplate($type)
+    public static function createOutputTemplate($type, $language)
     {
         switch ($type) {
             case EnhanceOutputTemplateType::Xml:
-                return new EnhanceXmlTemplate();
+                return new EnhanceXmlTemplate($language);
                 break;            
             case EnhanceOutputTemplateType::Html:
-                return new EnhanceHtmlTemplate();                
+                return new EnhanceHtmlTemplate($language);
                 break;
             case EnhanceOutputTemplateType::Cli:
-                return new EnhanceCliTemplate();                
+                return new EnhanceCliTemplate($language);
                 break;
         }
 
-        return new EnhanceHtmlTemplate();
+        return new EnhanceHtmlTemplate($language);
     }
 }
 
@@ -1186,5 +1202,16 @@ class EnhanceOutputTemplateType
     const Xml = 0;
     const Html = 1;
     const Cli = 2;
+}
+
+class EnhanceLanguage
+{
+    const English = 'En';
+    const Deutsch = 'De';
+}
+
+class EnhanceLocalisation
+{
+    public $Language = EnhanceLanguage::English;
 }
 ?>
