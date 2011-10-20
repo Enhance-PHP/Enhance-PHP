@@ -9,6 +9,9 @@ Unless required by applicable law or agreed to in writing, software distributed 
 http://www.enhance-php.com/
 https://github.com/Enhance-PHP/Enhance-PHP
 
+v2.0.1
+Improvements to auto-discovery to allow recursion to be specified and to allow directories to be excluded.
+
 v2.0.0
 Localisation and improvements to mocks. Minor bug fixes.
 
