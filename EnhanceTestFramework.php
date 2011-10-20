@@ -19,10 +19,10 @@ class Enhance
         self::$Language = $language;
     }
 
-    public static function discoverTests($path)
+    public static function discoverTests($path, $isRecursive = true, $excludeRules = array())
     {
         self::setInstance();
-        self::$Instance->discoverTests($path);
+        self::$Instance->discoverTests($path, $isRecursive, $excludeRules);
     }
 
     public static function runTests($output = EnhanceOutputTemplateType::Html) 
@@ -278,11 +278,14 @@ class EnhanceTestFramework
         $this->Language = $language;
     }
 
-    public function discoverTests($path, $isRecursive = true) {
-        $phpFiles = $this->FileSystem->getFilesFromDirectory($path, $isRecursive);
-        foreach ($phpFiles as $file) {
-            /** @noinspection PhpIncludeInspection */
-            include_once($file);
+    public function discoverTests($path, $isRecursive, $excludeRules) {
+        $directory = rtrim($path, '/');
+        if (is_dir($directory)) {
+            $phpFiles = $this->FileSystem->getFilesFromDirectory($directory, $isRecursive, $excludeRules);
+            foreach ($phpFiles as $file) {
+                /** @noinspection PhpIncludeInspection */
+                include_once($file);
+            }
         }
     }
     
@@ -385,16 +388,20 @@ class EnhanceTestFramework
 
 class EnhanceFileSystem
 {
-    public function getFilesFromDirectory($directory, $isRecursive)
+    public function getFilesFromDirectory($directory, $isRecursive, $excludeRules)
     {
         $files = array();
         if ($handle = opendir($directory)) {
             while (false !== ($file = readdir($handle))) {
                 if ($file != '.' && $file != '..') {
+                    if ($this->isFolderExcluded($file, $excludeRules)){
+                        continue;
+                    }
+
                     if(is_dir($directory . '/' . $file)) {
                         if ($isRecursive) {
                             $dir2 = $directory . '/' . $file;
-                            $files[] = $this->getFilesFromDirectory($dir2, $isRecursive);
+                            $files[] = $this->getFilesFromDirectory($dir2, $isRecursive, $excludeRules);
                         }
                     } else {
                         $files[] = $directory . '/' . $file;
@@ -404,6 +411,17 @@ class EnhanceFileSystem
             closedir($handle);
         }
         return $this->flattenArray($files);
+    }
+
+    private function isFolderExcluded($folder, $excludeRules) {
+        $folder = substr($folder, strrpos($folder, '/'));
+
+        foreach ($excludeRules as $excluded){
+            if ($folder === $excluded){
+                return true;
+            }
+        }
+        return false;
     }
 
     public function flattenArray($array)
