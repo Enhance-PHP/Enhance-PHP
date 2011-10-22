@@ -9,6 +9,9 @@ Unless required by applicable law or agreed to in writing, software distributed 
 http://www.enhance-php.com/
 https://github.com/Enhance-PHP/Enhance-PHP
 
+v2.0.2 (In Progress)
+When running from command line (for example within you IDE) the message "Test Passed" or "Test Failed" appears both top and bottom of the result set.
+
 v2.0.1
 Improvements to auto-discovery to allow recursion to be specified and to allow directories to be excluded.
 

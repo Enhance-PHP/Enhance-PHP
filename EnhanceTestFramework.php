@@ -1199,6 +1199,12 @@ class EnhanceCliTemplate implements iOutputTemplate
         foreach ($methodCalls as $key => $value) {
             $message .= str_replace('#', '->', $key) . ':' . $value . $cr;
         }
+
+        if ($failCount > 0) {
+            $message .= $text->TestFailed . $cr;
+        } else {
+            $message .= $text->TestPassed . $cr;
+        }
         
         $message .= str_replace('{0}', $duration, $text->FormatForTestRunTook) . $cr;
         
