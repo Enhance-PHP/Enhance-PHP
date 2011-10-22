@@ -278,7 +278,8 @@ class EnhanceTestFramework
         $this->Language = $language;
     }
 
-    public function discoverTests($path, $isRecursive, $excludeRules) {
+    public function discoverTests($path, $isRecursive, $excludeRules)
+    {
         $directory = rtrim($path, '/');
         if (is_dir($directory)) {
             $phpFiles = $this->FileSystem->getFilesFromDirectory($directory, $isRecursive, $excludeRules);
@@ -332,7 +333,8 @@ class EnhanceTestFramework
         return $className . '#' . $methodName;
     }
     
-    private function getTestFixturesByParent() {
+    private function getTestFixturesByParent()
+    {
         $classes = get_declared_classes();
         foreach($classes as $className) {
             $parentClassName = get_parent_class($className);
@@ -413,7 +415,8 @@ class EnhanceFileSystem
         return $this->flattenArray($files);
     }
 
-    private function isFolderExcluded($folder, $excludeRules) {
+    private function isFolderExcluded($folder, $excludeRules)
+    {
         $folder = substr($folder, strrpos($folder, '/'));
 
         foreach ($excludeRules as $excluded){
