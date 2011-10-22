@@ -491,11 +491,12 @@ class EnhanceTest
     
     public function run()
     {
+        /** @var $testClass iTestable */
         $testClass = new $this->ClassName();
     
         try {
             if (is_callable($this->SetUpMethod)) {
-                $testClass->SetUp();
+                $testClass->setUp();
             }
         } catch (Exception $e) { }
         
@@ -509,7 +510,7 @@ class EnhanceTest
         
         try {
             if (is_callable($this->TearDownMethod)) {
-                $testClass->TearDown();
+                $testClass->tearDown();
             }
         } catch (Exception $e) { }
         
@@ -963,6 +964,12 @@ interface iOutputTemplate
     public function get($errors, $results, $text, $duration, $methodCalls);
 }
 
+interface iTestable
+{
+    public function setUp();
+    public function tearDown();
+}
+
 class EnhanceHtmlTemplate implements iOutputTemplate 
 {
     private $Text;
@@ -1099,6 +1106,8 @@ class EnhanceHtmlTemplate implements iOutputTemplate
 class EnhanceXmlTemplate implements iOutputTemplate
 {
     private $Text;
+    private $Tab = "    ";
+    private $CR = "\n";
     
     public function EnhanceXmlTemplate($language)
     {
@@ -1113,46 +1122,73 @@ class EnhanceXmlTemplate implements iOutputTemplate
     public function get($errors, $results, $text, $duration, $methodCalls)
     {
         $message = '';
-        $cr = "\n";
-        $tab = "    ";
         $failCount = count($errors);
 
-        $message .= '<enhance>' . $cr;
+        $message .= '<enhance>' . $this->CR;
         if ($failCount > 0) {
-            $message .= $tab . '<result>' . $text->TestFailed . '</result>' . $cr;
+            $message .= $this->getNode(1, 'result', $text->TestFailed);
         } else {
-            $message .= $tab . '<result>' . $text->TestPassed . '</result>' . $cr;
+            $message .= $this->getNode(1, 'result', $text->TestPassed);
         }
         
-        $message .= $tab . '<testResults>' . $cr;
-        foreach ($errors as $error) {
-            $message .=  $tab . $tab . '<fail>' . $error->Message . '</fail>' . $cr;
-        }
+        $message .= $this->Tab . '<testResults>' . $this->CR .
+            $this->getBadResults($errors) .
+            $this->getGoodResults($results) .
+            $this->Tab . '</testResults>' . $this->CR .
+            $this->Tab . '<codeCoverage>' . $this->CR .
+            $this->getCodeCoverage($methodCalls) .
+            $this->Tab . '</codeCoverage>' . $this->CR;
 
-        foreach ($results as $result) {
-            $message .=  $tab . $tab . '<pass>' . $result->Message . '</pass>' . $cr;
-        }
-        $message .= $tab . '</testResults>' . $cr;
-        
-        $message .= $tab . '<codeCoverage>' . $cr;
-        foreach ($methodCalls as $key => $value) {
-            $message .= $this->buildCodeCoverageMessage($key, $value, $tab, $cr); 
-        }
-        
-        $message .= $tab . '</codeCoverage>' . $cr;
-                
-        $message .= $tab . '<testRunDuration>' . $duration . '</testRunDuration>' . $cr;
-        $message .= '</enhance>' . $cr;
+        $message .= $this->getNode(1, 'testRunDuration', $duration) .
+            '</enhance>' . $this->CR;
         
         return $this->getTemplateWithMessage($message);
     }
 
-    private function buildCodeCoverageMessage($key, $value, $tab, $cr)
+    public function getBadResults($errors)
     {
-        return $tab . $tab . '<method>' . $cr .
-                $tab . $tab . $tab . '<name>' . str_replace('#', '-&gt;', $key) . '</name>' . $cr .
-                $tab . $tab . $tab . '<timesCalled>' . $value . '</timesCalled>' . $cr .
-                $tab . $tab . '</method>' . $cr;
+        $message = '';
+        foreach ($errors as $error) {
+            $message .= $this->getNode(2, 'fail', $error->Message);
+        }
+        return $message;
+    }
+
+    public function getGoodResults($results)
+    {
+        $message = '';
+        foreach ($results as $result) {
+            $message .= $this->getNode(2, 'pass', $result->Message);
+        }
+        return $message;
+    }
+
+    public function getCodeCoverage($methodCalls)
+    {
+        $message = '';
+        foreach ($methodCalls as $key => $value) {
+            $message .= $this->buildCodeCoverageMessage($key, $value);
+        }
+        return $message;
+    }
+
+    private function buildCodeCoverageMessage($key, $value)
+    {
+        return $this->Tab . $this->Tab . '<method>' . $this->CR .
+            $this->getNode(3, 'name', str_replace('#', '-&gt;', $key)) .
+            $this->getNode(3, 'timesCalled', $value) .
+            $this->Tab . $this->Tab . '</method>' . $this->CR;
+    }
+
+    private function getNode($tabs, $nodeName, $nodeValue)
+    {
+        $node = '';
+        for ($i = 0; $i < $tabs; ++$i){
+            $node .= $this->Tab;
+        }
+        $node .= '<' . $nodeName . '>' . $nodeValue . '</' . $nodeName . '>' . $this->CR;
+
+        return $node;
     }
 
     private function getTemplateWithMessage($content)
@@ -1165,6 +1201,7 @@ class EnhanceXmlTemplate implements iOutputTemplate
 class EnhanceCliTemplate implements iOutputTemplate 
 {
     private $Text;
+    private $CR = "\n";
     
     public function EnhanceCliTemplate($language)
     {
@@ -1178,36 +1215,51 @@ class EnhanceCliTemplate implements iOutputTemplate
     
     public function get($errors, $results, $text, $duration, $methodCalls)
     {
-        $message = '';
-        $cr = "\n";
         $failCount = count($errors);
 
+        $resultMessage = $text->TestPassed . $this->CR;
         if ($failCount > 0) {
-            $message .= $text->TestFailed . $cr;
-        } else {
-            $message .= $text->TestPassed . $cr;
+            $resultMessage = $text->TestFailed . $this->CR;
         }
+
+        $message = $this->CR .
+            $resultMessage .
+            $this->CR .
+            $this->getBadResults($errors) .
+            $this->getGoodResults($results) .
+            $this->CR .
+            $this->getMethodCoverage($methodCalls) .
+            $this->CR .
+            $resultMessage .
+            str_replace('{0}', $duration, $text->FormatForTestRunTook) . $this->CR;
         
+        return $message;
+    }
+
+    public function getBadResults($errors)
+    {
+        $message = '';
         foreach ($errors as $error) {
-            $message .=  $error->Message . $cr;
+            $message .= $error->Message . $this->CR;
         }
+        return $message;
+    }
 
+    public function getGoodResults($results)
+    {
+        $message = '';
         foreach ($results as $result) {
-            $message .=  $result->Message . $cr;
+            $message .= $result->Message . $this->CR;
         }
-        
-        foreach ($methodCalls as $key => $value) {
-            $message .= str_replace('#', '->', $key) . ':' . $value . $cr;
-        }
+        return $message;
+    }
 
-        if ($failCount > 0) {
-            $message .= $text->TestFailed . $cr;
-        } else {
-            $message .= $text->TestPassed . $cr;
+    public function getMethodCoverage($methodCalls)
+    {
+        $message = '';
+        foreach ($methodCalls as $key => $value) {
+            $message .= str_replace('#', '->', $key) . ':' . $value . $this->CR;
         }
-        
-        $message .= str_replace('{0}', $duration, $text->FormatForTestRunTook) . $cr;
-        
         return $message;
     }
 }
