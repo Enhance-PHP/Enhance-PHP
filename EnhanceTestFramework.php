@@ -337,20 +337,25 @@ class EnhanceTestFramework
     {
         $classes = get_declared_classes();
         foreach($classes as $className) {
-            $parentClassName = get_parent_class($className);
-            if ($parentClassName === 'EnhanceTestFixture') {
+            $this->AddClassIfTest($className);
+        }
+    }
+
+    private function AddClassIfTest($className)
+    {
+        $parentClassName = get_parent_class($className);
+        if ($parentClassName === 'EnhanceTestFixture') {
+            $instance = new $className();
+            $this->addFixture($instance);
+        } else {
+            $ancestorClassName = get_parent_class($parentClassName);
+            if ($ancestorClassName === 'EnhanceTestFixture') {
                 $instance = new $className();
                 $this->addFixture($instance);
-            } else {
-                $ancestorClassName = get_parent_class($parentClassName);
-                if ($ancestorClassName === 'EnhanceTestFixture') {
-                    $instance = new $className();
-                    $this->addFixture($instance);
-                }
             }
         }
     }
-    
+
     private function addFixture($class) 
     {
         $classMethods = get_class_methods($class);
