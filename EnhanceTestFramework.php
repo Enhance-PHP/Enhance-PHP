@@ -271,7 +271,7 @@ class EnhanceTestFramework
     private $MethodCalls = array();
     private $Language;
 
-    public function EnhanceTestFramework($language)
+    public function __construct($language)
     {
         $this->Text = TextFactory::getLanguageText($language);
         $this->FileSystem = new EnhanceFileSystem();
@@ -452,7 +452,7 @@ class EnhanceTestMessage
     public $Test;
     public $IsPass;
     
-    public function EnhanceTestMessage($message, $test, $isPass)
+    public function __construct($message, $test, $isPass)
     {
         $this->Message = $message;
         $this->Test = $test;
@@ -469,7 +469,7 @@ class EnhanceTest
     private $TearDownMethod;
     private $Message;
     
-    public function EnhanceTest($class, $method)
+    public function __construct($class, $method)
     {
         $className = get_class($class);
         $this->ClassName = $className;
@@ -527,7 +527,7 @@ class EnhanceProxy
 {
     private $Instance;
     
-    public function EnhanceProxy($className, $args)
+    public function __construct($className, $args)
     {
         if ($args !== null) {
             $rc = new ReflectionClass($className);
@@ -567,7 +567,7 @@ class EnhanceMock
     private $ClassName;
     private $Expectations = array();
 
-    public function EnhanceMock($className, $isMock, $language)
+    public function __construct($className, $isMock, $language)
     {
         $this->IsMock = $isMock;
         $this->ClassName = $className;
@@ -701,7 +701,7 @@ class EnhanceScenario
 	private $Inputs = array();
 	private $Expectations = array();
 
-    public function EnhanceScenario($class, $functionName, $language)
+    public function __construct($class, $functionName, $language)
     {
         $this->Class = $class;
 		$this->FunctionName = $functionName;
@@ -763,7 +763,7 @@ class EnhanceExpectation
     public $Type;
     public $Text;
     
-    public function EnhanceExpectation($language)
+    public function __construct($language)
     {
         $this->ExpectedCalls = -1;
         $this->ActualCalls = 0;
@@ -845,7 +845,7 @@ class EnhanceAssertions
 {
     private $Text;
     
-    public function EnhanceAssertions($language)
+    public function __construct($language)
     {
         $this->Text = TextFactory::getLanguageText($language);
     }
@@ -979,7 +979,7 @@ class EnhanceHtmlTemplate implements iOutputTemplate
 {
     private $Text;
     
-    public function EnhanceHtmlTemplate($language)
+    public function __construct($language)
     {
         $this->Text = TextFactory::getLanguageText($language);
     }
@@ -1114,7 +1114,7 @@ class EnhanceXmlTemplate implements iOutputTemplate
     private $Tab = "    ";
     private $CR = "\n";
     
-    public function EnhanceXmlTemplate($language)
+    public function __construct($language)
     {
         $this->Text = TextFactory::getLanguageText($language);
     }
@@ -1208,7 +1208,7 @@ class EnhanceCliTemplate implements iOutputTemplate
     private $Text;
     private $CR = "\n";
     
-    public function EnhanceCliTemplate($language)
+    public function __construct($language)
     {
         $this->Text = TextFactory::getLanguageText($language);
     }
