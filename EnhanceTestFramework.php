@@ -9,6 +9,7 @@ class Enhance
     private static $Instance;
     private static $Language = EnhanceLanguage::English;
 
+    /** @return EnhanceLanguage */
     public static function getLanguage()
     {
         return self::$Language;
@@ -400,7 +401,7 @@ class EnhanceFileSystem
         $files = array();
         if ($handle = opendir($directory)) {
             while (false !== ($file = readdir($handle))) {
-                if ($file != '.' && $file != '..') {
+                if ($file != '.' && $file != '..' && strpos($file, '.') !== 0) {
                     if ($this->isFolderExcluded($file, $excludeRules)){
                         continue;
                     }
