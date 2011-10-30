@@ -1,12 +1,12 @@
 <?php
-class AssertIsFalseTestFixture extends EnhanceTestFixture
+class AssertIsFalseTestFixture extends \Enhance\EnhanceTestFixture
 {
-    /** @var EnhanceAssertions $target */
+    /** @var \Enhance\EnhanceAssertions $target */
     private $target;
     
     public function setUp()
     {
-        $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions', array(EnhanceLanguage::English));
+        $this->target = \Enhance\Enhance::getCodeCoverageWrapper('\Enhance\EnhanceAssertions', array(\Enhance\EnhanceLanguage::English));
     }
 
     public function assertIsFalseWithFalseExpectPass()
@@ -22,7 +22,7 @@ class AssertIsFalseTestFixture extends EnhanceTestFixture
         } catch (Exception $e) {
             $VerifyFailed = true;
         }
-        Assert::isTrue($VerifyFailed);
+        \Enhance\Assert::isTrue($VerifyFailed);
     }
     
     public function assertIsFalseWith0ExpectFail()
@@ -33,7 +33,7 @@ class AssertIsFalseTestFixture extends EnhanceTestFixture
         } catch (Exception $e) {
             $verifyFailed = true;
         }
-        Assert::isTrue($verifyFailed);
+        \Enhance\Assert::isTrue($verifyFailed);
     }
 }
 ?>

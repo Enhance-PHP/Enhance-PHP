@@ -1,4 +1,6 @@
 <?php
+namespace Enhance;
+
 ini_set('error_reporting', (string)E_ALL);
 ini_set('display_errors', '1');
 
@@ -198,7 +200,7 @@ class TextFactory
     public static function getLanguageText($language)
     {
         if (self::$Text === null) {
-            $languageClass = 'Text' . $language;
+            $languageClass = 'Enhance\Text' . $language;
             self::$Text = new $languageClass();
         }
         return self::$Text;
@@ -345,12 +347,12 @@ class EnhanceTestFramework
     private function AddClassIfTest($className)
     {
         $parentClassName = get_parent_class($className);
-        if ($parentClassName === 'EnhanceTestFixture') {
+        if ($parentClassName === 'Enhance\EnhanceTestFixture') {
             $instance = new $className();
             $this->addFixture($instance);
         } else {
             $ancestorClassName = get_parent_class($parentClassName);
-            if ($ancestorClassName === 'EnhanceTestFixture') {
+            if ($ancestorClassName === 'Enhance\EnhanceTestFixture') {
                 $instance = new $className();
                 $this->addFixture($instance);
             }
@@ -362,7 +364,7 @@ class EnhanceTestFramework
         $classMethods = get_class_methods($class);
         foreach($classMethods as $method) {
             if (strtolower($method) !== 'setup' && strtolower($method) !== 'teardown') {
-                $reflection = new ReflectionMethod($class, $method);
+                $reflection = new \ReflectionMethod($class, $method);
                 if ($reflection->isPublic()) {
                     $this->addTest($class, $method);
                 }
@@ -504,12 +506,12 @@ class EnhanceTest
             if (is_callable($this->SetUpMethod)) {
                 $testClass->setUp();
             }
-        } catch (Exception $e) { }
+        } catch (\Exception $e) { }
         
         try {
             $testClass->{$this->TestName}();
             $result = true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->Message = $e->getMessage();
             $result = false;
         }
@@ -518,7 +520,7 @@ class EnhanceTest
             if (is_callable($this->TearDownMethod)) {
                 $testClass->tearDown();
             }
-        } catch (Exception $e) { }
+        } catch (\Exception $e) { }
         
         return $result;
     }
@@ -531,7 +533,7 @@ class EnhanceProxy
     public function __construct($className, $args)
     {
         if ($args !== null) {
-            $rc = new ReflectionClass($className);
+            $rc = new \ReflectionClass($className);
             $this->Instance = $rc->newInstanceArgs($args);
         } else {
             $this->Instance = new $className();
@@ -583,7 +585,7 @@ class EnhanceMock
     public function VerifyExpectations()
     {
         if (!$this->IsMock) {
-            throw new Exception(
+            throw new \Exception(
                 $this->ClassName . ': ' . $this->Text->CannotCallVerifyOnStub
             );
         }
@@ -600,7 +602,7 @@ class EnhanceMock
                     }
                 }
                 
-                throw new Exception(
+                throw new \Exception(
                     $this->Text->ExpectationFailed . ' ' . 
                     $this->ClassName . '->' . $expectation->MethodName . '(' . $Arguments . ') ' . 
                     $this->Text->Expected . ' #' . $expectation->ExpectedCalls . ' ' . 
@@ -635,13 +637,13 @@ class EnhanceMock
         if ($Expected) {
             ++$Expectation->ActualCalls;
             if ($Expectation->ReturnException) {
-                throw new Exception($Expectation->ReturnValue);
+                throw new \Exception($Expectation->ReturnValue);
             }
             return $Expectation->ReturnValue;
         }
 
         if ($this->IsMock)  {
-            throw new Exception(
+            throw new \Exception(
                 $this->Text->ExpectationFailed . ' ' .
                 $this->ClassName . '->' . $methodName . '(' . $args . ') ' .
                 $this->Text->Expected . ' #0 ' .
@@ -724,7 +726,7 @@ class EnhanceScenario
     public function verifyExpectations()
     {
     	if (count($this->Inputs) !== count($this->Expectations)) {
-            throw new Exception($this->Text->ScenarioWithExpectMismatch);
+            throw new \Exception($this->Text->ScenarioWithExpectMismatch);
         }
 		
     	$exceptionText = '';		
@@ -746,7 +748,7 @@ class EnhanceScenario
 		}
 		
 		if ($exceptionText !== ''){
-			throw new Exception($exceptionText, 0);				
+			throw new \Exception($exceptionText, 0);
 		}
     }
 }
@@ -807,7 +809,7 @@ class EnhanceExpectation
     public function returns($returnValue)
     {
         if ($this->ReturnValue !== null) {
-            throw new Exception($this->Text->ReturnsOrThrowsNotBoth);
+            throw new \Exception($this->Text->ReturnsOrThrowsNotBoth);
         }
         $this->ReturnValue = $returnValue;
         return $this;
@@ -816,7 +818,7 @@ class EnhanceExpectation
     public function throws($errorMessage)
     {
         if ($this->ReturnValue !== null) {
-            throw new Exception($this->Text->ReturnsOrThrowsNotBoth);
+            throw new \Exception($this->Text->ReturnsOrThrowsNotBoth);
         }
         $this->ReturnValue = $errorMessage;
         $this->ReturnException = true;
@@ -855,10 +857,10 @@ class EnhanceAssertions
     {    	
 		if (is_float($expected)) {
 			if ((string)$expected !== (string)$actual) {
-                throw new Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
+                throw new \Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
 			}
 		} elseif ($expected !== $actual) {
-            throw new Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
+            throw new \Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
@@ -866,24 +868,24 @@ class EnhanceAssertions
     {
         if (is_float($expected)) {
 			if ((string)$expected === (string)$actual) {
-                throw new Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedNotButWas)), 0);
+                throw new \Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedNotButWas)), 0);
 			}
 		} elseif ($expected === $actual) {
-            throw new Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new \Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedNotButWas)), 0);
         }
     }
     
     public function isTrue($actual)
     {
         if ($actual !== true) {
-            throw new Exception(str_replace('{0}', 'true', str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
+            throw new \Exception(str_replace('{0}', 'true', str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
     public function isFalse($actual)
     {
         if ($actual !== false) {
-            throw new Exception(str_replace('{0}', 'false', str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
+            throw new \Exception(str_replace('{0}', 'false', str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
@@ -891,7 +893,7 @@ class EnhanceAssertions
     {
         $result = strpos($actual, $expected);
         if ($result === false) {
-            throw new Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedContainsButWas)), 0);
+            throw new \Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedContainsButWas)), 0);
         }
     }
     
@@ -899,39 +901,39 @@ class EnhanceAssertions
     {
         $result = strpos($actual, $expected);
         if ($result !== false) {
-            throw new Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedNotContainsButWas)), 0);
+            throw new \Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedNotContainsButWas)), 0);
         }
     }
     
     public function isNull($actual)
     {
         if ($actual !== null) {
-            throw new Exception(str_replace('{0}', 'null', str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
+            throw new \Exception(str_replace('{0}', 'null', str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
     public function isNotNull($actual)
     {
         if ($actual === null) {
-            throw new Exception(str_replace('{0}', 'null', str_replace('{1}', $actual, $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new \Exception(str_replace('{0}', 'null', str_replace('{1}', $actual, $this->Text->FormatForExpectedNotButWas)), 0);
         }
     }
 
     public function fail()
     {
-        throw new Exception($this->Text->Failed, 0);
+        throw new \Exception($this->Text->Failed, 0);
     }
     
     public function inconclusive()
     {
-        throw new Exception($this->Text->InconclusiveOrNotImplemented, 0);
+        throw new \Exception($this->Text->InconclusiveOrNotImplemented, 0);
     }
     
     public function isInstanceOfType($expected, $actual)
     {
         $actualType = get_class($actual);
         if ($expected !== $actualType) {
-            throw new Exception(str_replace('{0}', $expected, str_replace('{1}', $actualType, $this->Text->FormatForExpectedButWas)), 0);
+            throw new \Exception(str_replace('{0}', $expected, str_replace('{1}', $actualType, $this->Text->FormatForExpectedButWas)), 0);
         };
     }
     
@@ -939,7 +941,7 @@ class EnhanceAssertions
     {
         $actualType = get_class($actual);
         if ($expected === $actualType) {
-            throw new Exception(str_replace('{0}', $expected, str_replace('{1}', $actualType, $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new \Exception(str_replace('{0}', $expected, str_replace('{1}', $actualType, $this->Text->FormatForExpectedNotButWas)), 0);
         };
     }
     
@@ -954,12 +956,12 @@ class EnhanceAssertions
             } else {
                 $class->{$methodName}();
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $exception = true;
         }
         
         if (!$exception) {
-            throw new Exception($this->Text->ExpectedExceptionNotThrown, 0);
+            throw new \Exception($this->Text->ExpectedExceptionNotThrown, 0);
         }
     }
 }

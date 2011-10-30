@@ -2,31 +2,31 @@
 // Include the test framework
 include('../EnhanceTestFramework.php');
 // Find the tests - '.' is the current folder
-Enhance::discoverTests('.');
+\Enhance\Enhance::discoverTests('.');
 // Run the tests
-Enhance::runTests();
+\Enhance\Enhance::runTests();
 ?>
 
 <?php
-class ExampleClassTests extends EnhanceTestFixture
+class ExampleClassTests extends \Enhance\EnhanceTestFixture
 {
         private $target;
 
         public function setUp()
         {
-                $this->target = Enhance::getCodeCoverageWrapper('ExampleClass');
+                $this->target = \Enhance\Enhance::getCodeCoverageWrapper('ExampleClass');
         }
 
         public function addTwoNumbersWith3and2Expect5()
         {
                 $result = $this->target->addTwoNumbers(3, 2);
-                Assert::areIdentical(5, $result);
+                \Enhance\Assert::areIdentical(5, $result);
         }
         
         public function addTwoNumbersWith4and2Expect6()
         {
                 $result = $this->target->addTwoNumbers(4, 2);
-                Assert::areIdentical(6, $result);
+                \Enhance\Assert::areIdentical(6, $result);
         }
 }
 ?>

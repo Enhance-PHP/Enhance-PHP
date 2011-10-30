@@ -2,8 +2,8 @@
 // Include the test framework
 include('../EnhanceTestFramework.php');
 // Find the tests - '.' is the current folder
-Enhance::discoverTests('.');
+\Enhance\Enhance::discoverTests('.');
 // Run the tests
-Enhance::runTests();
+\Enhance\Enhance::runTests();
 ?>
 

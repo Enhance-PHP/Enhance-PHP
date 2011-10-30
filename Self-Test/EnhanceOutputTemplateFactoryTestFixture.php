@@ -1,25 +1,25 @@
 <?php
-class EnhanceOutputTemplateFactoryTestFixture extends EnhanceTestFixture
+class EnhanceOutputTemplateFactoryTestFixture extends \Enhance\EnhanceTestFixture
 {
     public function createOutputTemplateWithXmlExpectXmlTemplate()
     {
-        $output = EnhanceOutputTemplateFactory::CreateOutputTemplate(EnhanceOutputTemplateType::Xml, EnhanceLanguage::English);
+        $output = \Enhance\EnhanceOutputTemplateFactory::CreateOutputTemplate(\Enhance\EnhanceOutputTemplateType::Xml, \Enhance\EnhanceLanguage::English);
 
-        Assert::areIdentical(EnhanceOutputTemplateType::Xml, $output->GetTemplateType());
+        \Enhance\Assert::areIdentical(\Enhance\EnhanceOutputTemplateType::Xml, $output->GetTemplateType());
     }    
 
     public function createOutputTemplateWithHtmlExpectHtmlTemplate()
     {
-        $output = EnhanceOutputTemplateFactory::CreateOutputTemplate(EnhanceOutputTemplateType::Html, EnhanceLanguage::English);
+        $output = \Enhance\EnhanceOutputTemplateFactory::CreateOutputTemplate(\Enhance\EnhanceOutputTemplateType::Html, \Enhance\EnhanceLanguage::English);
 
-        Assert::areIdentical(EnhanceOutputTemplateType::Html, $output->GetTemplateType());
+        \Enhance\Assert::areIdentical(\Enhance\EnhanceOutputTemplateType::Html, $output->GetTemplateType());
     }    
 
     public function createOutputTemplateWithCliExpectCliTemplate()
     {
-        $output = EnhanceOutputTemplateFactory::CreateOutputTemplate(EnhanceOutputTemplateType::Cli, EnhanceLanguage::English);
+        $output = \Enhance\EnhanceOutputTemplateFactory::CreateOutputTemplate(\Enhance\EnhanceOutputTemplateType::Cli, \Enhance\EnhanceLanguage::English);
 
-        Assert::areIdentical(EnhanceOutputTemplateType::Cli, $output->GetTemplateType());
+        \Enhance\Assert::areIdentical(\Enhance\EnhanceOutputTemplateType::Cli, $output->GetTemplateType());
     }    
 }
 ?>

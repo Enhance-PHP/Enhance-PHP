@@ -1,12 +1,12 @@
 <?php
-class AssertNotContainsTestFixture extends EnhanceTestFixture
+class AssertNotContainsTestFixture extends \Enhance\EnhanceTestFixture
 {
-    /** @var EnhanceAssertions $target */
+    /** @var \Enhance\EnhanceAssertions $target */
     private $target;
     
     public function setUp()
     {
-        $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions', array(EnhanceLanguage::English));
+        $this->target = \Enhance\Enhance::getCodeCoverageWrapper('\Enhance\EnhanceAssertions', array(\Enhance\EnhanceLanguage::English));
     }
     
     public function assertNotContainsWithStringThatContains() 
@@ -17,7 +17,7 @@ class AssertNotContainsTestFixture extends EnhanceTestFixture
         } catch (Exception $e) {
             $verifyFailed = true;
         }
-        Assert::isTrue($verifyFailed);
+        \Enhance\Assert::isTrue($verifyFailed);
     }
     
     public function assertNotContainsWithStringThatEndsWith()
@@ -28,7 +28,7 @@ class AssertNotContainsTestFixture extends EnhanceTestFixture
         } catch (Exception $e) {
             $verifyFailed = true;
         }
-        Assert::isTrue($verifyFailed);
+        \Enhance\Assert::isTrue($verifyFailed);
     }
     
     public function assertNotContainsWithStringThatStartsWith()
@@ -39,7 +39,7 @@ class AssertNotContainsTestFixture extends EnhanceTestFixture
         } catch (Exception $e) {
             $verifyFailed = true;
         }
-        Assert::isTrue($verifyFailed);
+        \Enhance\Assert::isTrue($verifyFailed);
     }
     
     public function assertNotContainsWithStringThatDoesNotContain()

@@ -1,11 +1,13 @@
 <?php
-class StringCalculatorTests extends EnhanceTestFixture
+namespace Kata;
+
+class StringCalculatorTests extends \Enhance\EnhanceTestFixture
 {
         private $target;
 
         public function setUp()
         {
-                $this->target = Enhance::getCodeCoverageWrapper('StringCalculator');
+                $this->target = \Enhance\Enhance::getCodeCoverageWrapper('StringCalculator');
         }
 
         public function startWritingTests()

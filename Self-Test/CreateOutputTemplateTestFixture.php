@@ -1,11 +1,11 @@
 <?php
-class CreateOutputTemplateTestFixture extends EnhanceTestFixture
+class CreateOutputTemplateTestFixture extends \Enhance\EnhanceTestFixture
 {
     public function createOutputTemplateWithXmlExpectXmlTemplate()
     {
-        $output = EnhanceOutputTemplateFactory::createOutputTemplate('Xml', EnhanceLanguage::English);
+        $output = \Enhance\EnhanceOutputTemplateFactory::createOutputTemplate('Xml', \Enhance\EnhanceLanguage::English);
 
-        Assert::areIdentical(EnhanceOutputTemplateType::Xml, $output->getTemplateType());
+        \Enhance\Assert::areIdentical(\Enhance\EnhanceOutputTemplateType::Xml, $output->getTemplateType());
     }    
 }
 ?>

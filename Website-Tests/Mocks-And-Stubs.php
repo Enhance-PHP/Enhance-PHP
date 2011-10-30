@@ -1,11 +1,11 @@
 <?php
-class ExampleDependencyClassTests extends EnhanceTestFixture
+class ExampleDependencyClassTests extends \Enhance\EnhanceTestFixture
 {
         public function verifyWithAMock() 
         {
-                $mock = MockFactory::createMock('ExampleDependencyClass');
+                $mock = \Enhance\MockFactory::createMock('ExampleDependencyClass');
                 $mock->addExpectation(
-                    Expect::method('getSomething')
+                    \Enhance\Expect::method('getSomething')
                         ->with(1, 'Arg2')
                         ->returns('Something')
                         ->times(1)

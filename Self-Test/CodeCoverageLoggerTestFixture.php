@@ -9,37 +9,37 @@ class TestClassForCodeCoverageLogger
     }
 }
 
-class CodeCoverageLoggerTestFixture extends EnhanceTestFixture
+class CodeCoverageLoggerTestFixture extends \Enhance\EnhanceTestFixture
 {
     public function useCodeCoverageLoggerToCallMethod()
     {
         /** @var TestClassForCodeCoverageLogger $target */
-        $target = Enhance::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
+        $target = \Enhance\Enhance::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
         
         $result = $target->getNumberPlusTwo(5);
         
-        Assert::areIdentical(7, $result);
+        \Enhance\Assert::areIdentical(7, $result);
     }
     
     public function useCodeCoverageLoggerToGetProperty()
     {
         /** @var TestClassForCodeCoverageLogger $target */
-        $target = Enhance::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
+        $target = \Enhance\Enhance::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
         
         $result = $target->property;
         
-        Assert::areIdentical(1, $result);
+        \Enhance\Assert::areIdentical(1, $result);
     }
     
     public function useCodeCoverageLoggerToSetProperty() 
     {
         /** @var TestClassForCodeCoverageLogger $target */
-        $target = Enhance::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
+        $target = \Enhance\Enhance::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
         
         $target->property = 8;
         $result = $target->property;
         
-        Assert::areIdentical(8, $result);
+        \Enhance\Assert::areIdentical(8, $result);
     }
 }
 ?>

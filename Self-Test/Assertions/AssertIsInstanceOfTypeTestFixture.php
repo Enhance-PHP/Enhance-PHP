@@ -4,14 +4,14 @@ class SomeType
     public $value;
 }
 
-class AssertIsInstanceOfTypeTestFixture extends EnhanceTestFixture
+class AssertIsInstanceOfTypeTestFixture extends \Enhance\EnhanceTestFixture
 {
-    /** @var EnhanceAssertions $target */
+    /** @var \Enhance\EnhanceAssertions $target */
     private $target;
     
     public function setUp()
     {
-        $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions', array(EnhanceLanguage::English));
+        $this->target = \Enhance\Enhance::getCodeCoverageWrapper('\Enhance\EnhanceAssertions', array(\Enhance\EnhanceLanguage::English));
     }
 
     public function assertIsInstanceOfTypeWithIdenticalType()
@@ -29,7 +29,7 @@ class AssertIsInstanceOfTypeTestFixture extends EnhanceTestFixture
         } catch (Exception $e) {
             $verifyFailed = true;
         }
-        Assert::isTrue($verifyFailed);
+        \Enhance\Assert::isTrue($verifyFailed);
     }
 }
 ?>

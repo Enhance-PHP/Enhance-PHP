@@ -1,12 +1,12 @@
 <?php
-class AssertContainsTestFixture extends EnhanceTestFixture
+class AssertContainsTestFixture extends \Enhance\EnhanceTestFixture
 {
-    /** @var EnhanceAssertions $target */
+    /** @var \Enhance\EnhanceAssertions $target */
     private $target;
     
     public function setUp()
     {
-        $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions', array(EnhanceLanguage::English));
+        $this->target = \Enhance\Enhance::getCodeCoverageWrapper('\Enhance\EnhanceAssertions', array(\Enhance\EnhanceLanguage::English));
     }
 
     public function assertContainsWithStringThatContains()
@@ -32,7 +32,7 @@ class AssertContainsTestFixture extends EnhanceTestFixture
         } catch (Exception $e) {
             $verifyFailed = true;
         }
-        Assert::isTrue($verifyFailed);
+        \Enhance\Assert::isTrue($verifyFailed);
     }
 }
 ?>

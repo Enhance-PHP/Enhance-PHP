@@ -10,31 +10,31 @@ class ExampleClass
     }
 }
 
-class ExampleClassTests extends EnhanceTestFixture
+class ExampleClassTests extends \Enhance\EnhanceTestFixture
 {
     /** @var ExampleClass $target */
     private $target;
     
     public function setUp()
     {
-        $this->target = Enhance::getCodeCoverageWrapper('ExampleClass');
+        $this->target = \Enhance\Enhance::getCodeCoverageWrapper('ExampleClass');
     }
     
     public function addTwoNumbersWith3and2Expect5()
     {
         $result = $this->target->addTwoNumbers(3, 2);
 
-        Assert::areIdentical(5, $result);
+        \Enhance\Assert::areIdentical(5, $result);
     }
     
     public function addTwoNumbersWith4and2Expect6()
     {
         $result = $this->target->addTwoNumbers(4, 2);
 
-        Assert::areIdentical(6, $result);
+        \Enhance\Assert::areIdentical(6, $result);
     }
 }
 
-Enhance::runTests(EnhanceOutputTemplateType::Xml);
+\Enhance\Enhance::runTests(\Enhance\EnhanceOutputTemplateType::Xml);
 ?>
 

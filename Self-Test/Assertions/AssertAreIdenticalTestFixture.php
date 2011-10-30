@@ -1,12 +1,12 @@
 <?php
-class AssertAreIdenticalTestFixture extends EnhanceTestFixture
+class AssertAreIdenticalTestFixture extends \Enhance\EnhanceTestFixture
 {
-    /** @var EnhanceAssertions $target */
+    /** @var \Enhance\EnhanceAssertions $target */
     private $target;
     
     public function setUp() 
     {
-        $this->target = Enhance::getCodeCoverageWrapper('EnhanceAssertions', array(EnhanceLanguage::English));
+        $this->target = \Enhance\Enhance::getCodeCoverageWrapper('\Enhance\EnhanceAssertions', array(\Enhance\EnhanceLanguage::English));
     }
 
     public function assertAreIdenticalWithIdenticalIntegers()
@@ -19,10 +19,10 @@ class AssertAreIdenticalTestFixture extends EnhanceTestFixture
         $verifyFailed = false;
         try {
             $this->target->areIdentical(5, 4);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $verifyFailed = true;
         }
-        Assert::isTrue($verifyFailed);
+        \Enhance\Assert::isTrue($verifyFailed);
     }
     
     public function assertAreIdenticalWithIdenticalStrings()
@@ -35,10 +35,10 @@ class AssertAreIdenticalTestFixture extends EnhanceTestFixture
         $verifyFailed = false;
         try {
             $this->target->areIdentical('Test', 'test');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $verifyFailed = true;
         }
-        Assert::isTrue($verifyFailed);
+        \Enhance\Assert::isTrue($verifyFailed);
     }
     
     public function assertAreIdenticalWithIdenticalFloats()
@@ -56,10 +56,10 @@ class AssertAreIdenticalTestFixture extends EnhanceTestFixture
         $verifyFailed = false;
         try {
             $this->target->areIdentical(15.123346575, 15.123346574);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $verifyFailed = true;
         }
-        Assert::isTrue($verifyFailed);
+        \Enhance\Assert::isTrue($verifyFailed);
     }
 }
 ?>

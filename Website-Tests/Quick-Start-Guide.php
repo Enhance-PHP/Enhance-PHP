@@ -13,7 +13,7 @@ class ExampleClass
 
 // Naming: By using "extends EnhanceTestFixture" you signal that the public methods in
 // your class are tests.
-class ExampleClassTests extends EnhanceTestFixture
+class ExampleClassTests extends \Enhance\EnhanceTestFixture
 {
 
     // SetUp
@@ -38,17 +38,17 @@ class ExampleClassTests extends EnhanceTestFixture
     public function addTwoNumbersWith3and2Expect5Test() 
     {
         // Arrange
-        $target = Enhance::getCodeCoverageWrapper('ExampleClass');
+        $target = \Enhance\Enhance::getCodeCoverageWrapper('ExampleClass');
 
         // Act
         $result = $target->addTwoNumbers(3, 2);
 
         // Assert
-        Assert::areIdentical(5, $result);
+        \Enhance\Assert::areIdentical(5, $result);
     }
 }
 
 // Run the tests
-Enhance::runTests();
+\Enhance\Enhance::runTests();
 ?>
 
