@@ -12,7 +12,7 @@ class ScenarioExampleClass
     }
 }
 
-class ScenarioTestFixture extends \Enhance\EnhanceTestFixture
+class ScenarioTestFixture extends \Enhance\TestFixture
 {	
     public function scenarioTestWithOneArgFunctionExpectReturnValue()
     {

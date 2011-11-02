@@ -4,14 +4,14 @@ class SomeOtherType
     public $value;
 }
 
-class AssertIsNotInstanceOfTypeTestFixture extends \Enhance\EnhanceTestFixture
+class AssertIsNotInstanceOfTypeTestFixture extends \Enhance\TestFixture
 {
-    /** @var \Enhance\EnhanceAssertions $target */
+    /** @var \Enhance\Assertions $target */
     private $target;
     
     public function setUp()
     {
-        $this->target = \Enhance\Enhance::getCodeCoverageWrapper('\Enhance\EnhanceAssertions', array(\Enhance\EnhanceLanguage::English));
+        $this->target = \Enhance\Enhance::getCodeCoverageWrapper('\Enhance\Assertions', array(\Enhance\Language::English));
     }
 
     public function assertIsNotInstanceOfTypeWithDifferentType()

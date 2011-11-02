@@ -9,7 +9,7 @@ class TestClassForCodeCoverageLogger
     }
 }
 
-class CodeCoverageLoggerTestFixture extends \Enhance\EnhanceTestFixture
+class CodeCoverageLoggerTestFixture extends \Enhance\TestFixture
 {
     public function useCodeCoverageLoggerToCallMethod()
     {

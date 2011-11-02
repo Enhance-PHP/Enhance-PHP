@@ -1,5 +1,5 @@
 <?php
-class ExampleAnotherClassTests extends \Enhance\EnhanceTestFixture
+class ExampleAnotherClassTests extends \Enhance\TestFixture
 {
     public function getJoinedStringWithTwoStringsExpectJoinedResult()
     {

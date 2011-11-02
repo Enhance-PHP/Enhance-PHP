@@ -8,7 +8,7 @@ include('../EnhanceTestFramework.php');
 ?>
 
 <?php
-class ExampleClassTests extends \Enhance\EnhanceTestFixture
+class ExampleClassTests extends \Enhance\TestFixture
 {
         private $target;
 

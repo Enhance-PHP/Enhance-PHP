@@ -10,7 +10,7 @@ class ExampleClass
     }
 }
 
-class ExampleClassTests extends \Enhance\EnhanceTestFixture
+class ExampleClassTests extends \Enhance\TestFixture
 {
     /** @var ExampleClass $target */
     private $target;
@@ -35,6 +35,6 @@ class ExampleClassTests extends \Enhance\EnhanceTestFixture
     }
 }
 
-\Enhance\Enhance::runTests(\Enhance\EnhanceOutputTemplateType::Xml);
+\Enhance\Enhance::runTests(\Enhance\TemplateType::Xml);
 ?>
 

@@ -10,7 +10,7 @@ class ExampleClass
     }
 }
 
-class ExampleTestFixture extends \Enhance\EnhanceTestFixture
+class ExampleTestFixture extends \Enhance\TestFixture
 {
     /** @var ExampleClass $target */
     private $target;

@@ -1,5 +1,5 @@
 <?php
-class ExampleDependencyClassTests extends \Enhance\EnhanceTestFixture
+class ExampleDependencyClassTests extends \Enhance\TestFixture
 {
         public function verifyWithAMock() 
         {

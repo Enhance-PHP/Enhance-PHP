@@ -1,5 +1,5 @@
 <?php
-class ExpectationTestFixture extends \Enhance\EnhanceTestFixture
+class ExpectationTestFixture extends \Enhance\TestFixture
 {
     public function expectWithMethodWithReturnsTimes()
     {

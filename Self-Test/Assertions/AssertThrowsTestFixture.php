@@ -26,14 +26,14 @@ class StubThrowsClass
     }
 }
 
-class AssertThrowsTestFixture extends \Enhance\EnhanceTestFixture
+class AssertThrowsTestFixture extends \Enhance\TestFixture
 {
-    /** @var \Enhance\EnhanceAssertions $target */
+    /** @var \Enhance\Assertions $target */
     private $target;
     
     public function setUp()
     {
-        $this->target = \Enhance\Enhance::getCodeCoverageWrapper('\Enhance\EnhanceAssertions', array(\Enhance\EnhanceLanguage::English));
+        $this->target = \Enhance\Enhance::getCodeCoverageWrapper('\Enhance\Assertions', array(\Enhance\Language::English));
     }
 
     public function assertThrowsWithExceptionExpectPass()

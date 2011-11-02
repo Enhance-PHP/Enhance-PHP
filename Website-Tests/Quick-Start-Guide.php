@@ -13,7 +13,7 @@ class ExampleClass
 
 // Naming: By using "extends EnhanceTestFixture" you signal that the public methods in
 // your class are tests.
-class ExampleClassTests extends \Enhance\EnhanceTestFixture
+class ExampleClassTests extends \Enhance\TestFixture
 {
 
     // SetUp

@@ -1,5 +1,5 @@
 <?php
-class ExampleClassTests extends \Enhance\EnhanceTestFixture
+class ExampleClassTests extends \Enhance\TestFixture
 {
         /** @var ExampleClass $target */
         private $target;

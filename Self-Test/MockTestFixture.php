@@ -6,7 +6,7 @@ interface IMockExample
     function callNotExpectedMethod();
 }
 
-class MockTestFixture extends \Enhance\EnhanceTestFixture
+class MockTestFixture extends \Enhance\TestFixture
 {
     public function createMockWithArgumentsAndOneTimeExpectReturnValueAndVerifies()
     {

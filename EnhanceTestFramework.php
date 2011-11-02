@@ -9,9 +9,9 @@ class Enhance
 {
     /** @var EnhanceTestFramework $Instance */
     private static $Instance;
-    private static $Language = EnhanceLanguage::English;
+    private static $Language = Language::English;
 
-    /** @return EnhanceLanguage */
+    /** @return Language */
     public static function getLanguage()
     {
         return self::$Language;
@@ -28,7 +28,7 @@ class Enhance
         self::$Instance->discoverTests($path, $isRecursive, $excludeRules);
     }
 
-    public static function runTests($output = EnhanceOutputTemplateType::Html) 
+    public static function runTests($output = TemplateType::Html)
     {
         self::setInstance();
         self::$Instance->runTests($output);
@@ -38,7 +38,7 @@ class Enhance
     {
         self::setInstance();
         self::$Instance->registerForCodeCoverage($className);
-        return new EnhanceProxy($className, $args);
+        return new Proxy($className, $args);
     }
     
     public static function log($class, $methodName) 
@@ -50,7 +50,7 @@ class Enhance
 	    
     public static function getScenario($className, $args = null) 
     {
-        return new EnhanceScenario($className, $args, self::$Language);
+        return new Scenario($className, $args, self::$Language);
     }
 
     public static function setInstance()
@@ -62,7 +62,7 @@ class Enhance
 }
 
 // Public API
-class EnhanceTestFixture
+class TestFixture
 {
     
 }
@@ -72,7 +72,7 @@ class MockFactory
 {
     public static function createMock($typeName) 
     {
-        return new EnhanceMock($typeName, true, Enhance::getLanguage());
+        return new Mock($typeName, true, Enhance::getLanguage());
     }
 }
 
@@ -81,7 +81,7 @@ class StubFactory
 {
     public static function createStub($typeName) 
     {
-        return new EnhanceMock($typeName, false, Enhance::getLanguage());
+        return new Mock($typeName, false, Enhance::getLanguage());
     }
 }
 
@@ -92,19 +92,19 @@ class Expect
 
     public static function method($methodName) 
     {
-        $expectation = new EnhanceExpectation(Enhance::getLanguage());
+        $expectation = new Expectation(Enhance::getLanguage());
         return $expectation->method($methodName);
     }
     
     public static function getProperty($propertyName) 
     {
-        $expectation = new EnhanceExpectation(Enhance::getLanguage());
+        $expectation = new Expectation(Enhance::getLanguage());
         return $expectation->getProperty($propertyName);
     }
     
     public static function setProperty($propertyName) 
     {
-        $expectation = new EnhanceExpectation(Enhance::getLanguage());
+        $expectation = new Expectation(Enhance::getLanguage());
         return $expectation->setProperty($propertyName);
     }
 }
@@ -112,13 +112,13 @@ class Expect
 // Public API
 class Assert 
 {
-    /** @var EnhanceAssertions $EnhanceAssertions */
+    /** @var Assertions $EnhanceAssertions */
     private static $EnhanceAssertions;
     
     private static function GetEnhanceAssertionsInstance() 
     {
         if(self::$EnhanceAssertions === null) {
-            self::$EnhanceAssertions = new EnhanceAssertions(Enhance::getLanguage());
+            self::$EnhanceAssertions = new Assertions(Enhance::getLanguage());
         }
         return self::$EnhanceAssertions;
     }
@@ -277,7 +277,7 @@ class EnhanceTestFramework
     public function __construct($language)
     {
         $this->Text = TextFactory::getLanguageText($language);
-        $this->FileSystem = new EnhanceFileSystem();
+        $this->FileSystem = new FileSystem();
         $this->Language = $language;
     }
 
@@ -299,10 +299,10 @@ class EnhanceTestFramework
         $this->run();
         
         if(PHP_SAPI === 'cli') {
-            $output = EnhanceOutputTemplateType::Cli;
+            $output = TemplateType::Cli;
         }
         
-        $OutputTemplate = EnhanceOutputTemplateFactory::createOutputTemplate($output, $this->Language);
+        $OutputTemplate = TemplateFactory::createOutputTemplate($output, $this->Language);
         echo $OutputTemplate->get(
             $this->Errors, 
             $this->Results, 
@@ -347,12 +347,12 @@ class EnhanceTestFramework
     private function AddClassIfTest($className)
     {
         $parentClassName = get_parent_class($className);
-        if ($parentClassName === 'Enhance\EnhanceTestFixture') {
+        if ($parentClassName === 'Enhance\TestFixture') {
             $instance = new $className();
             $this->addFixture($instance);
         } else {
             $ancestorClassName = get_parent_class($parentClassName);
-            if ($ancestorClassName === 'Enhance\EnhanceTestFixture') {
+            if ($ancestorClassName === 'Enhance\TestFixture') {
                 $instance = new $className();
                 $this->addFixture($instance);
             }
@@ -374,29 +374,29 @@ class EnhanceTestFramework
     
     private function addTest($class, $method) 
     {
-        $testMethod = new EnhanceTest($class, $method);
+        $testMethod = new Test($class, $method);
         $this->Tests[] = $testMethod;
     }
     
     private function run() 
     {
         $start = time();
-        foreach($this->Tests as /** @var EnhanceTest $test */ $test) {
+        foreach($this->Tests as /** @var Test $test */ $test) {
             $result = $test->run();
             if ($result) {
                 $message = $test->getTestName() . ' - ' . $this->Text->Passed;
-                $this->Results[] = new EnhanceTestMessage($message, $test, true);
+                $this->Results[] = new TestMessage($message, $test, true);
             } else {
                 $message = $test->getTestName() . ' - ' . 
                     $this->Text->Failed . ' - ' . $test->getMessage();
-                $this->Errors[] = new EnhanceTestMessage($message, $test, false);
+                $this->Errors[] = new TestMessage($message, $test, false);
             }
         }
         $this->Duration = time() - $start;
     }
 }
 
-class EnhanceFileSystem
+class FileSystem
 {
     public function getFilesFromDirectory($directory, $isRecursive, $excludeRules)
     {
@@ -449,7 +449,7 @@ class EnhanceFileSystem
     }
 }
 
-class EnhanceTestMessage 
+class TestMessage
 {
     public $Message;
     public $Test;
@@ -463,7 +463,7 @@ class EnhanceTestMessage
     }
 }
 
-class EnhanceTest 
+class Test
 {
     private $ClassName;
     private $TestName;
@@ -526,7 +526,7 @@ class EnhanceTest
     }
 }
 
-class EnhanceProxy 
+class Proxy
 {
     private $Instance;
     
@@ -563,7 +563,7 @@ class EnhanceProxy
     }
 }
 
-class EnhanceMock
+class Mock
 {
     private $IsMock;
     private $Text;	
@@ -590,7 +590,7 @@ class EnhanceMock
             );
         }
         
-        foreach ($this->Expectations as /** @var EnhanceExpectation $expectation */ $expectation) {
+        foreach ($this->Expectations as /** @var Expectation $expectation */ $expectation) {
             if (!$expectation->verify()) {
                 $Arguments = '';
                 if (isset($expectation->MethodArguments)) {
@@ -696,7 +696,7 @@ class EnhanceMock
     }
 }
 
-class EnhanceScenario
+class Scenario
 {
     private $Text;	
     private $Class;	
@@ -753,7 +753,7 @@ class EnhanceScenario
     }
 }
 
-class EnhanceExpectation 
+class Expectation
 {
     public $MethodName;
     public $MethodArguments;
@@ -844,7 +844,7 @@ class EnhanceExpectation
     }
 }
 
-class EnhanceAssertions 
+class Assertions
 {
     private $Text;
     
@@ -978,7 +978,7 @@ interface iTestable
     public function tearDown();
 }
 
-class EnhanceHtmlTemplate implements iOutputTemplate 
+class HtmlTemplate implements iOutputTemplate
 {
     private $Text;
     
@@ -989,7 +989,7 @@ class EnhanceHtmlTemplate implements iOutputTemplate
     
     public function getTemplateType()
     {
-        return EnhanceOutputTemplateType::Html;
+        return TemplateType::Html;
     }    
     
     public function get($errors, $results, $text, $duration, $methodCalls)
@@ -1111,7 +1111,7 @@ class EnhanceHtmlTemplate implements iOutputTemplate
     }
 }
 
-class EnhanceXmlTemplate implements iOutputTemplate
+class XmlTemplate implements iOutputTemplate
 {
     private $Text;
     private $Tab = "    ";
@@ -1124,7 +1124,7 @@ class EnhanceXmlTemplate implements iOutputTemplate
     
     public function getTemplateType()
     {
-        return EnhanceOutputTemplateType::Xml;
+        return TemplateType::Xml;
     }     
     
     public function get($errors, $results, $text, $duration, $methodCalls)
@@ -1206,7 +1206,7 @@ class EnhanceXmlTemplate implements iOutputTemplate
     }
 }
 
-class EnhanceCliTemplate implements iOutputTemplate 
+class CliTemplate implements iOutputTemplate
 {
     private $Text;
     private $CR = "\n";
@@ -1218,7 +1218,7 @@ class EnhanceCliTemplate implements iOutputTemplate
     
     public function getTemplateType()
     {
-        return EnhanceOutputTemplateType::Cli;
+        return TemplateType::Cli;
     }    
     
     public function get($errors, $results, $text, $duration, $methodCalls)
@@ -1272,41 +1272,41 @@ class EnhanceCliTemplate implements iOutputTemplate
     }
 }
 
-class EnhanceOutputTemplateFactory 
+class TemplateFactory
 {
     public static function createOutputTemplate($type, $language)
     {
         switch ($type) {
-            case EnhanceOutputTemplateType::Xml:
-                return new EnhanceXmlTemplate($language);
+            case TemplateType::Xml:
+                return new XmlTemplate($language);
                 break;            
-            case EnhanceOutputTemplateType::Html:
-                return new EnhanceHtmlTemplate($language);
+            case TemplateType::Html:
+                return new HtmlTemplate($language);
                 break;
-            case EnhanceOutputTemplateType::Cli:
-                return new EnhanceCliTemplate($language);
+            case TemplateType::Cli:
+                return new CliTemplate($language);
                 break;
         }
 
-        return new EnhanceHtmlTemplate($language);
+        return new HtmlTemplate($language);
     }
 }
 
-class EnhanceOutputTemplateType
+class TemplateType
 {
     const Xml = 0;
     const Html = 1;
     const Cli = 2;
 }
 
-class EnhanceLanguage
+class Language
 {
     const English = 'En';
     const Deutsch = 'De';
 }
 
-class EnhanceLocalisation
+class Localisation
 {
-    public $Language = EnhanceLanguage::English;
+    public $Language = Language::English;
 }
 ?>

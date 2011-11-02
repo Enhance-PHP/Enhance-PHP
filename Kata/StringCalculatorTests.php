@@ -1,7 +1,7 @@
 <?php
 namespace Kata;
 
-class StringCalculatorTests extends \Enhance\EnhanceTestFixture
+class StringCalculatorTests extends \Enhance\TestFixture
 {
         private $target;
 
