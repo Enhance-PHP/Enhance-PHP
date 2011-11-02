@@ -578,12 +578,12 @@ class Mock
         $this->Text = TextFactory::getLanguageText($language);
     }
     
-    public function AddExpectation($expectation)
+    public function addExpectation($expectation)
     {
         $this->Expectations[] = $expectation;
     }
     
-    public function VerifyExpectations()
+    public function verifyExpectations()
     {
         if (!$this->IsMock) {
             throw new \Exception(
