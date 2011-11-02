@@ -1,4 +1,6 @@
 <?php
+namespace FirstTest;
+
 class ExampleAnotherClass
 {
     private $X;

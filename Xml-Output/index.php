@@ -1,4 +1,6 @@
 <?php
+namespace XmlOutput;
+
 // Example XML output
 include('../EnhanceTestFramework.php');
 
@@ -17,7 +19,7 @@ class ExampleClassTests extends \Enhance\TestFixture
     
     public function setUp()
     {
-        $this->target = \Enhance\Enhance::getCodeCoverageWrapper('ExampleClass');
+        $this->target = \Enhance\Enhance::getCodeCoverageWrapper('\XmlOutput\ExampleClass');
     }
     
     public function addTwoNumbersWith3and2Expect5()

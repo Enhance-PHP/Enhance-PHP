@@ -1,4 +1,6 @@
 <?php
+namespace FirstTest;
+
 class ExampleClassTests extends \Enhance\TestFixture
 {
         /** @var ExampleClass $target */
@@ -6,7 +8,7 @@ class ExampleClassTests extends \Enhance\TestFixture
 
         public function setUp()
         {
-                $this->target = \Enhance\Enhance::getCodeCoverageWrapper('ExampleClass');
+                $this->target = \Enhance\Enhance::getCodeCoverageWrapper('\FirstTest\ExampleClass');
         }
 
         public function addTwoNumbersWith3and2Expect5()

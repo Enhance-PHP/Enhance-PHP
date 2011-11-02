@@ -1,4 +1,6 @@
 <?php
+namespace TestDriven;
+
 // Example built using TDD
 include('../EnhanceTestFramework.php');
 
@@ -17,7 +19,7 @@ class ExampleTestFixture extends \Enhance\TestFixture
     
     public function setUp()
     {
-        $this->target = \Enhance\Enhance::getCodeCoverageWrapper('ExampleClass');
+        $this->target = \Enhance\Enhance::getCodeCoverageWrapper('\TestDriven\ExampleClass');
     }
     
     public function addTwoNumbersWith3and2Expect5()
