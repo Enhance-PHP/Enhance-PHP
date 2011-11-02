@@ -5,7 +5,7 @@ ini_set('error_reporting', (string)E_ALL);
 ini_set('display_errors', '1');
 
 // Public API
-class Enhance 
+class Enhance
 {
     /** @var EnhanceTestFramework $Instance */
     private static $Instance;
@@ -38,13 +38,12 @@ class Enhance
     {
         self::setInstance();
         self::$Instance->registerForCodeCoverage($className);
-        return new Proxy($className, $args);
+        return new CodeCoverageWrapper($className, $args);
     }
     
-    public static function log($class, $methodName) 
+    public static function log($className, $methodName)
     {
         self::setInstance();
-        $className = get_class($class);
         self::$Instance->log($className, $methodName);
     }
 	    
@@ -526,24 +525,26 @@ class Test
     }
 }
 
-class Proxy
+class CodeCoverageWrapper
 {
     private $Instance;
+    private $ClassName;
     
     public function __construct($className, $args)
     {
+        $this->ClassName = $className;
         if ($args !== null) {
             $rc = new \ReflectionClass($className);
             $this->Instance = $rc->newInstanceArgs($args);
         } else {
             $this->Instance = new $className();
         }
-        Enhance::log($this->Instance, $className);
+        Enhance::log($this->ClassName, $className);
     }
 
     public function __call($methodName, $args = null)
     {
-        Enhance::log($this->Instance, $methodName);
+        Enhance::log($this->ClassName, $methodName);
         if ($args !== null) {
             /** @noinspection PhpParamsInspection */
             return call_user_func_array(array($this->Instance, $methodName), $args);
