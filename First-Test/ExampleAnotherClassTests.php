@@ -6,7 +6,7 @@ class ExampleAnotherClassTests extends \Enhance\TestFixture
     public function getJoinedStringWithTwoStringsExpectJoinedResult()
     {
         /** @var ExampleAnotherClass $target */
-        $target = \Enhance\Enhance::getCodeCoverageWrapper('\FirstTest\ExampleAnotherClass', array('xx', 'yy'));
+        $target = \Enhance\Core::getCodeCoverageWrapper('\FirstTest\ExampleAnotherClass', array('xx', 'yy'));
 
         $result = $target->getJoinedString('A', 'B');
 

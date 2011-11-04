@@ -38,7 +38,7 @@ class ExampleClassTests extends \Enhance\TestFixture
     public function addTwoNumbersWith3and2Expect5Test() 
     {
         // Arrange
-        $target = \Enhance\Enhance::getCodeCoverageWrapper('ExampleClass');
+        $target = \Enhance\Core::getCodeCoverageWrapper('ExampleClass');
 
         // Act
         $result = $target->addTwoNumbers(3, 2);
@@ -49,6 +49,6 @@ class ExampleClassTests extends \Enhance\TestFixture
 }
 
 // Run the tests
-\Enhance\Enhance::runTests();
+\Enhance\Core::runTests();
 ?>
 

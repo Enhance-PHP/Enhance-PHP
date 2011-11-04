@@ -2,9 +2,9 @@
 // Include the test framework
 include('../EnhanceTestFramework.php');
 // Find the tests - '.' is the current folder
-\Enhance\Enhance::discoverTests('.');
+\Enhance\Core::discoverTests('.');
 // Run the tests
-\Enhance\Enhance::runTests();
+\Enhance\Core::runTests();
 ?>
 
 <?php
@@ -14,7 +14,7 @@ class ExampleClassTests extends \Enhance\TestFixture
 
         public function setUp()
         {
-                $this->target = \Enhance\Enhance::getCodeCoverageWrapper('ExampleClass');
+                $this->target = \Enhance\Core::getCodeCoverageWrapper('ExampleClass');
         }
 
         public function addTwoNumbersWith3and2Expect5()

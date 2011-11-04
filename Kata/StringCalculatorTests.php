@@ -7,7 +7,7 @@ class StringCalculatorTests extends \Enhance\TestFixture
 
         public function setUp()
         {
-                $this->target = \Enhance\Enhance::getCodeCoverageWrapper('\Kata\StringCalculator');
+                $this->target = \Enhance\Core::getCodeCoverageWrapper('\Kata\StringCalculator');
         }
 
         public function startWritingTests()

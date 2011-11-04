@@ -5,7 +5,7 @@ ini_set('error_reporting', (string)E_ALL);
 ini_set('display_errors', '1');
 
 // Public API
-class Enhance
+class Core
 {
     /** @var EnhanceTestFramework $Instance */
     private static $Instance;
@@ -71,7 +71,7 @@ class MockFactory
 {
     public static function createMock($typeName) 
     {
-        return new Mock($typeName, true, Enhance::getLanguage());
+        return new Mock($typeName, true, Core::getLanguage());
     }
 }
 
@@ -80,7 +80,7 @@ class StubFactory
 {
     public static function createStub($typeName) 
     {
-        return new Mock($typeName, false, Enhance::getLanguage());
+        return new Mock($typeName, false, Core::getLanguage());
     }
 }
 
@@ -91,19 +91,19 @@ class Expect
 
     public static function method($methodName) 
     {
-        $expectation = new Expectation(Enhance::getLanguage());
+        $expectation = new Expectation(Core::getLanguage());
         return $expectation->method($methodName);
     }
     
     public static function getProperty($propertyName) 
     {
-        $expectation = new Expectation(Enhance::getLanguage());
+        $expectation = new Expectation(Core::getLanguage());
         return $expectation->getProperty($propertyName);
     }
     
     public static function setProperty($propertyName) 
     {
-        $expectation = new Expectation(Enhance::getLanguage());
+        $expectation = new Expectation(Core::getLanguage());
         return $expectation->setProperty($propertyName);
     }
 }
@@ -117,7 +117,7 @@ class Assert
     private static function GetEnhanceAssertionsInstance() 
     {
         if(self::$EnhanceAssertions === null) {
-            self::$EnhanceAssertions = new Assertions(Enhance::getLanguage());
+            self::$EnhanceAssertions = new Assertions(Core::getLanguage());
         }
         return self::$EnhanceAssertions;
     }
@@ -539,12 +539,12 @@ class CodeCoverageWrapper
         } else {
             $this->Instance = new $className();
         }
-        Enhance::log($this->ClassName, $className);
+        Core::log($this->ClassName, $className);
     }
 
     public function __call($methodName, $args = null)
     {
-        Enhance::log($this->ClassName, $methodName);
+        Core::log($this->ClassName, $methodName);
         if ($args !== null) {
             /** @noinspection PhpParamsInspection */
             return call_user_func_array(array($this->Instance, $methodName), $args);

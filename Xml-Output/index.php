@@ -19,7 +19,7 @@ class ExampleClassTests extends \Enhance\TestFixture
     
     public function setUp()
     {
-        $this->target = \Enhance\Enhance::getCodeCoverageWrapper('\XmlOutput\ExampleClass');
+        $this->target = \Enhance\Core::getCodeCoverageWrapper('\XmlOutput\ExampleClass');
     }
     
     public function addTwoNumbersWith3and2Expect5()
@@ -37,6 +37,6 @@ class ExampleClassTests extends \Enhance\TestFixture
     }
 }
 
-\Enhance\Enhance::runTests(\Enhance\TemplateType::Xml);
+\Enhance\Core::runTests(\Enhance\TemplateType::Xml);
 ?>
 

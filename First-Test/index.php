@@ -2,9 +2,9 @@
 // Include the test framework
 include('../EnhanceTestFramework.php');
 // Set the language
-\Enhance\Enhance::setLanguage(\Enhance\Language::Deutsch);
+\Enhance\Core::setLanguage(\Enhance\Language::Deutsch);
 // Find the tests - '.' is the current folder
- \Enhance\Enhance::discoverTests('.');
+ \Enhance\Core::discoverTests('.');
 // Run the tests
-\Enhance\Enhance::runTests();
+\Enhance\Core::runTests();
 ?>

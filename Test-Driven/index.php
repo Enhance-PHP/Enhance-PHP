@@ -19,7 +19,7 @@ class ExampleTestFixture extends \Enhance\TestFixture
     
     public function setUp()
     {
-        $this->target = \Enhance\Enhance::getCodeCoverageWrapper('\TestDriven\ExampleClass');
+        $this->target = \Enhance\Core::getCodeCoverageWrapper('\TestDriven\ExampleClass');
     }
     
     public function addTwoNumbersWith3and2Expect5()
@@ -37,6 +37,6 @@ class ExampleTestFixture extends \Enhance\TestFixture
     }
 }
 
-\Enhance\Enhance::runTests();
+\Enhance\Core::runTests();
 ?>
 

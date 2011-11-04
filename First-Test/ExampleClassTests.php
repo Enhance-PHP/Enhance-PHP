@@ -8,7 +8,7 @@ class ExampleClassTests extends \Enhance\TestFixture
 
         public function setUp()
         {
-                $this->target = \Enhance\Enhance::getCodeCoverageWrapper('\FirstTest\ExampleClass');
+                $this->target = \Enhance\Core::getCodeCoverageWrapper('\FirstTest\ExampleClass');
         }
 
         public function addTwoNumbersWith3and2Expect5()

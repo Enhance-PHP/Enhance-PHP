@@ -11,7 +11,7 @@ class AssertIsInstanceOfTypeTestFixture extends \Enhance\TestFixture
     
     public function setUp()
     {
-        $this->target = \Enhance\Enhance::getCodeCoverageWrapper('\Enhance\Assertions', array(\Enhance\Language::English));
+        $this->target = \Enhance\Core::getCodeCoverageWrapper('\Enhance\Assertions', array(\Enhance\Language::English));
     }
 
     public function assertIsInstanceOfTypeWithIdenticalType()

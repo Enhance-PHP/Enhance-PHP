@@ -14,7 +14,7 @@ class CodeCoverageLoggerTestFixture extends \Enhance\TestFixture
     public function useCodeCoverageLoggerToCallMethod()
     {
         /** @var TestClassForCodeCoverageLogger $target */
-        $target = \Enhance\Enhance::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
+        $target = \Enhance\Core::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
         
         $result = $target->getNumberPlusTwo(5);
         
@@ -24,7 +24,7 @@ class CodeCoverageLoggerTestFixture extends \Enhance\TestFixture
     public function useCodeCoverageLoggerToGetProperty()
     {
         /** @var TestClassForCodeCoverageLogger $target */
-        $target = \Enhance\Enhance::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
+        $target = \Enhance\Core::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
         
         $result = $target->property;
         
@@ -34,7 +34,7 @@ class CodeCoverageLoggerTestFixture extends \Enhance\TestFixture
     public function useCodeCoverageLoggerToSetProperty() 
     {
         /** @var TestClassForCodeCoverageLogger $target */
-        $target = \Enhance\Enhance::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
+        $target = \Enhance\Core::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
         
         $target->property = 8;
         $result = $target->property;
