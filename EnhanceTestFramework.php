@@ -858,10 +858,10 @@ class Assertions
     {    	
 		if (is_float($expected)) {
 			if ((string)$expected !== (string)$actual) {
-                throw new \Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
+                throw new \Exception(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
 			}
 		} elseif ($expected !== $actual) {
-            throw new \Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
+            throw new \Exception(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
@@ -869,24 +869,24 @@ class Assertions
     {
         if (is_float($expected)) {
 			if ((string)$expected === (string)$actual) {
-                throw new \Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedNotButWas)), 0);
+                throw new \Exception(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
 			}
 		} elseif ($expected === $actual) {
-            throw new \Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new \Exception(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
         }
     }
     
     public function isTrue($actual)
     {
         if ($actual !== true) {
-            throw new \Exception(str_replace('{0}', 'true', str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
+            throw new \Exception(str_replace('{0}', 'true', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
     public function isFalse($actual)
     {
         if ($actual !== false) {
-            throw new \Exception(str_replace('{0}', 'false', str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
+            throw new \Exception(str_replace('{0}', 'false', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
@@ -894,7 +894,7 @@ class Assertions
     {
         $result = strpos($actual, $expected);
         if ($result === false) {
-            throw new \Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedContainsButWas)), 0);
+            throw new \Exception(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedContainsButWas)), 0);
         }
     }
     
@@ -902,21 +902,21 @@ class Assertions
     {
         $result = strpos($actual, $expected);
         if ($result !== false) {
-            throw new \Exception(str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedNotContainsButWas)), 0);
+            throw new \Exception(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotContainsButWas)), 0);
         }
     }
     
     public function isNull($actual)
     {
         if ($actual !== null) {
-            throw new \Exception(str_replace('{0}', 'null', str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas)), 0);
+            throw new \Exception(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
     public function isNotNull($actual)
     {
         if ($actual === null) {
-            throw new \Exception(str_replace('{0}', 'null', str_replace('{1}', $actual, $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new \Exception(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
         }
     }
 
@@ -963,6 +963,15 @@ class Assertions
         
         if (!$exception) {
             throw new \Exception($this->Text->ExpectedExceptionNotThrown, 0);
+        }
+    }
+
+    private function getDescription($mixed)
+    {
+        if (is_object($mixed)){
+            return get_class($mixed);
+        } else {
+            return (string) $mixed;
         }
     }
 }
