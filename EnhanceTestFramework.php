@@ -1282,6 +1282,45 @@ class CliTemplate implements iOutputTemplate
     }
 }
 
+class TapTemplate implements iOutputTemplate
+{
+    private $Text;
+    private $CR = "\n";
+
+    public function __construct($language)
+    {
+        $this->Text = TextFactory::getLanguageText($language);
+    }
+
+    public function getTemplateType()
+    {
+        return TemplateType::Cli;
+    }
+
+    public function get($errors, $results, $text, $duration, $methodCalls)
+    {
+        $failCount = count($errors);
+        $passCount = count($results);
+        $total = $failCount + $passCount;
+        $count = 0;
+
+        $message = '1..' . $total . $this->CR;
+
+        foreach ($errors as $error) {
+            ++$count;
+            $message .= 'not ok ' . $count . ' ' . $error->Message . $this->CR;
+        }
+
+        foreach ($results as $result) {
+            ++$count;
+            $message .= 'ok ' . $count . ' ' . $result->Message . $this->CR;
+        }
+
+        return $message;
+    }
+
+}
+
 class TemplateFactory
 {
     public static function createOutputTemplate($type, $language)
@@ -1296,6 +1335,9 @@ class TemplateFactory
             case TemplateType::Cli:
                 return new CliTemplate($language);
                 break;
+            case TemplateType::Tap:
+                return new TapTemplate($language);
+                break;
         }
 
         return new HtmlTemplate($language);
@@ -1307,6 +1349,7 @@ class TemplateType
     const Xml = 0;
     const Html = 1;
     const Cli = 2;
+    const Tap = 3;
 }
 
 class Language
