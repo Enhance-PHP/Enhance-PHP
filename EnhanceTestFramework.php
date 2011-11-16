@@ -309,6 +309,12 @@ class EnhanceTestFramework
             $this->Duration, 
             $this->MethodCalls
         );
+
+        if (count($this->Errors) > 0) {
+            exit(1);
+        } else {
+            exit(0);
+        }
     }
     
     public function log($className, $methodName) 
