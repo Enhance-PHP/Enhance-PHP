@@ -9,8 +9,11 @@ Unless required by applicable law or agreed to in writing, software distributed 
 http://www.enhance-php.com/
 https://github.com/Enhance-PHP/Enhance-PHP
 
-v2.1.1 (In Progress)
+v2.1.2 (In Progress)
+
+v2.1.1
 TAP Template output
+CLI exit codes
 
 v2.1.0
 PHP namespaces added - usage updated. View the documentation on our website: http://www.enhance-php.com/
