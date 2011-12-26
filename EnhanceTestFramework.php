@@ -1208,6 +1208,8 @@ class Assertions
     {
         if (is_object($mixed)){
             return get_class($mixed);
+        } else if (is_bool($mixed)){
+    	    return $mixed ? 'true' : 'false';
         } else {
             return (string) $mixed;
         }
