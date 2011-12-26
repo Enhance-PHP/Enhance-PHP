@@ -546,6 +546,7 @@ class CodeCoverageWrapper
             $this->Instance = new $className();
         }
         Core::log($this->ClassName, $className);
+        Core::log($this->ClassName, '__construct');
     }
 
     public function __call($methodName, $args = null)
