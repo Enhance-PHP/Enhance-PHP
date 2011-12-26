@@ -392,7 +392,8 @@ class EnhanceTestFramework
                 $message = $test->getTestName() . ' - ' . $this->Text->Passed;
                 $this->Results[] = new TestMessage($message, $test, true);
             } else {
-                $message = $test->getTestName() . ' - ' . 
+            	$message = '['. str_replace('{0}', $test->getLine(), str_replace('{1}', $test->getFile(), $this->Text->LineFile)) . '] ' .
+            	    $test->getTestName() . ' - ' .
                     $this->Text->Failed . ' - ' . $test->getMessage();
                 $this->Errors[] = new TestMessage($message, $test, false);
             }
@@ -476,6 +477,8 @@ class Test
     private $SetUpMethod;
     private $TearDownMethod;
     private $Message;
+    private $Line;
+    private $File;
     
     public function __construct($class, $method)
     {
@@ -501,7 +504,17 @@ class Test
     {
         return $this->Message;
     }
-    
+
+    public function getLine()
+    {
+        return $this->Line;
+    }
+
+    public function getFile()
+    {
+        return $this->File;
+    }
+
     public function run()
     {
         /** @var $testClass iTestable */
@@ -516,8 +529,10 @@ class Test
         try {
             $testClass->{$this->TestName}();
             $result = true;
-        } catch (\Exception $e) {
+        } catch (TestException $e) {
             $this->Message = $e->getMessage();
+            $this->Line = $e->getLine();
+            $this->File = pathinfo($e->getFile(), PATHINFO_BASENAME);
             $result = false;
         }
         
@@ -863,12 +878,12 @@ class Assertions
 
     public function areIdentical($expected, $actual) 
     {    	
-		if (is_float($expected)) {
-			if ((string)$expected !== (string)$actual) {
-                throw new \Exception(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+        if (is_float($expected)) {
+            if ((string)$expected !== (string)$actual) {
+                throw new TestException(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
 			}
 		} elseif ($expected !== $actual) {
-            throw new \Exception(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
@@ -876,24 +891,24 @@ class Assertions
     {
         if (is_float($expected)) {
 			if ((string)$expected === (string)$actual) {
-                throw new \Exception(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+                throw new TestException(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
 			}
 		} elseif ($expected === $actual) {
-            throw new \Exception(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new TestException(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
         }
     }
     
     public function isTrue($actual)
     {
         if ($actual !== true) {
-            throw new \Exception(str_replace('{0}', 'true', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(str_replace('{0}', 'true', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
     public function isFalse($actual)
     {
         if ($actual !== false) {
-            throw new \Exception(str_replace('{0}', 'false', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(str_replace('{0}', 'false', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
@@ -901,7 +916,7 @@ class Assertions
     {
         $result = strpos($actual, $expected);
         if ($result === false) {
-            throw new \Exception(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedContainsButWas)), 0);
+            throw new TestException(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedContainsButWas)), 0);
         }
     }
     
@@ -909,39 +924,39 @@ class Assertions
     {
         $result = strpos($actual, $expected);
         if ($result !== false) {
-            throw new \Exception(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotContainsButWas)), 0);
+            throw new TestException(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotContainsButWas)), 0);
         }
     }
     
     public function isNull($actual)
     {
         if ($actual !== null) {
-            throw new \Exception(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
     public function isNotNull($actual)
     {
         if ($actual === null) {
-            throw new \Exception(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
         }
     }
 
     public function fail()
     {
-        throw new \Exception($this->Text->Failed, 0);
+        throw new TestException($this->Text->Failed, 0);
     }
     
     public function inconclusive()
     {
-        throw new \Exception($this->Text->InconclusiveOrNotImplemented, 0);
+        throw new TestException($this->Text->InconclusiveOrNotImplemented, 0);
     }
     
     public function isInstanceOfType($expected, $actual)
     {
         $actualType = get_class($actual);
         if ($expected !== $actualType) {
-            throw new \Exception(str_replace('{0}', $expected, str_replace('{1}', $actualType, $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(str_replace('{0}', $expected, str_replace('{1}', $actualType, $this->Text->FormatForExpectedButWas)), 0);
         };
     }
     
@@ -949,7 +964,7 @@ class Assertions
     {
         $actualType = get_class($actual);
         if ($expected === $actualType) {
-            throw new \Exception(str_replace('{0}', $expected, str_replace('{1}', $actualType, $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new TestException(str_replace('{0}', $expected, str_replace('{1}', $actualType, $this->Text->FormatForExpectedNotButWas)), 0);
         };
     }
     
@@ -969,7 +984,7 @@ class Assertions
         }
         
         if (!$exception) {
-            throw new \Exception($this->Text->ExpectedExceptionNotThrown, 0);
+            throw new TestException($this->Text->ExpectedExceptionNotThrown, 0);
         }
     }
 
@@ -980,6 +995,19 @@ class Assertions
         } else {
             return (string) $mixed;
         }
+    }
+}
+
+class TestException extends \Exception
+{
+    public function __construct($message = null, $code = 0, Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+
+        $trace = $this->getTrace();
+
+        $this->line = $trace[1]['line'];
+        $this->file = $trace[1]['file'];
     }
 }
 
