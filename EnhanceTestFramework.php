@@ -297,14 +297,14 @@ class EnhanceTestFramework
         $this->getTestFixturesByParent();
         $this->run();
         
-        if(PHP_SAPI === 'cli') {
+        if(PHP_SAPI === 'cli' && $output != TemplateType::Tap) {
             $output = TemplateType::Cli;
         }
-        
+
         $OutputTemplate = TemplateFactory::createOutputTemplate($output, $this->Language);
         echo $OutputTemplate->get(
-            $this->Errors, 
-            $this->Results, 
+            $this->Errors,
+            $this->Results,
             $this->Text, 
             $this->Duration, 
             $this->MethodCalls
