@@ -151,6 +151,96 @@ class Assert
     {
         self::GetEnhanceAssertionsInstance()->isNotNull($actual);
     }
+
+    public static function isArray($actual)
+    {
+        self::GetEnhanceAssertionsInstance()->isArray($actual);
+    }
+
+    public static function isNotArray($actual)
+    {
+        self::GetEnhanceAssertionsInstance()->isNotArray($actual);
+    }
+
+    public static function isBool($actual)
+    {
+        self::GetEnhanceAssertionsInstance()->isBool($actual);
+    }
+
+    public static function isNotBool($actual)
+    {
+        self::GetEnhanceAssertionsInstance()->isNotBool($actual);
+    }
+
+    public static function isFloat($actual)
+    {
+        self::GetEnhanceAssertionsInstance()->isFloat($actual);
+    }
+
+    public static function isNotFloat($actual)
+    {
+        self::GetEnhanceAssertionsInstance()->isNotFloat($actual);
+    }
+
+    public static function isInt($actual)
+    {
+        self::GetEnhanceAssertionsInstance()->isInt($actual);
+    }
+
+    public static function isNotInt($actual)
+    {
+        self::GetEnhanceAssertionsInstance()->isNotInt($actual);
+    }
+
+    public static function isNumeric($actual)
+    {
+        self::GetEnhanceAssertionsInstance()->isNumeric($actual);
+    }
+
+    public static function isNotNumeric($actual)
+    {
+        self::GetEnhanceAssertionsInstance()->isNotNumeric($actual);
+    }
+
+    public static function isObject($actual)
+    {
+        self::GetEnhanceAssertionsInstance()->isObject($actual);
+    }
+
+    public static function isNotObject($actual)
+    {
+        self::GetEnhanceAssertionsInstance()->isNotObject($actual);
+    }
+
+    public static function isResource($actual)
+    {
+        self::GetEnhanceAssertionsInstance()->isResource($actual);
+    }
+
+    public static function isNotResource($actual)
+    {
+        self::GetEnhanceAssertionsInstance()->isNotResource($actual);
+    }
+
+    public static function isScalar($actual)
+    {
+        self::GetEnhanceAssertionsInstance()->isScalar($actual);
+    }
+
+    public static function isNotScalar($actual)
+    {
+        self::GetEnhanceAssertionsInstance()->isNotScalar($actual);
+    }
+
+    public static function isString($actual)
+    {
+        self::GetEnhanceAssertionsInstance()->isString($actual);
+    }
+
+    public static function isNotString($actual)
+    {
+        self::GetEnhanceAssertionsInstance()->isNotString($actual);
+    }
     
     public static function contains($expected, $actual) 
     {
@@ -392,7 +482,8 @@ class EnhanceTestFramework
                 $message = $test->getTestName() . ' - ' . $this->Text->Passed;
                 $this->Results[] = new TestMessage($message, $test, true);
             } else {
-                $message = $test->getTestName() . ' - ' . 
+            	$message = '['. str_replace('{0}', $test->getLine(), str_replace('{1}', $test->getFile(), $this->Text->LineFile)) . '] ' .
+            	    $test->getTestName() . ' - ' .
                     $this->Text->Failed . ' - ' . $test->getMessage();
                 $this->Errors[] = new TestMessage($message, $test, false);
             }
@@ -476,6 +567,8 @@ class Test
     private $SetUpMethod;
     private $TearDownMethod;
     private $Message;
+    private $Line;
+    private $File;
     
     public function __construct($class, $method)
     {
@@ -501,7 +594,17 @@ class Test
     {
         return $this->Message;
     }
-    
+
+    public function getLine()
+    {
+        return $this->Line;
+    }
+
+    public function getFile()
+    {
+        return $this->File;
+    }
+
     public function run()
     {
         /** @var $testClass iTestable */
@@ -516,8 +619,10 @@ class Test
         try {
             $testClass->{$this->TestName}();
             $result = true;
-        } catch (\Exception $e) {
+        } catch (TestException $e) {
             $this->Message = $e->getMessage();
+            $this->Line = $e->getLine();
+            $this->File = pathinfo($e->getFile(), PATHINFO_BASENAME);
             $result = false;
         }
         
@@ -546,6 +651,7 @@ class CodeCoverageWrapper
             $this->Instance = new $className();
         }
         Core::log($this->ClassName, $className);
+        Core::log($this->ClassName, '__construct');
     }
 
     public function __call($methodName, $args = null)
@@ -862,12 +968,12 @@ class Assertions
 
     public function areIdentical($expected, $actual) 
     {    	
-		if (is_float($expected)) {
-			if ((string)$expected !== (string)$actual) {
-                throw new \Exception(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+        if (is_float($expected)) {
+            if ((string)$expected !== (string)$actual) {
+                throw new TestException(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
 			}
 		} elseif ($expected !== $actual) {
-            throw new \Exception(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
@@ -875,24 +981,24 @@ class Assertions
     {
         if (is_float($expected)) {
 			if ((string)$expected === (string)$actual) {
-                throw new \Exception(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+                throw new TestException(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
 			}
 		} elseif ($expected === $actual) {
-            throw new \Exception(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new TestException(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
         }
     }
     
     public function isTrue($actual)
     {
         if ($actual !== true) {
-            throw new \Exception(str_replace('{0}', 'true', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(str_replace('{0}', 'true', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
     public function isFalse($actual)
     {
         if ($actual !== false) {
-            throw new \Exception(str_replace('{0}', 'false', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(str_replace('{0}', 'false', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
@@ -900,7 +1006,7 @@ class Assertions
     {
         $result = strpos($actual, $expected);
         if ($result === false) {
-            throw new \Exception(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedContainsButWas)), 0);
+            throw new TestException(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedContainsButWas)), 0);
         }
     }
     
@@ -908,39 +1014,165 @@ class Assertions
     {
         $result = strpos($actual, $expected);
         if ($result !== false) {
-            throw new \Exception(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotContainsButWas)), 0);
+            throw new TestException(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotContainsButWas)), 0);
         }
     }
     
     public function isNull($actual)
     {
         if ($actual !== null) {
-            throw new \Exception(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
         }
     }
     
     public function isNotNull($actual)
     {
         if ($actual === null) {
-            throw new \Exception(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+        }
+    }
+
+    public function isArray($actual)
+    {
+        if (!is_array($actual)) {
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+        }
+    }
+
+    public function isNotArray($actual)
+    {
+        if (is_array($actual)) {
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+        }
+    }
+
+    public function isBool($actual)
+    {
+        if (!is_bool($actual)) {
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+        }
+    }
+
+    public function isNotBool($actual)
+    {
+        if (is_bool($actual)) {
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+    }
+    }
+
+    public function isFloat($actual)
+    {
+        if (!is_float($actual)) {
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+        }
+    }
+
+    public function isNotFloat($actual)
+    {
+        if (is_float($actual)) {
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+        }
+    }
+
+    public function isInt($actual)
+    {
+        if (!is_int($actual)) {
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+        }
+    }
+
+    public function isNotInt($actual)
+    {
+        if (is_int($actual)) {
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+        }
+    }
+
+    public function isNumeric($actual)
+    {
+        if (!is_numeric($actual)) {
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+        }
+    }
+
+    public function isNotNumeric($actual)
+    {
+        if (is_numeric($actual)) {
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+        }
+    }
+
+    public function isObject($actual)
+    {
+        if (!is_object($actual)) {
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+        }
+    }
+
+    public function isNotObject($actual)
+    {
+        if (is_object($actual)) {
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+        }
+    }
+
+    public function isResource($actual)
+    {
+        if (!is_resource($actual)) {
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+        }
+    }
+
+    public function isNotResource($actual)
+    {
+        if (is_resource($actual)) {
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+        }
+    }
+
+    public function isScalar($actual)
+    {
+        if (!is_scalar($actual)) {
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+        }
+    }
+
+    public function isNotScalar($actual)
+    {
+        if (is_scalar($actual)) {
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+        }
+    }
+
+    public function isString($actual)
+    {
+        if (!is_string($actual)) {
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+        }
+    }
+
+    public function isNotString($actual)
+    {
+        if (is_string($actual)) {
+            throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
         }
     }
 
     public function fail()
     {
-        throw new \Exception($this->Text->Failed, 0);
+        throw new TestException($this->Text->Failed, 0);
     }
     
     public function inconclusive()
     {
-        throw new \Exception($this->Text->InconclusiveOrNotImplemented, 0);
+        throw new TestException($this->Text->InconclusiveOrNotImplemented, 0);
     }
     
     public function isInstanceOfType($expected, $actual)
     {
         $actualType = get_class($actual);
         if ($expected !== $actualType) {
-            throw new \Exception(str_replace('{0}', $expected, str_replace('{1}', $actualType, $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(str_replace('{0}', $expected, str_replace('{1}', $actualType, $this->Text->FormatForExpectedButWas)), 0);
         };
     }
     
@@ -948,7 +1180,7 @@ class Assertions
     {
         $actualType = get_class($actual);
         if ($expected === $actualType) {
-            throw new \Exception(str_replace('{0}', $expected, str_replace('{1}', $actualType, $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new TestException(str_replace('{0}', $expected, str_replace('{1}', $actualType, $this->Text->FormatForExpectedNotButWas)), 0);
         };
     }
     
@@ -968,7 +1200,7 @@ class Assertions
         }
         
         if (!$exception) {
-            throw new \Exception($this->Text->ExpectedExceptionNotThrown, 0);
+            throw new TestException($this->Text->ExpectedExceptionNotThrown, 0);
         }
     }
 
@@ -976,9 +1208,24 @@ class Assertions
     {
         if (is_object($mixed)){
             return get_class($mixed);
+        } else if (is_bool($mixed)){
+    	    return $mixed ? 'true' : 'false';
         } else {
             return (string) $mixed;
         }
+    }
+}
+
+class TestException extends \Exception
+{
+    public function __construct($message = null, $code = 0, Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+
+        $trace = $this->getTrace();
+
+        $this->line = $trace[1]['line'];
+        $this->file = $trace[1]['file'];
     }
 }
 
