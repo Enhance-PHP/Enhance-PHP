@@ -6,7 +6,7 @@ class ExampleAnotherClass
     private $X;
     private $Y;
 
-    public function ExampleAnotherClass($x, $y)
+    public function __construct($x, $y)
     {
         $this->X = $x;
         $this->Y = $y;
