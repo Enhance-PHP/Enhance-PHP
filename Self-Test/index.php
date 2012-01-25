@@ -6,4 +6,3 @@ include('../EnhanceTestFramework.php');
 // Run the tests
 \Enhance\Core::runTests();
 ?>
-

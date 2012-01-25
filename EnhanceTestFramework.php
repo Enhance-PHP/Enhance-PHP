@@ -33,21 +33,21 @@ class Core
         self::setInstance();
         self::$Instance->runTests($output);
     }
-    
-    public static function getCodeCoverageWrapper($className, $args = null) 
+
+    public static function getCodeCoverageWrapper($className, $args = null)
     {
         self::setInstance();
         self::$Instance->registerForCodeCoverage($className);
         return new CodeCoverageWrapper($className, $args);
     }
-    
+
     public static function log($className, $methodName)
     {
         self::setInstance();
         self::$Instance->log($className, $methodName);
     }
-	    
-    public static function getScenario($className, $args = null) 
+
+    public static function getScenario($className, $args = null)
     {
         return new Scenario($className, $args, self::$Language);
     }
@@ -63,45 +63,45 @@ class Core
 // Public API
 class TestFixture
 {
-    
+
 }
 
 // Public API
-class MockFactory 
+class MockFactory
 {
-    public static function createMock($typeName) 
+    public static function createMock($typeName)
     {
         return new Mock($typeName, true, Core::getLanguage());
     }
 }
 
 // Public API
-class StubFactory 
+class StubFactory
 {
-    public static function createStub($typeName) 
+    public static function createStub($typeName)
     {
         return new Mock($typeName, false, Core::getLanguage());
     }
 }
 
 // Public API
-class Expect 
+class Expect
 {
     const AnyValue = 'ENHANCE_ANY_VALUE_WILL_DO';
 
-    public static function method($methodName) 
+    public static function method($methodName)
     {
         $expectation = new Expectation(Core::getLanguage());
         return $expectation->method($methodName);
     }
-    
-    public static function getProperty($propertyName) 
+
+    public static function getProperty($propertyName)
     {
         $expectation = new Expectation(Core::getLanguage());
         return $expectation->getProperty($propertyName);
     }
-    
-    public static function setProperty($propertyName) 
+
+    public static function setProperty($propertyName)
     {
         $expectation = new Expectation(Core::getLanguage());
         return $expectation->setProperty($propertyName);
@@ -109,45 +109,45 @@ class Expect
 }
 
 // Public API
-class Assert 
+class Assert
 {
     /** @var Assertions $EnhanceAssertions */
     private static $EnhanceAssertions;
-    
-    private static function GetEnhanceAssertionsInstance() 
+
+    private static function GetEnhanceAssertionsInstance()
     {
         if(self::$EnhanceAssertions === null) {
             self::$EnhanceAssertions = new Assertions(Core::getLanguage());
         }
         return self::$EnhanceAssertions;
     }
-    
-    public static function areIdentical($expected, $actual) 
+
+    public static function areIdentical($expected, $actual)
     {
         self::GetEnhanceAssertionsInstance()->areIdentical($expected, $actual);
     }
-    
-    public static function areNotIdentical($expected, $actual) 
+
+    public static function areNotIdentical($expected, $actual)
     {
         self::GetEnhanceAssertionsInstance()->areNotIdentical($expected, $actual);
     }
-    
-    public static function isTrue($actual) 
+
+    public static function isTrue($actual)
     {
         self::GetEnhanceAssertionsInstance()->isTrue($actual);
     }
-    
-    public static function isFalse($actual) 
+
+    public static function isFalse($actual)
     {
         self::GetEnhanceAssertionsInstance()->isFalse($actual);
     }
-    
-    public static function isNull($actual) 
+
+    public static function isNull($actual)
     {
         self::GetEnhanceAssertionsInstance()->isNull($actual);
     }
-    
-    public static function isNotNull($actual) 
+
+    public static function isNotNull($actual)
     {
         self::GetEnhanceAssertionsInstance()->isNotNull($actual);
     }
@@ -241,38 +241,38 @@ class Assert
     {
         self::GetEnhanceAssertionsInstance()->isNotString($actual);
     }
-    
-    public static function contains($expected, $actual) 
+
+    public static function contains($expected, $actual)
     {
         self::GetEnhanceAssertionsInstance()->contains($expected, $actual);
     }
-    
-    public static function notContains($expected, $actual) 
+
+    public static function notContains($expected, $actual)
     {
         self::GetEnhanceAssertionsInstance()->notContains($expected, $actual);
     }
-    
-    public static function fail() 
+
+    public static function fail()
     {
         self::GetEnhanceAssertionsInstance()->fail();
     }
-    
-    public static function inconclusive() 
+
+    public static function inconclusive()
     {
         self::GetEnhanceAssertionsInstance()->inconclusive();
     }
-    
-    public static function isInstanceOfType($expected, $actual) 
+
+    public static function isInstanceOfType($expected, $actual)
     {
         self::GetEnhanceAssertionsInstance()->isInstanceOfType($expected, $actual);
     }
-    
-    public static function isNotInstanceOfType($expected, $actual) 
+
+    public static function isNotInstanceOfType($expected, $actual)
     {
         self::GetEnhanceAssertionsInstance()->isNotInstanceOfType($expected, $actual);
     }
-    
-    public static function throws($class, $methodName, $args = null) 
+
+    public static function throws($class, $methodName, $args = null)
     {
         self::GetEnhanceAssertionsInstance()->throws($class, $methodName, $args);
     }
@@ -282,7 +282,7 @@ class Assert
 // You don't need to call any of these bits directly - use the public API above, which will
 // use the stuff below to carry out your tests!
 
-class TextFactory 
+class TextFactory
 {
     public static $Text;
 
@@ -322,6 +322,7 @@ class TextEn
     public $CannotCallVerifyOnStub = 'Cannot call VerifyExpectations on a stub';
     public $ReturnsOrThrowsNotBoth = 'You must only set a single return value (1 returns() or 1 throws())';
     public $ScenarioWithExpectMismatch = 'Scenario must be initialised with the same number of "with" and "expect" calls';
+    public $LineFile = 'Line {0} in file {1}';
 }
 
 class TextDe
@@ -350,9 +351,10 @@ class TextDe
     public $CannotCallVerifyOnStub = 'Kann VerifyExpectations auf einem Stub nicht aufrufen';
     public $ReturnsOrThrowsNotBoth = 'Sie müssen einen einzelnen Return Value nur einstellen';
     public $ScenarioWithExpectMismatch = 'Szenarium muss mit der gleichen Zahl von "With" und "Expect" calls initialisiert werden';
+    public $LineFile = 'Zeile {0} der Datei {1}';
 }
 
-class EnhanceTestFramework 
+class EnhanceTestFramework
 {
     private $FileSystem;
     private $Text;
@@ -381,12 +383,12 @@ class EnhanceTestFramework
             }
         }
     }
-    
-    public function runTests($output) 
+
+    public function runTests($output)
     {
         $this->getTestFixturesByParent();
         $this->run();
-        
+
         if(PHP_SAPI === 'cli' && $output != TemplateType::Tap) {
             $output = TemplateType::Cli;
         }
@@ -395,8 +397,8 @@ class EnhanceTestFramework
         echo $OutputTemplate->get(
             $this->Errors,
             $this->Results,
-            $this->Text, 
-            $this->Duration, 
+            $this->Text,
+            $this->Duration,
             $this->MethodCalls
         );
 
@@ -406,16 +408,16 @@ class EnhanceTestFramework
             exit(0);
         }
     }
-    
-    public function log($className, $methodName) 
+
+    public function log($className, $methodName)
     {
         $index = $this->getMethodIndex($className, $methodName);
         if (array_key_exists($index ,$this->MethodCalls)) {
             $this->MethodCalls[$index] = $this->MethodCalls[$index] + 1;
         }
     }
-    
-    public function registerForCodeCoverage($className) 
+
+    public function registerForCodeCoverage($className)
     {
         $classMethods = get_class_methods($className);
         foreach($classMethods as $methodName) {
@@ -425,12 +427,12 @@ class EnhanceTestFramework
             }
         }
     }
-    
-    private function getMethodIndex($className, $methodName) 
+
+    private function getMethodIndex($className, $methodName)
     {
         return $className . '#' . $methodName;
     }
-    
+
     private function getTestFixturesByParent()
     {
         $classes = get_declared_classes();
@@ -454,7 +456,7 @@ class EnhanceTestFramework
         }
     }
 
-    private function addFixture($class) 
+    private function addFixture($class)
     {
         $classMethods = get_class_methods($class);
         foreach($classMethods as $method) {
@@ -466,14 +468,14 @@ class EnhanceTestFramework
             }
         }
     }
-    
-    private function addTest($class, $method) 
+
+    private function addTest($class, $method)
     {
         $testMethod = new Test($class, $method);
         $this->Tests[] = $testMethod;
     }
-    
-    private function run() 
+
+    private function run()
     {
         $start = time();
         foreach($this->Tests as /** @var Test $test */ $test) {
@@ -482,8 +484,8 @@ class EnhanceTestFramework
                 $message = $test->getTestName() . ' - ' . $this->Text->Passed;
                 $this->Results[] = new TestMessage($message, $test, true);
             } else {
-            	$message = '['. str_replace('{0}', $test->getLine(), str_replace('{1}', $test->getFile(), $this->Text->LineFile)) . '] ' .
-            	    $test->getTestName() . ' - ' .
+                $message = '['. str_replace('{0}', $test->getLine(), str_replace('{1}', $test->getFile(), $this->Text->LineFile)) . '] ' .
+                    $test->getTestName() . ' - ' .
                     $this->Text->Failed . ' - ' . $test->getMessage();
                 $this->Errors[] = new TestMessage($message, $test, false);
             }
@@ -550,7 +552,7 @@ class TestMessage
     public $Message;
     public $Test;
     public $IsPass;
-    
+
     public function __construct($message, $test, $isPass)
     {
         $this->Message = $message;
@@ -569,7 +571,7 @@ class Test
     private $Message;
     private $Line;
     private $File;
-    
+
     public function __construct($class, $method)
     {
         $className = get_class($class);
@@ -579,17 +581,17 @@ class Test
         $this->TearDownMethod = array($className, 'tearDown');
         $this->TestName = $method;
     }
-    
-    public function getTestName() 
+
+    public function getTestName()
     {
         return $this->TestName;
     }
-    
+
     public function getClassName()
     {
         return $this->ClassName;
     }
-    
+
     public function getMessage()
     {
         return $this->Message;
@@ -609,13 +611,13 @@ class Test
     {
         /** @var $testClass iTestable */
         $testClass = new $this->ClassName();
-    
+
         try {
             if (is_callable($this->SetUpMethod)) {
                 $testClass->setUp();
             }
         } catch (\Exception $e) { }
-        
+
         try {
             $testClass->{$this->TestName}();
             $result = true;
@@ -625,13 +627,13 @@ class Test
             $this->File = pathinfo($e->getFile(), PATHINFO_BASENAME);
             $result = false;
         }
-        
+
         try {
             if (is_callable($this->TearDownMethod)) {
                 $testClass->tearDown();
             }
         } catch (\Exception $e) { }
-        
+
         return $result;
     }
 }
@@ -640,7 +642,7 @@ class CodeCoverageWrapper
 {
     private $Instance;
     private $ClassName;
-    
+
     public function __construct($className, $args)
     {
         $this->ClassName = $className;
@@ -664,12 +666,12 @@ class CodeCoverageWrapper
             return $this->Instance->{$methodName}();
         }
     }
-    
+
     public function __get($propertyName)
     {
         return $this->Instance->{$propertyName};
     }
-    
+
     public function __set($propertyName, $value)
     {
         $this->Instance->{$propertyName} = $value;
@@ -679,7 +681,7 @@ class CodeCoverageWrapper
 class Mock
 {
     private $IsMock;
-    private $Text;	
+    private $Text;
     private $ClassName;
     private $Expectations = array();
 
@@ -689,12 +691,12 @@ class Mock
         $this->ClassName = $className;
         $this->Text = TextFactory::getLanguageText($language);
     }
-    
+
     public function addExpectation($expectation)
     {
         $this->Expectations[] = $expectation;
     }
-    
+
     public function verifyExpectations()
     {
         if (!$this->IsMock) {
@@ -702,7 +704,7 @@ class Mock
                 $this->ClassName . ': ' . $this->Text->CannotCallVerifyOnStub
             );
         }
-        
+
         foreach ($this->Expectations as /** @var Expectation $expectation */ $expectation) {
             if (!$expectation->verify()) {
                 $Arguments = '';
@@ -714,31 +716,31 @@ class Mock
                         $Arguments .= $argument;
                     }
                 }
-                
+
                 throw new \Exception(
-                    $this->Text->ExpectationFailed . ' ' . 
-                    $this->ClassName . '->' . $expectation->MethodName . '(' . $Arguments . ') ' . 
-                    $this->Text->Expected . ' #' . $expectation->ExpectedCalls . ' ' . 
-                    $this->Text->Called . ' #' . $expectation->ActualCalls, 0);
+                    $this->Text->ExpectationFailed . ' ' .
+                        $this->ClassName . '->' . $expectation->MethodName . '(' . $Arguments . ') ' .
+                        $this->Text->Expected . ' #' . $expectation->ExpectedCalls . ' ' .
+                        $this->Text->Called . ' #' . $expectation->ActualCalls, 0);
             }
         }
     }
-    
+
     public function __call($methodName, $args)
     {
         return $this->getReturnValue('method', $methodName, $args);
     }
-    
+
     public function __get($propertyName)
     {
         return $this->getReturnValue('getProperty', $propertyName, array());
     }
-    
+
     public function __set($propertyName, $value)
     {
         $this->getReturnValue('setProperty', $propertyName, array($value));
     }
-    
+
     private function getReturnValue($type, $methodName, $args)
     {
         $Expectation = $this->getMatchingExpectation($type, $methodName, $args);
@@ -746,7 +748,7 @@ class Mock
         if ($Expectation === null) {
             $Expected = false;
         }
-        
+
         if ($Expected) {
             ++$Expectation->ActualCalls;
             if ($Expectation->ReturnException) {
@@ -758,13 +760,13 @@ class Mock
         if ($this->IsMock)  {
             throw new \Exception(
                 $this->Text->ExpectationFailed . ' ' .
-                $this->ClassName . '->' . $methodName . '(' . $args . ') ' .
-                $this->Text->Expected . ' #0 ' .
-                $this->Text->Called . ' #1', 0);
+                    $this->ClassName . '->' . $methodName . '(' . $args . ') ' .
+                    $this->Text->Expected . ' #0 ' .
+                    $this->Text->Called . ' #1', 0);
         }
         return null;
     }
-    
+
     private function getMatchingExpectation($type, $methodName, $arguments)
     {
         foreach ($this->Expectations as $expectation) {
@@ -773,7 +775,7 @@ class Mock
                     $isMatch = true;
                     if ($expectation->ExpectArguments) {
                         $isMatch = $this->argumentsMatch(
-                            $expectation->MethodArguments, 
+                            $expectation->MethodArguments,
                             $arguments
                         );
                     }
@@ -785,7 +787,7 @@ class Mock
         }
         return null;
     }
-    
+
     private function argumentsMatch($arguments1, $arguments2)
     {
         $Count1 = count($arguments1);
@@ -793,7 +795,7 @@ class Mock
         $isMatch = true;
         if ($Count1 === $Count2) {
             for ($i = 0; $i < $Count1; ++$i) {
-                if ($arguments1[$i] === Expect::AnyValue 
+                if ($arguments1[$i] === Expect::AnyValue
                     || $arguments2[$i] === Expect::AnyValue) {
                     // No need to match
                 } else {
@@ -811,58 +813,58 @@ class Mock
 
 class Scenario
 {
-    private $Text;	
-    private $Class;	
-	private $FunctionName;
-	private $Inputs = array();
-	private $Expectations = array();
+    private $Text;
+    private $Class;
+    private $FunctionName;
+    private $Inputs = array();
+    private $Expectations = array();
 
     public function __construct($class, $functionName, $language)
     {
         $this->Class = $class;
-		$this->FunctionName = $functionName;
+        $this->FunctionName = $functionName;
         $this->Text = TextFactory::getLanguageText($language);
     }
-    
-	public function with()
-	{
-		$this->Inputs[] = func_get_args();
-		return $this;
-	}
-	
-	public function expect()
-	{
-		$this->Expectations[] = func_get_args();
-		return $this;
-	}	
-	
+
+    public function with()
+    {
+        $this->Inputs[] = func_get_args();
+        return $this;
+    }
+
+    public function expect()
+    {
+        $this->Expectations[] = func_get_args();
+        return $this;
+    }
+
     public function verifyExpectations()
     {
-    	if (count($this->Inputs) !== count($this->Expectations)) {
+        if (count($this->Inputs) !== count($this->Expectations)) {
             throw new \Exception($this->Text->ScenarioWithExpectMismatch);
         }
-		
-    	$exceptionText = '';		
-		
-		while(count($this->Inputs) > 0) {			
-	    	$input = array_shift($this->Inputs);
-			$expected = array_shift($this->Expectations);
-			$expected = $expected[0];
 
- 			$actual = call_user_func_array(array($this->Class, $this->FunctionName), $input);
-			
-			if (is_float($expected)) {
-				if ((string)$expected !== (string)$actual) {
-					$exceptionText .= str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas));
-				}
-			} elseif ($expected != $actual) {
-	            $exceptionText .= str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas));
-			}			
-		}
-		
-		if ($exceptionText !== ''){
-			throw new \Exception($exceptionText, 0);
-		}
+        $exceptionText = '';
+
+        while(count($this->Inputs) > 0) {
+            $input = array_shift($this->Inputs);
+            $expected = array_shift($this->Expectations);
+            $expected = $expected[0];
+
+            $actual = call_user_func_array(array($this->Class, $this->FunctionName), $input);
+
+            if (is_float($expected)) {
+                if ((string)$expected !== (string)$actual) {
+                    $exceptionText .= str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas));
+                }
+            } elseif ($expected != $actual) {
+                $exceptionText .= str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas));
+            }
+        }
+
+        if ($exceptionText !== ''){
+            throw new \Exception($exceptionText, 0);
+        }
     }
 }
 
@@ -878,7 +880,7 @@ class Expectation
     public $ExpectTimes;
     public $Type;
     public $Text;
-    
+
     public function __construct($language)
     {
         $this->ExpectedCalls = -1;
@@ -897,28 +899,28 @@ class Expectation
         $this->MethodName =  $methodName;
         return $this;
     }
-    
+
     public function getProperty($propertyName)
     {
         $this->Type = 'getProperty';
         $this->MethodName =  $propertyName;
         return $this;
     }
-    
+
     public function setProperty($propertyName)
     {
         $this->Type = 'setProperty';
         $this->MethodName =  $propertyName;
         return $this;
     }
-    
+
     public function with()
     {
         $this->ExpectArguments = true;
         $this->MethodArguments = func_get_args();
         return $this;
     }
-    
+
     public function returns($returnValue)
     {
         if ($this->ReturnValue !== null) {
@@ -927,7 +929,7 @@ class Expectation
         $this->ReturnValue = $returnValue;
         return $this;
     }
-    
+
     public function throws($errorMessage)
     {
         if ($this->ReturnValue !== null) {
@@ -937,14 +939,14 @@ class Expectation
         $this->ReturnException = true;
         return $this;
     }
-    
+
     public function times($expectedCalls)
     {
         $this->ExpectTimes = true;
         $this->ExpectedCalls = $expectedCalls;
         return $this;
     }
-    
+
     public function verify()
     {
         $ExpectationMet = true;
@@ -960,48 +962,48 @@ class Expectation
 class Assertions
 {
     private $Text;
-    
+
     public function __construct($language)
     {
         $this->Text = TextFactory::getLanguageText($language);
     }
 
-    public function areIdentical($expected, $actual) 
-    {    	
+    public function areIdentical($expected, $actual)
+    {
         if (is_float($expected)) {
             if ((string)$expected !== (string)$actual) {
                 throw new TestException(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
-			}
-		} elseif ($expected !== $actual) {
+            }
+        } elseif ($expected !== $actual) {
             throw new TestException(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
         }
     }
-    
+
     public function areNotIdentical($expected, $actual)
     {
         if (is_float($expected)) {
-			if ((string)$expected === (string)$actual) {
+            if ((string)$expected === (string)$actual) {
                 throw new TestException(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
-			}
-		} elseif ($expected === $actual) {
+            }
+        } elseif ($expected === $actual) {
             throw new TestException(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
         }
     }
-    
+
     public function isTrue($actual)
     {
         if ($actual !== true) {
             throw new TestException(str_replace('{0}', 'true', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
         }
     }
-    
+
     public function isFalse($actual)
     {
         if ($actual !== false) {
             throw new TestException(str_replace('{0}', 'false', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
         }
     }
-    
+
     public function contains($expected, $actual)
     {
         $result = strpos($actual, $expected);
@@ -1009,7 +1011,7 @@ class Assertions
             throw new TestException(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedContainsButWas)), 0);
         }
     }
-    
+
     public function notContains($expected, $actual)
     {
         $result = strpos($actual, $expected);
@@ -1017,14 +1019,14 @@ class Assertions
             throw new TestException(str_replace('{0}', $this->getDescription($expected), str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotContainsButWas)), 0);
         }
     }
-    
+
     public function isNull($actual)
     {
         if ($actual !== null) {
             throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
         }
     }
-    
+
     public function isNotNull($actual)
     {
         if ($actual === null) {
@@ -1057,7 +1059,7 @@ class Assertions
     {
         if (is_bool($actual)) {
             throw new TestException(str_replace('{0}', 'null', str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
-    }
+        }
     }
 
     public function isFloat($actual)
@@ -1162,12 +1164,12 @@ class Assertions
     {
         throw new TestException($this->Text->Failed, 0);
     }
-    
+
     public function inconclusive()
     {
         throw new TestException($this->Text->InconclusiveOrNotImplemented, 0);
     }
-    
+
     public function isInstanceOfType($expected, $actual)
     {
         $actualType = get_class($actual);
@@ -1175,7 +1177,7 @@ class Assertions
             throw new TestException(str_replace('{0}', $expected, str_replace('{1}', $actualType, $this->Text->FormatForExpectedButWas)), 0);
         };
     }
-    
+
     public function isNotInstanceOfType($expected, $actual)
     {
         $actualType = get_class($actual);
@@ -1183,7 +1185,7 @@ class Assertions
             throw new TestException(str_replace('{0}', $expected, str_replace('{1}', $actualType, $this->Text->FormatForExpectedNotButWas)), 0);
         };
     }
-    
+
     public function throws($class, $methodName, $args = null)
     {
         $exception = false;
@@ -1198,7 +1200,7 @@ class Assertions
         } catch (\Exception $e) {
             $exception = true;
         }
-        
+
         if (!$exception) {
             throw new TestException($this->Text->ExpectedExceptionNotThrown, 0);
         }
@@ -1209,7 +1211,7 @@ class Assertions
         if (is_object($mixed)){
             return get_class($mixed);
         } else if (is_bool($mixed)){
-    	    return $mixed ? 'true' : 'false';
+            return $mixed ? 'true' : 'false';
         } else {
             return (string) $mixed;
         }
@@ -1244,24 +1246,24 @@ interface iTestable
 class HtmlTemplate implements iOutputTemplate
 {
     private $Text;
-    
+
     public function __construct($language)
     {
         $this->Text = TextFactory::getLanguageText($language);
     }
-    
+
     public function getTemplateType()
     {
         return TemplateType::Html;
-    }    
-    
+    }
+
     public function get($errors, $results, $text, $duration, $methodCalls)
     {
         $message = '';
         $failCount = count($errors);
         $passCount = count($results);
         $methodCallCount = count($methodCalls);
-        
+
         $currentClass = '';
         if ($failCount > 0) {
             $message .= '<h2 class="error">' . $text->Test . ' ' . $text->Failed . '</h2>';
@@ -1284,7 +1286,7 @@ class HtmlTemplate implements iOutputTemplate
         } else {
             $message .= '<h2 class="ok">' . $text->TestPassed . '</h2>';
         }
-        
+
         $currentClass = '';
         if ($passCount > 0) {
             $message .= '<ul>';
@@ -1303,29 +1305,29 @@ class HtmlTemplate implements iOutputTemplate
             }
             $message .= '</ul></li></ul>';
         }
-        
+
         $message .= '<h3>' . $text->MethodCoverage . '</h3>';
         if ($methodCallCount > 0) {
             $message .= '<ul>';
             foreach ($methodCalls as $key => $value) {
                 $key = str_replace('#', '->', $key);
                 if ($value === 0) {
-                    $message .= '<li class="error">' . $key . ' ' . $text->Called . ' ' . $value . ' ' . 
+                    $message .= '<li class="error">' . $key . ' ' . $text->Called . ' ' . $value . ' ' .
                         $text->Times . '</li>';
                 } else {
-                    $message .= '<li class="ok">' . $key . ' ' . $text->Called . ' ' . $value . ' ' . 
+                    $message .= '<li class="ok">' . $key . ' ' . $text->Called . ' ' . $value . ' ' .
                         $text->Times . '</li>';
                 }
             }
             $message .= '</ul>';
         }
-        
+
         $message .= '<p>' . str_replace('{0}', $duration, $text->FormatForTestRunTook) . '</p>';
-        
+
         return $this->getTemplateWithMessage($message);
     }
 
-    private function getTemplateWithMessage($content) 
+    private function getTemplateWithMessage($content)
     {
         return str_replace('{0}', $content, '<!DOCTYPE html>
         <html lang="en">
@@ -1365,9 +1367,9 @@ class HtmlTemplate implements iOutputTemplate
                 </article>
         
                 <footer>
-                    <p><a href="http://www.enhance-php.com/">' . $this->Text->EnhanceTestFrameworkFull . '</a> ' . 
-                    $this->Text->Copyright . ' &copy;2011 - ' . date('Y') . 
-                    ' <a href="http://www.stevefenton.co.uk/">Steve Fenton</a>.</p>
+                    <p><a href="http://www.enhance-php.com/">' . $this->Text->EnhanceTestFrameworkFull . '</a> ' .
+            $this->Text->Copyright . ' &copy;2011 - ' . date('Y') .
+            ' <a href="http://www.stevefenton.co.uk/">Steve Fenton</a>.</p>
                 </footer>
             </body>
         </html>');
@@ -1379,17 +1381,17 @@ class XmlTemplate implements iOutputTemplate
     private $Text;
     private $Tab = "    ";
     private $CR = "\n";
-    
+
     public function __construct($language)
     {
         $this->Text = TextFactory::getLanguageText($language);
     }
-    
+
     public function getTemplateType()
     {
         return TemplateType::Xml;
-    }     
-    
+    }
+
     public function get($errors, $results, $text, $duration, $methodCalls)
     {
         $message = '';
@@ -1401,7 +1403,7 @@ class XmlTemplate implements iOutputTemplate
         } else {
             $message .= $this->getNode(1, 'result', $text->TestPassed);
         }
-        
+
         $message .= $this->Tab . '<testResults>' . $this->CR .
             $this->getBadResults($errors) .
             $this->getGoodResults($results) .
@@ -1412,7 +1414,7 @@ class XmlTemplate implements iOutputTemplate
 
         $message .= $this->getNode(1, 'testRunDuration', $duration) .
             '</enhance>' . $this->CR;
-        
+
         return $this->getTemplateWithMessage($message);
     }
 
@@ -1473,17 +1475,17 @@ class CliTemplate implements iOutputTemplate
 {
     private $Text;
     private $CR = "\n";
-    
+
     public function __construct($language)
     {
         $this->Text = TextFactory::getLanguageText($language);
     }
-    
+
     public function getTemplateType()
     {
         return TemplateType::Cli;
-    }    
-    
+    }
+
     public function get($errors, $results, $text, $duration, $methodCalls)
     {
         $failCount = count($errors);
@@ -1503,7 +1505,7 @@ class CliTemplate implements iOutputTemplate
             $this->CR .
             $resultMessage .
             str_replace('{0}', $duration, $text->FormatForTestRunTook) . $this->CR;
-        
+
         return $message;
     }
 
@@ -1581,7 +1583,7 @@ class TemplateFactory
         switch ($type) {
             case TemplateType::Xml:
                 return new XmlTemplate($language);
-                break;            
+                break;
             case TemplateType::Html:
                 return new HtmlTemplate($language);
                 break;
