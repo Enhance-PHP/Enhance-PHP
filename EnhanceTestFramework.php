@@ -354,6 +354,35 @@ class TextDe
     public $LineFile = 'Zeile {0} der Datei {1}';
 }
 
+class TextPtBr
+{
+    public $FormatForTestRunTook = 'Execução de teste levou {0} segundos';
+    public $FormatForExpectedButWas = 'Esperado {0} mas foi {1}';
+    public $FormatForExpectedNotButWas = 'Não era esperado {0} mas foi {1}';
+    public $FormatForExpectedContainsButWas = 'Era esperado ser {0} mas foi {1}';
+    public $FormatForExpectedNotContainsButWas = 'Não era esperado seer {0} mas foi {1}';
+    public $EnhanceTestFramework = 'Framework de teste Enhance';
+    public $EnhanceTestFrameworkFull = 'Framework de teste unitário com PHP Enhance';
+    public $TestResults = 'Resultado do teste';
+    public $Test = 'Teste';
+    public $TestPassed = 'Teste passou';
+    public $TestFailed = 'Teste falhou';
+    public $Passed = 'Passou';
+    public $Failed = 'Falhou';
+    public $ExpectationFailed = 'Probabilidade falhou';
+    public $Expected = 'Probabilidade';
+    public $Called = 'Chamado';
+    public $InconclusiveOrNotImplemented = 'Inconclusivo ou não implementado';
+    public $Times = 'Vezes';
+    public $MethodCoverage = 'Cobertura de método';
+    public $Copyright = 'Direitos autorais';
+    public $ExpectedExceptionNotThrown = 'Exceção esperada não ocorreu';
+    public $CannotCallVerifyOnStub = 'Não foi possível chamar um esboço de VerifyExpectations';
+    public $ReturnsOrThrowsNotBoth = 'Você só deve definer um único valor de retorno (1 retorno() ou 1 throw())';
+    public $ScenarioWithExpectMismatch = 'Cenário deve ser iniciado com o mesmo número de chamadas de "with" e "expect"';
+    public $LineFile = 'Linha {0} no arquivo {1}';
+}
+
 class EnhanceTestFramework
 {
     private $FileSystem;
