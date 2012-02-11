@@ -1640,6 +1640,7 @@ class Language
 {
     const English = 'En';
     const Deutsch = 'De';
+    const BrazilianPortuguese = 'PtBr';
 }
 
 class Localisation

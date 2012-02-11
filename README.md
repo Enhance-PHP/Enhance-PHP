@@ -1,4 +1,4 @@
-Enhance PHP
+Enhance PHP [![Build Status](https://secure.travis-ci.org/kinncj/Enhance-PHP.png)](http://travis-ci.org/kinncj/Enhance-PHP)
 
 A unit testing framework with mocks and stubs. Built for PHP, in PHP!
 
