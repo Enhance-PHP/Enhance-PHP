@@ -1,11 +1,4 @@
 <?php
-interface IMockExample
-{
-    function doSomething();
-    function anotherMethod();
-    function callNotExpectedMethod();
-}
-
 class MockTestFixture extends \Enhance\TestFixture
 {
     public function createMockWithArgumentsAndOneTimeExpectReturnValueAndVerifies()
@@ -223,5 +216,12 @@ class MockTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::areIdentical('Some Value', $result2);
         \Enhance\Assert::areIdentical(5, $result3);
     }
+}
+
+interface IMockExample
+{
+    function doSomething();
+    function anotherMethod();
+    function callNotExpectedMethod();
 }
 ?>
