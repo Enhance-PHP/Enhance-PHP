@@ -1,5 +1,5 @@
 <?php
-namespace FirstTest;
+namespace CodespyTest;
 
 class ExampleClass
 {

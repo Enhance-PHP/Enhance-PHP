@@ -352,6 +352,7 @@ class TextDe
     public $ReturnsOrThrowsNotBoth = 'Sie müssen einen einzelnen Return Value nur einstellen';
     public $ScenarioWithExpectMismatch = 'Szenarium muss mit der gleichen Zahl von "With" und "Expect" calls initialisiert werden';
     public $LineFile = 'Zeile {0} der Datei {1}';
+    public $TypeOfVar=" Typ: ";
 }
 
 class TextPtBr
@@ -381,6 +382,37 @@ class TextPtBr
     public $ReturnsOrThrowsNotBoth = 'Você só deve definer um único valor de retorno (1 retorno() ou 1 throw())';
     public $ScenarioWithExpectMismatch = 'Cenário deve ser iniciado com o mesmo número de chamadas de "with" e "expect"';
     public $LineFile = 'Linha {0} no arquivo {1}';
+    public $TypeOfVar=" Tipo: ";
+}
+
+class TextSp
+{
+    public $FormatForTestRunTook = 'La ejecución de las pruebas tomó {0} segundos';
+    public $FormatForExpectedButWas = 'Se esperaba {0} pero se obuvo {1}';
+    public $FormatForExpectedNotButWas = 'Se esperada Negación {0} pero se obtuvo {1}';
+    public $FormatForExpectedContainsButWas = 'Se esperaba tuviera {0} pero se obtuvo {1}';
+    public $FormatForExpectedNotContainsButWas = 'Se esperaba NO tuviera {0} pero se obtuvo {1}';
+    public $EnhanceTestFramework = 'Enhance Test Framework';
+    public $EnhanceTestFrameworkFull = 'Enhance PHP Unit Herramienta de pruebas';
+    public $TestResults = 'Resultado de las pruebas';
+    public $Test = 'Prueba';
+    public $TestPassed = 'Prueba pasó';
+    public $TestFailed = 'Prueba Fallo';
+    public $Passed = 'Pasó';
+    public $Failed = 'Fallo';
+    public $ExpectationFailed = 'Fallo en valor esperado';
+    public $Expected = 'Esperado';
+    public $Called = 'Llamada';
+    public $InconclusiveOrNotImplemented = 'Inconcluso o no implementado';
+    public $Times = 'Veces';
+    public $MethodCoverage = 'Covertura de Métodos';
+    public $Copyright = 'Copyright';
+    public $ExpectedExceptionNotThrown = 'La excepción esperada no fue generada';
+    public $CannotCallVerifyOnStub = 'No se puede llamar  VerifyExpectations en un stub';
+    public $ReturnsOrThrowsNotBoth = 'Debe proporcionar un solo valor de retorno (1 returns() ó 1 throws())';
+    public $ScenarioWithExpectMismatch = 'Escenario debe ser inicializado con el mismo número de llamadas "with" y "expect" ';
+	public $LineFile = 'Linha {0} no arquivo {1}';    
+	public $TypeOfVar=" Tipo: ";
 }
 
 class EnhanceTestFramework
@@ -506,7 +538,7 @@ class EnhanceTestFramework
 
     private function run()
     {
-        $start = time();
+        $start = microtime(true);
         foreach($this->Tests as /** @var Test $test */ $test) {
             $result = $test->run();
             if ($result) {
@@ -519,7 +551,7 @@ class EnhanceTestFramework
                 $this->Errors[] = new TestMessage($message, $test, false);
             }
         }
-        $this->Duration = time() - $start;
+        $this->Duration = microtime(true) - $start;
     }
 }
 
@@ -1701,6 +1733,7 @@ class Language
     const English = 'En';
     const Deutsch = 'De';
     const BrazilianPortuguese = 'PtBr';
+	const Spanish = 'Sp';
 }
 
 class Localisation

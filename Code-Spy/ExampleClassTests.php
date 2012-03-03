@@ -1,5 +1,5 @@
 <?php
-namespace FirstTest;
+namespace CodespyTest;
 
 class ExampleClassTests extends \Enhance\TestFixture
 {
@@ -8,7 +8,7 @@ class ExampleClassTests extends \Enhance\TestFixture
 
         public function setUp()
         {
-                $this->target = \Enhance\Core::getCodeCoverageWrapper('\FirstTest\ExampleClass');
+                $this->target = \Enhance\Core::getCodeCoverageWrapper('\CodespyTest\ExampleClass');
         }
 
         public function addTwoNumbersWith3and2Expect5()
