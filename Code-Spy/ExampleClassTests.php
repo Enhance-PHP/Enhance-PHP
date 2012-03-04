@@ -8,7 +8,7 @@ class ExampleClassTests extends \Enhance\TestFixture
 
         public function setUp()
         {
-                $this->target = \Enhance\Core::getCodeCoverageWrapper('\CodespyTest\ExampleClass');
+                $this->target = \Enhance\Core::getCodeCoverageWrapper('CodespyTest\ExampleClass');
         }
 
         public function addTwoNumbersWith3and2Expect5()
@@ -21,6 +21,11 @@ class ExampleClassTests extends \Enhance\TestFixture
         {
                 $result = $this->target->addTwoNumbers(4, 2);
                 \Enhance\Assert::areIdentical(6, $result);
+        }
+        public function addTwoNumbersWith4and0Expect4()
+        {
+                $result = $this->target->addTwoNumbers(4, 0);
+                \Enhance\Assert::areIdentical(4, $result);
         }
 }
 ?>
