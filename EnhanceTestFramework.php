@@ -1763,7 +1763,7 @@ class Language
     const Deutsch = 'De';
     const BrazilianPortuguese = 'PtBr';
 	const Spanish = 'Sp';
-	const Romana = 'Ro';
+	const Romana = 'Ro'
 }
 
 class Localisation
