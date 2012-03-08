@@ -411,8 +411,8 @@ class TextSp
     public $CannotCallVerifyOnStub = 'No se puede llamar  VerifyExpectations en un stub';
     public $ReturnsOrThrowsNotBoth = 'Debe proporcionar un solo valor de retorno (1 returns() ó 1 throws())';
     public $ScenarioWithExpectMismatch = 'Escenario debe ser inicializado con el mismo número de llamadas "with" y "expect" ';
-	public $LineFile = 'Linha {0} no arquivo {1}';    
-	public $TypeOfVar=" Tipo: ";
+    public $LineFile = 'Linha {0} no arquivo {1}';    
+    public $TypeOfVar=" Tipo: ";
 }
 
 class TextRo{
@@ -1762,8 +1762,8 @@ class Language
     const English = 'En';
     const Deutsch = 'De';
     const BrazilianPortuguese = 'PtBr';
-	const Spanish = 'Sp';
-	const Romana = 'Ro'
+    const Spanish = 'Sp';
+    const Romana = 'Ro';
 }
 
 class Localisation
