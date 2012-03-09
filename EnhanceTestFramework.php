@@ -411,9 +411,38 @@ class TextSp
     public $CannotCallVerifyOnStub = 'No se puede llamar  VerifyExpectations en un stub';
     public $ReturnsOrThrowsNotBoth = 'Debe proporcionar un solo valor de retorno (1 returns() ó 1 throws())';
     public $ScenarioWithExpectMismatch = 'Escenario debe ser inicializado con el mismo número de llamadas "with" y "expect" ';
-	public $LineFile = 'Linha {0} no arquivo {1}';    
-	public $TypeOfVar=" Tipo: ";
+    public $LineFile = 'Linha {0} no arquivo {1}';    
+    public $TypeOfVar=" Tipo: ";
 }
+
+class TextRo{
+    public $FormatForTestRunTook = 'Testul a durat {0} secunde';
+    public $FormatForExpectedButWas = 'Se aștepta {0} dar a returnat {1}';
+    public $FormatForExpectedNotButWas = 'Nu se aștepta {0} dar a returnat {1}';
+    public $FormatForExpectedContainsButWas = 'Se aștepta sa conțină {0} dar conține {1}';
+    public $FormatForExpectedNotContainsButWas = 'Nu se aștepta sa conțină {0} dar conține  {1}';
+    public $EnhanceTestFramework = 'Enhance Test Framework';
+    public $EnhanceTestFrameworkFull = 'Enhance PHP Unit Testing Framework';
+    public $TestResults = 'Rezultate Teste';
+    public $Test = 'Test';
+    public $TestPassed = 'Testul a fost finalizat cu succes.';
+    public $TestFailed = 'Testul a eșuat.';
+    public $Passed = 'Succes';
+    public $Failed = 'Eșuat.';
+    public $ExpectationFailed = 'Așteptare eșuată';
+    public $Expected = 'Așteptare';
+    public $Called = 'Apelat';
+    public $InconclusiveOrNotImplemented = 'Neconcludent sau neimplementat';
+    public $Times = 'Ori';
+    public $MethodCoverage = 'Învăluire metoda';
+    public $Copyright = 'Drepturi de autor';
+    public $ExpectedExceptionNotThrown = 'Se aștepta o excepție dar nu a fost afișata';
+    public $CannotCallVerifyOnStub = 'Nu a putut fi apelata metoda VerifyExpectations pe un stub';
+    public $ReturnsOrThrowsNotBoth = 'Trebuie sa alegi numai o valoare pentru a fi returnata (1 returns() sau 1 throws())';
+    public $ScenarioWithExpectMismatch = 'Scenariul trebuie inițializat cu același număr de apelări la metoda "with" sau "expect" ';
+    public $LineFile = 'Linia {0} in fișierul {1}';
+}
+
 
 class EnhanceTestFramework
 {
@@ -1733,7 +1762,8 @@ class Language
     const English = 'En';
     const Deutsch = 'De';
     const BrazilianPortuguese = 'PtBr';
-	const Spanish = 'Sp';
+    const Spanish = 'Sp';
+    const Romana = 'Ro';
 }
 
 class Localisation
