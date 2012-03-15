@@ -325,6 +325,34 @@ class TextEn
     public $LineFile = 'Line {0} in file {1}';
 }
 
+class TextFr
+{
+    public $FormatForTestRunTook = 'Le test a prit {0} seconds';
+    public $FormatForExpectedButWas = '{0} attendu mais finalement fut {1}';
+    public $FormatForExpectedNotButWas = 'Pas {0} attendu mais finalement fut {1}';
+    public $FormatForExpectedContainsButWas = 'Présence de {0} attendu mais finalement fut {1}';
+    public $FormatForExpectedNotContainsButWas = 'Absence de  {0} attendu mais finalement fut {1}';
+    public $EnhanceTestFramework = 'Enhance Test Framework';
+    public $EnhanceTestFrameworkFull = 'Enhance PHP Unit Testing Framework';
+    public $TestResults = 'Résultats des tests ';
+    public $Test = 'Test';
+    public $TestPassed = 'Test Réussi';
+    public $TestFailed = 'Test Échoué';
+    public $Passed = 'Réussi';
+    public $Failed = 'Échoué';
+    public $ExpectationFailed = 'Les attentes ne furent pas atteintes';
+    public $Expected = 'Attendu';
+    public $Called = 'Appelé ';
+    public $InconclusiveOrNotImplemented = 'non conclusif ou pas implémenté';
+    public $Times = 'fois';
+    public $MethodCoverage = 'Couverture des fonctions';
+    public $Copyright = 'Copyright';
+    public $ExpectedExceptionNotThrown = 'L\'exception attendu ne fut pas levée';
+    public $CannotCallVerifyOnStub = 'impossible d\'appeler VerifyExpectations sur la souche';
+    public $ReturnsOrThrowsNotBoth = 'Vous ne pouvez définire qu\une seul valeur de retour(1 returns() ou 1 throws())';
+    public $ScenarioWithExpectMismatch = 'Les scenarios doivent être initialisé avec le même nombre d\'appel à "with" et "expect"';
+    public $LineFile = 'Ligne {0} dans le fichier {1}';
+}
 class TextDe
 {
     public $FormatForTestRunTook = 'Fertig nach {0} Sekunden';
@@ -1730,6 +1758,7 @@ class TemplateType
 
 class Language
 {
+    const French = "Fr";
     const English = 'En';
     const Deutsch = 'De';
     const BrazilianPortuguese = 'PtBr';
