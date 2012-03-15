@@ -333,7 +333,7 @@ class TextFr
     public $FormatForExpectedContainsButWas = 'Présence de {0} attendu mais finalement fut {1}';
     public $FormatForExpectedNotContainsButWas = 'Absence de  {0} attendu mais finalement fut {1}';
     public $EnhanceTestFramework = 'Enhance Test Framework';
-    public $EnhanceTestFrameworkFull = 'Enhance PHP Unit Testing Framework';
+    public $EnhanceTestFrameworkFull = 'Enhance PHP Framework de Test Unitaire';
     public $TestResults = 'Résultats des tests ';
     public $Test = 'Test';
     public $TestPassed = 'Test Réussi';
