@@ -1,5 +1,4 @@
 <?php
-// Codespy PHP code coverage analyzing tool version 2.0
 namespace codespy;
 /*
 
@@ -239,16 +238,14 @@ class str_wrp
 }
 class analyzer
 {
+	public static $inistackcount=0;
+	public static $stack = array();
+	public static $last_trace_node=0;
+	public static $file_to_cover=array();
 	public static $coveredlines = array();
-	public static $executionbranches = array();
-	public static $instancenumberfor = array();
-	public static $possiblebranches = array();
-	public static $nodetrees = array();
 	public static $outputformat = 'txt';
 	public static $outputdir = '';
-	public static $file_to_cover=array();
-	public static $functions_to_analayze = array();
-	public static $coveredcolor = '#ffc2c2';
+    public static $coveredcolor = '#ffc2c2';
 	public function __destruct()
 	{
 		if(self::$outputformat == 'vim') {
@@ -263,47 +260,16 @@ class analyzer
 		} elseif(self::$outputformat =='html') {
 			stream_wrapper_restore('file');
 			foreach(self::$coveredlines as $file=>$lines) {
-				if(self::shouldpatchfile($file)) {
-					$patcher = new patcher(file_get_contents($file));
-					$patched = $patcher->patch(array(1,2,3,6));
-					file_put_contents(self::$outputdir."/".basename($file).".cc.temp",$patched);
-					$file_lines = file(self::$outputdir."/".basename($file).".cc.temp");
-					unlink(self::$outputdir."/".basename($file).".cc.temp");
-					$output = "<body style='font-family:monospace;'>";
-					$maxlen = strlen(count($file_lines).max(self::$coveredlines[$file])) +1;
-					$covered_lines=0;
-					if(isset(Analyzer::$possiblebranches[$file])) foreach(Analyzer::$possiblebranches[$file] as  $class =>$filebranches) {
-						$output .= "\nFor Class <h3>$class:</h3>\n<br/>";
-						foreach($filebranches as $file_1=>$branches) { $output .= "<hr/>Function:&nbsp;<h3>$file_1"."</h3><br/>Execution node tree constructed from source. Paths in red are the ones that actually executed.<br/>";	
-							$highlightpaths = array();
-							foreach(self::$executionbranches[$file][$class][$file_1] as $path) {  ($highlightpaths[] = join(',',array_keys($path)));}
-							ob_start();
-							Analyzer::$nodetrees[$file][$class][$file_1]->dumpNode(0,array(),$highlightpaths);
-							$output .= ob_get_clean();
-							$output .= "<br/>Possible execution paths:".($pp = count($branches))."\n<br/>";
-							$output .= "<div style='overflow:auto;width:400px;height:200px;'>";
-							foreach($branches as $b) $output .= join(',',$b)."\n<br/>";
-							$output .= "</div>";
-							$output .= "\n<br/>Paths covered:".($cp = count($highlightpaths = array_unique($highlightpaths)))."\n\n<br/><br/>";
-							$output .= "Covered Paths:\n<br/>";
-							foreach($highlightpaths as $path) {  $output .= ($path."\n<br/>");}
-							$output .= "\n<br/>";
-							$output .= "Path covereage :".(($cp*100)/$pp)."%\n\n<br/><br/>";
-						}
-					}
-				} else {
 				$file_lines = file($file);
+				$output = '';
 				$maxlen = strlen(count($file_lines).max(self::$coveredlines[$file])) +1;
 				$covered_lines=0;
-				$output = '';
-				}
-				//foreach(self::$executionbranches as $functionname=>$paths) {$output .=$functionname."<br/>"; foreach($paths as $path)  $output .= join(',',array_keys($path))."\n<br/>";}
 				foreach($file_lines as $k=>$line) 
 					if(isset($lines[$k+1]) && $lines[$k+1]>0) {
-						$output .= "<span  style='font-family:monospace;background-color:#a0ffa0'>".str_pad(($k+1).':'.$lines[$k+1],$maxlen,'0',STR_PAD_LEFT)."</span><pre style='display:inline;margin:0px;background-color:".self::$coveredcolor.";font-family:monospace'>".rtrim(preg_replace('/\(codespy-execution-node:([0-9]+)\)/','<span style=\'color:red;font-weight:bold;font-size:22;padding:10px;\'>\1</span>', htmlentities($line)))."</pre><br/>";
+						$output .= "<span  style='font-family:monospace;background-color:#a0ffa0'>".str_pad(($k+1).':'.$lines[$k+1],$maxlen,'0',STR_PAD_LEFT)."</span><pre style='display:inline;margin:0px;background-color:" . self::$coveredcolor . ";font-family:monospace'>".rtrim(htmlentities($line))."</pre><br/>";
 						$covered_lines+=1;
 					} else
-						$output .=  "<span style='font-family:monospace;background-color:#a0ffa0'>".str_pad($k+1,$maxlen,'0',STR_PAD_LEFT)."</span><pre style='margin:0px;display:inline'>".rtrim(preg_replace('/\(codespy-execution-node:([0-9]+)\)/','<span style=\'color:red;font-size:22;font-weight:bold\'>\1</span>',htmlentities($line)))."</pre><br/>";
+						$output .=  "<span style='font-family:monospace;background-color:#a0ffa0'>".str_pad($k+1,$maxlen,'0',STR_PAD_LEFT)."</span><pre style='margin:0px;display:inline'>".rtrim(htmlentities($line))."</pre><br/>";
 				$output .= "<b>Code Coverage percentage</b>=".($covered_lines/count($file_lines))*100;
 				if(self::$outputdir) {
 					file_put_contents(self::$outputdir."/".basename($file).".cc.html",$output);
@@ -318,29 +284,6 @@ class analyzer
 				echo PHP_EOL."Code Coverage percentage=".((count($lines)/$total_lines)*100).PHP_EOL;
 			}
 		}
-	}
-	public static function shouldpatchfile($file)
-	{
-			foreach(self::$functions_to_analayze as $item) if($item[0] == $file ) return true;
-	}
-	public static function shouldpatch($function,$class ='')
-	{
-		$function = strtolower($function);
-		$class = strtolower($class);
-		if($class) {
-			foreach(self::$functions_to_analayze as $item) {
-				if($item[1] == $function && $item[2] == $class) return true;
-			}
-		} else {
-			foreach(self::$functions_to_analayze as $item) {
-				if($item[1] == $function && $item[2]=='' ) return true;
-			}
-		}
-	}
-	public static function addFunctionToAnalyze($file,$function_name,$class='')
-	{
-		if($file = realpath($file))
-		array_push(self::$functions_to_analayze,array($file,strtolower($function_name),strtolower($class)));
 	}
 	public static function addFileToSpy($path)
 	{
@@ -363,52 +306,203 @@ class analyzer
 	
 	static function load($source,$path,$lc)
 	{
+		//$files = array_merge(get_included_files(),self::$files);
+		//if(in_array(realpath($file),$files)) return false;
+		//self::$files[] = realpath($file);
 		if((in_array($path,self::$file_to_cover) === false) && count(self::$file_to_cover)>0) return $source;
+		$context = $patch = '';
+		$stack = array();
+		$tokens = token_get_all($source); 
+		$token_count = count($tokens);
 		self::$coveredlines[$path] = array_fill(1,$lc,0);
-	 	$patcher = new patcher($source);
-		if(count(self::$functions_to_analayze)>0)
-			return $patcher->patch(array(1,2,3,4,5),$path);
-		else 
-			return $patcher->patch(array(1,2,3,4),$path);
-	}
-	static function add_to_patch($token,$offset)
-	{
+		$last_function = '';
+		$capture_input = false;
+		$capture_function = '';
+		$function_fragments = array();
+		$patched_capture = '';
+		$nested_function_stack = array();
+		$parethesis_stack = array();
+		$curlybraseadded = 0;
+		$inparenthisis = false;
+        $patched = '';
+		for($k = 0 ; $k<$token_count ; $k++) {
+			$v = $tokens[$k];
+			if(is_string($v)) {
+				if($capture_input) {
+					$patched_capture .= $v;
+				}
+				if($v == '(') {
+					array_push($parethesis_stack,'(');
+					$inparenthisis = true;
+					$patch .= $v;
+				} elseif($v ==')') {
+					array_pop($parethesis_stack);
+					if(count($parethesis_stack)==0) {
+						if($context == 'loopstart') {
+						$context = '';
+						$temp = self::get_next_non_comment($tokens,$k+1);
+							if(0 && $temp != ':' && $temp != '{' && $temp != ';') {
+							$patched .= '{\profiler::trace($____profiler,\profiler::$trace_variables?compact(\profiler::$trace_variables):get_defined_vars(),__LINE__-$____profiler_start_line);';
+							$curlybraseadded += 1;
+							}
+						}
+						$inparenthisis = false;
+					}else $inparenthisis = true; 
+					$patch .= $v;
+				} else if($v == ';') {
+						$next_non_comment = self::get_next_non_comment($tokens,$k+1);
+						if(($curlybraseadded>0) && $next_non_comment != 'T_ELSE' &&  $next_non_comment != 'T_ELSEIF') 
+						{
+							if(!$inparenthisis && $capture_input)  
+							$patched_capture .= str_repeat('}',$curlybraseadded);
+							$curlybraseadded = 0;
+							$patch .= ';';
+						}
+						else if($context != 'class' && $next_non_comment != 'T_ELSE' &&  $next_non_comment != 'T_ELSEIF' ) {
+							$patch .= ';';
+							if(!$inparenthisis && $capture_input)  $patch .= '\codespy\Analyzer::$coveredlines[__FILE__][__LINE__]+=1;';
+						} else {
+							$patch .= ';';
+						}
+				} elseif($v == '{') {
+					array_push($stack,$context);
+					$patch .= $v;
+				} elseif($v == '}' && 0) {
+					$stack_top = array_pop($stack);
+					if($stack_top == 'function' && (array_search('function',$stack)===false)) {
+						$capture_input = false;
+						$function_fragments[$last_function] = $patched_capture;
+						$patch .= "{if(isset(\$____profiler)) \profiler::close(\$____profiler);} }";
+					} elseif($stack_top == 'class') {
+						foreach($function_fragments as $kk=>$vv) {
+							$vv = ltrim($vv);
+							if(substr($vv,0,1)=='&') {
+								$vv = ltrim($vv,'& ');
+								$patch .= "\n function & trace_patch_$vv ";
+							} else {
+								$patch .= "\n function  trace_patch_$vv ";
 
-	}
-	
-	public function exception_handler($e)
-	{
-		$this->__destruct();
-		throw $e;
-	}
-	
-}
+							}
+						}
+						$patch .=  $v;
+						$function_fragments = array();
+						$patched_capture = '';
+					} else {
+						$patch .= $v;
+					}
+					$context = '';
+				} else $patch .= $v;
+			}else {
+				if($capture_input) {
+					$patched_capture .= $v[1];
+					if(token_name($v[0]) == 'T_END_HEREDOC') {
+						$patched_capture .= PHP_EOL;
+					}
+				}
+				switch(token_name($v[0])) {
+					case 'T_FOR':
+					case 'T_FOREACH':
+					case 'T_WHILE':
+						$context = 'loopstart';
+						break;
+					case 'T_DO':
+						$temp = self::get_next_non_comment($tokens,$k+1);
+						if($temp != ':' && $temp != '{') {
+						if(!$inparenthisis && $capture_input)  
+						$patched_capture .= '{';
+						$curlybraseadded = true;
+						}
+						break;
+					case 'T_CLASS':
+					case 'T_INTERFACE':
+						$context = 'class';
+						$last_class = self::get_next_non_comment($tokens,$k+1,true);
+						break;
+					case 'T_FUNCTION':
+						if(array_search('function',$stack)!==false) break;
+						$context = 'function';
+						$temp= self::get_till($tokens,'T_STRING',$k+1); 
+						if($this_function = join('',$temp) ){
+							$last_function = $this_function;
+							$patched_capture = '';
+						}
+						if($last_function) $capture_input = true;
+						break;
+					case 'T_RETURN':
+						$return_exp = '';
+						$temp = false;
+						while(isset($tokens[$k]) && ($scan_token = $tokens[++$k]) !== ';')  
+						{
+						if(is_array($scan_token) )  {
+							$return_exp .= $scan_token[1];
+							if(token_name($scan_token[0]) != 'T_WHITESPACE') $temp = true;
+						} else {
+							$return_exp .= $scan_token;
+							$temp = true;
+						}
 
-class patcher
-{
-	function __construct($source)
-	{
-		$this->source = array($source); 
-		$this->current_pass = 0;
-		$this->break_levels = array();
-		$this->break_nodes = array();
-		$this->continue_nodes = array();
-		$this->return_nodes = array();
-		$this->jumps = array();
-		$this->tokens_to_be_inserted_after = array();
-		$this->tokens_to_be_replaced = array();
-	}
+						}
+						if($temp)  {
+						$patch .= "{\\codespy\\Analyzer::\$coveredlines[__FILE__][__LINE__]+=1;return $return_exp;}";
+						if($capture_input) $patched_capture .=" $return_exp;";
+						} else {
+							$patch.="{\\codespy\\Analyzer::\$coveredlines[__FILE__][__LINE__]+=1;return;}";
+							$patched_capture .=" ; ";
+						}
+						$next_non_comment = self::get_next_non_comment($tokens,$k+1);
+						if( $next_non_comment != 'T_ELSE' &&   $next_non_comment != 'T_ELSEIF'  ) $patch .= ';';
+						$v[1] = '';
+						break;
+					case 'T_THROW':
+						$return_exp = '';
+						$temp = false;
+						while(isset($tokens[$k]) && ($scan_token = $tokens[++$k]) !== ';')  
+						{
+						if(is_array($scan_token) )  {
+							$return_exp .= $scan_token[1];
+							if(token_name($scan_token[0]) != 'T_WHITESPACE') $temp = true;
+						} else {
+							$return_exp .= $scan_token;
+							$temp = true;
+						}
 
-	private function get_till($tokens,$search_token,$start)
+						}
+						if($temp)  {
+						$patch .= "{\\codespy\\Analyzer::\$coveredlines[__FILE__][__LINE__]+=1;throw $return_exp;}";
+						if($capture_input) $patched_capture .=" $return_exp;";
+						} else {
+							$patch.="{\\codespy\\Analyzer::\$coveredlines[__FILE__][__LINE__]+=1;return;}";
+							$patched_capture .=" ; ";
+						}
+						$next_non_comment = self::get_next_non_comment($tokens,$k+1);
+						if( $next_non_comment != 'T_ELSE' &&   $next_non_comment != 'T_ELSEIF'  ) $patch .= ';';
+						$v[1] = '';
+						break;
+					case 'T_DOLLAR_OPEN_CURLY_BRACES':
+						case 'T_STRING_VARNAME';
+						case 'T_CURLY_OPEN';
+						array_push($stack,$context);
+						break;
+				
+				}
+				$patch .= $v[1];
+			}
+		}
+		//$patch = substr($patch,6);
+		//if($last_class) file_put_contents("temp_$last_class.php",$patch);
+
+		return ($patch);
+	}
+	static function get_till($tokens,$search_token,$start)
 	{
 		$return = array();
 		while(isset($tokens[$start])) {
 			if(is_array($tokens[$start])) {
-				$token_name = token_name($tokens[$start][0]);
-				$token_content = $tokens[$start++][1];
-				$return[] = $token_content;
-				if($token_name == $search_token ) return $return;
-
+			$token_name = token_name($tokens[$start][0]);
+			$token_content = $tokens[$start++][1];
+			$return[] = $token_content;
+			if($token_name == $search_token ) return $return;
+			
 			} else {
 				$return[] =$tokens[$start];
 				if($search_token == $tokens[$start++]) return $return;
@@ -416,833 +510,24 @@ class patcher
 		}
 		return false;
 	}
-	private function get_previous_non_comment($tokens,$start,$return_content = false)
+	static function get_next_non_comment($tokens,$start,$return_content = false)
 	{
 		while(isset($tokens[$start])) {
 			if(is_array($tokens[$start])) {
-				$token_name = token_name($tokens[$start][0]);
-				$token_content = $tokens[$start][1];
-				if($token_name == 'T_WHITESPACE' || $token_name=='T_COMMENT' || $token_name== 'T_MLCOMMENT') {
-					$start--;
-					continue;
-					}
-				if($return_content) return $token_content;else return $start;
-			} else return $start;
-			$start--;
+			$token_name = token_name($tokens[$start][0]);
+			$token_content = $tokens[$start++][1];
+			if($token_name == 'T_WHITESPACE' || $token_name=='T_COMMENT' || $token_name== 'T_MLCOMMENT') continue;
+			if($return_content) return $token_content;else return $token_name;
+			} else return $tokens[$start];
 		}
 		return false;
 	}
-	private function get_next_non_comment($tokens,$start,$return_content = false)
+	public function exception_handler($e)
 	{
-		while(isset($tokens[$start])) {
-			if(is_array($tokens[$start])) {
-				$token_name = token_name($tokens[$start][0]);
-				$token_content = $tokens[$start][1];
-				if($token_name == 'T_WHITESPACE' || $token_name=='T_COMMENT' || $token_name== 'T_MLCOMMENT') {
-					$start++;
-					continue;
-					}
-				if($return_content) return $token_content;else return $start;
-			} else return $start;
-			$start++;
-		}
-		return false;
-	}
-	public function patch($passes=array(),$path='')
-	{
-		$pass = 0;
-		$this->last_pass = 0;
-		foreach($passes as $pass) {
-			if(method_exists($this,$method_name = 'pass_'.$pass)) {
-				$this->current_pass = $pass;
-				$this->tokens_to_be_inserted_after = array();
-				$this->tokens_to_be_replaced = array();
-				$this->$method_name($path);
-				$this->last_pass = $pass;
-			}
-		}
-		//echo $this->source[$this->current_pass];
-		return $this->source[$this->current_pass];
-	}
-	private function add_tokens_to_be_inserted_after($tp,$token,$node=false)
-	{
-		if($node === false) {
-			if(isset($this->tokens_to_be_inserted_after[$tp][$token])) 
-				$this->tokens_to_be_inserted_after[$tp][$token] += 1;
-			else 
-				$this->tokens_to_be_inserted_after[$tp][$token] = 1;
-		} else {
-		$token = "(codespy-execution-node:$node)";
-		if(isset($this->tokens_to_be_inserted_after[$tp][$token])) 
-			$this->tokens_to_be_inserted_after[$tp][$token] += 1;
-		else 
-			$this->tokens_to_be_inserted_after[$tp][$token] = 1;
-		}
-	}
-	private function add_tokens_to_be_replaced($tp,$token)
-	{
-		if(isset($this->tokens_to_be_replaced[$tp][$token])) 
-			$this->tokens_to_be_replaced[$tp][$token] += 1;
-		else 
-			$this->tokens_to_be_replaced[$tp][$token] = 1;
-	}
-	private function change_stuff()
-	{
-		$tp=0;
-		$out = '';
-		$tokens = token_get_all($this->source[$this->last_pass]);
-		$token_count = count($tokens);
-		while($tp < $token_count) {
-			if(isset($this->tokens_to_be_inserted_after[$tp])) {
-				foreach($this->tokens_to_be_inserted_after[$tp] as $k=>$v) {
-					$out .= str_repeat($k,$v);
-				}
-			}
-			if(isset($this->tokens_to_be_replaced[$tp])) {
-				foreach($this->tokens_to_be_replaced[$tp] as $k=>$v) {
-					$out .= str_repeat($k,$v);
-				}
-			} else{
-				$out .= $this->token_content($tokens[$tp]);
-			}
-			$tp++;
-		}
-		return $out;
-	}
-	//replace else if with elseif
-	public function pass_1()
-	{
-		$tokens = token_get_all($this->source[$this->last_pass]);
-		$token_count = count($tokens);
-		$tp = 0;
-		$tokens_of_interest = array('T_ELSE');
-		while($tp < $token_count) {
-			if($this->token_name($tokens[$tp]) == 'T_ELSE' ){
-			$temp = $this->get_next_non_comment($tokens,$tp+1);
-			if($this->token_name($tokens[$temp]) == 'T_IF') {
-					$this->add_tokens_to_be_replaced($tp ,'elseif');
-					$this->add_tokens_to_be_replaced($temp ,'');
-				}
-			}
-			$tp++;
-		}
-		$this->source[$this->current_pass] = $this->change_stuff() ;
-		
+		$this->__destruct();
+		throw $e;
 	}
 	
-	//convert alternate syntax to conventional syntax, convert colons after case to ';'.
-	public function pass_2()
-	{
-		$tokens = token_get_all($this->source[$this->last_pass]);
-		$token_count = count($tokens);
-		$tp = 0;
-		$tokens_of_interest = array('T_IF','T_FOR','T_FOREACH','T_ELSE','T_ELSEIF','T_WHILE','T_SWITCH');
-		$tokens_of_interest_1 = array('T_ENDIF','T_ENDWHILE','T_ENDFOR','T_ENDSWITCH');
-		while($tp < $token_count) {
-			if(in_array($token_name = $this->token_name($tokens[$tp]), $tokens_of_interest )){
-				if($token_name == 'T_DO') {
-
-				} else {
-					$temp = $this->get_next_non_comment($tokens,$tp+1);
-					if($this->token_name($tokens[$temp]) == '(') {
-							$temp = $this->get_pair($tokens,$temp);
-							$temp = $this->get_next_non_comment($tokens,$temp+1);
-						} 	
-						if($this->token_name($tokens[$temp]) == ':') {
-							$this->add_tokens_to_be_replaced($temp,'{');
-							if($token_name == 'T_ELSEIF' || $token_name == 'T_ELSE') {
-								$this->add_tokens_to_be_inserted_after($tp,'}');
-							}
-						}
-				}
-			} elseif(in_array($token_name,$tokens_of_interest_1)) {
-				$this->add_tokens_to_be_replaced($tp,'}');
-				$this->add_tokens_to_be_replaced($this->get_next_non_comment($tokens,$tp+1),' ');
-			} elseif($token_name == 'T_CASE' || $token_name == 'T_DEFAULT') {
-				//jump over the ternary operators to get the last colon
-				if($this->search_token($tokens,$tp,'?',array(';'))) {
-				while($tmp = $this->search_token($tokens,$tp,'?',array(';'))) $tp = $tmp+1;
-				if($tmp =  $this->search_token($tokens,$tp,':',array(';')))  $tp = $tmp+1;
-				}
-				if($temp =  $this->search_token($tokens,$tp,':',array(';'))) {
-					$this->add_tokens_to_be_replaced($temp ,';');
-				}
-			}
-			$tp++;
-		}
-		
-		$this->source[$this->current_pass] = $this->change_stuff() ;
-	}
-	
-	// enclode inline if,elseif,for,while statements to blocks.
-	public function pass_3()
-	{
-		$tokens = token_get_all($this->source[$this->last_pass]);
-		$token_count = count($tokens);
-		$tp = 0;
-		$tokens_of_interest = array('T_IF','T_FOR','T_FOREACH','T_ELSE','T_ELSEIF','T_WHILE','T_DO');
-		while($tp < $token_count) {
-			$ct = $tokens[$tp];
-			if(in_array($this->token_name($ct), $tokens_of_interest )){
-				while(in_array($token_name = $this->token_name($ct), $tokens_of_interest )) {
-					$temp = $this->get_next_non_comment($tokens,$tp+1);
-					if($this->token_name($tokens[$temp]) == '(') {
-						$temp = $this->get_pair($tokens,$temp);
-						$next = $this->get_next_non_comment($tokens,$temp+1);
-					} else 
-						$next = $temp;
-					$ct = $tokens[$next];
-					if(!in_array($this->token_name($tokens[$next]), array('{',':',';'))) {
-						$this->add_tokens_to_be_inserted_after($next,'{');
-						if($token_name == 'T_IF') 
-							$this->add_tokens_to_be_inserted_after($this->get_if_end($tokens,$tp)+1,'}');
-						else
-							$this->add_tokens_to_be_inserted_after($this->get_statement_end($tokens,$next)+1,'}');
-
-					}
-					$tp = $next;
-				}
-			} 
-			$tp++;
-		}
-		$this->source[$this->current_pass] = $this->change_stuff() ;
-	}
-	// inject trace code in statements
-	public function pass_4()
-	{
-		$tokens = token_get_all($this->source[$this->last_pass]);
-		$token_count = count($tokens);
-		$tp = 0;
-		$tokens_to_jump_parenthesis = array('T_IF','T_FOR','T_FOREACH','T_ELSEIF','T_WHILE');
-		$tokens_to_patch = array('T_FUNCTION');
-		$tokens_to_stop_patching = array('T_CLASS','T_TRAIT','T_INTERFACE');
-		$offset = 0;
-		$suspend = true;
-		$inclass = false;
-		while($tp < $token_count) {
-			$token_name = $this->token_name($tokens[$tp]);
-			if(in_array($token_name, $tokens_to_patch )) {
-				if($blockstart = $this->search_token($tokens,$tp,'{',array(';'))) {
-					if(!isset($blockend)) $blockend = $this->get_pair($tokens,$blockstart);
-					$suspend = false;
-				}
-			} elseif(in_array($token_name, $tokens_to_stop_patching )) {
-				if($blockstart = $this->search_token($tokens,$tp,'{',array(';'))) {
-					$inclass = true;
-					$classend = $this->get_pair($tokens,$blockstart);
-					$suspend = true;
-				}
-			}
-			if($inclass && $tp >= $classend) {
-				$inclass = false;
-			};
-			if($suspend && $inclass) {
-				$tp++;
-				continue;
-				} else {
-				if(isset($blockend) && $tp >= $blockend) {
-					$suspend = true;
-					$tp++;
-					unset($blockend);
-					continue;
-					}
-				}
-				if(in_array($token_name, $tokens_to_jump_parenthesis )) {
-					$temp = $this->get_next_non_comment($tokens,$tp+1);
-					if($this->token_name($tokens[$temp]) == '(') {
-						$temp = $this->get_pair($tokens,$temp);
-						$tp = $this->get_next_non_comment($tokens,$temp+1);
-					}
-				} elseif($token_name =='T_END_HEREDOC') {
-					if($this->token_name($tokens[$temp = $this->get_next_non_comment($tokens,$tp+1)]) == ';') {
-						$offset++;
-						$this->add_tokens_to_be_inserted_after($temp+1,PHP_EOL.'\codespy\Analyzer::$coveredlines[__FILE__][__LINE__-'.$offset.']+=1;');
-						$tp = $temp+1;
-					}
-
-				} elseif($token_name == ';') {
-					$this->add_tokens_to_be_inserted_after($tp+1,'\codespy\Analyzer::$coveredlines[__FILE__][__LINE__-'.$offset.']+=1;');
-				} elseif($token_name == 'T_RETURN' || $token_name == 'T_THROW' || $token_name == 'T_BREAK' || $token_name == 'T_CONTINUE') {
-					$this->add_tokens_to_be_inserted_after($tp,'\codespy\Analyzer::$coveredlines[__FILE__][__LINE__-'.$offset.']+=1;');
-
-				}
-			$tp++;
-		}
-		$this->source[$this->current_pass] = $this->change_stuff() ;
-		
-	}
-	//Add branch analysis code
-	public function pass_5($path)
-	{
-		$tokens = token_get_all($this->source[$this->last_pass]);
-		$token_count = count($tokens);
-		$tp = 0;
-		$tokens_to_patch = array('T_FUNCTION');
-		$last_class = '';
-		while($tp < $token_count) {
-			$token_name = $this->token_name($tokens[$tp]);
-			if($token_name == 'T_NAMESPACE') $current_namespace =  $this->token_content($tokens[$this->get_next_non_comment($tokens,$tp+1)]);
-			if($token_name == 'T_CLASS') {
-			$last_class = $this->token_content($tokens[$this->get_next_non_comment($tokens,$tp+1)]);
-			if(isset($current_namespace)) $last_class = $current_namespace."\\".$last_class;
-			}
-			if(in_array($token_name, $tokens_to_patch )) {
-				if($blockstart = $this->search_token($tokens,$tp,'{',array(';'))) {
-					 $function_name_tp = $this->get_next_non_comment($tokens,$tp+1);
-					 if(!is_array($tokens[$function_name_tp])) 
-						 $function_name_tp = $this->get_next_non_comment($tokens,$function_name_tp+1);
-					 $function_name = $tokens[$function_name_tp][1];
-					 if(!Analyzer::shouldpatch($function_name,$last_class)) {
-					 	$tp++;
-						continue;
-					 } 
-					 Analyzer::$instancenumberfor[$function_name] = 0;
-					 $this->add_tokens_to_be_inserted_after($blockstart+1,"/*0*/"."if(isset(\\codespy\\Analyzer::\$instancenumberfor[__FILE__][__CLASS__][__FUNCTION__])) \\codespy\\Analyzer::\$instancenumberfor[__FILE__][__CLASS__][__FUNCTION__]++; else \\codespy\\Analyzer::\$instancenumberfor[__FILE__][__CLASS__][__FUNCTION__]=0;\\codespy\\Analyzer::\$executionbranches[__FILE__][__CLASS__][__FUNCTION__][\\codespy\\Analyzer::\$instancenumberfor[__FILE__][__CLASS__][__FUNCTION__]][0] = 1;");
-					 $blockend = $this->get_pair($tokens,$blockstart);
-					 $children = $this->get_children_from($tokens,$blockstart,$blockend,0);
-					 Analyzer::$possiblebranches[$path][$last_class][$function_name] = $children->getPaths();
-					 Analyzer::$nodetrees[$path][$last_class][$function_name] = $children;
-				}
-			} 
-				
-			$tp++;
-		}
-	$this->source[$this->current_pass] =  $this->change_stuff();
-	}
-	
-	//for-output-only copy of pass 5
-	public function pass_6()
-	{
-		$tokens = token_get_all($this->source[$this->last_pass]);
-		$token_count = count($tokens);
-		$tp = 0;
-		$tokens_to_patch = array('T_FUNCTION');
-		$last_class = '';
-		while($tp < $token_count) {
-			$token_name = $this->token_name($tokens[$tp]);
-			if($token_name == 'T_NAMESPACE') $current_namespace =  $this->token_content($tokens[$this->get_next_non_comment($tokens,$tp+1)]);
-			if($token_name == 'T_CLASS') {
-			$last_class = $this->token_content($tokens[$this->get_next_non_comment($tokens,$tp+1)]);
-			if(isset($current_namespace)) $last_class = $current_namespace."\\".$last_class;
-			}
-			if(in_array($token_name, $tokens_to_patch )) {
-				if($blockstart = $this->search_token($tokens,$tp,'{',array(';'))) {
-					 $function_name_tp = $this->get_next_non_comment($tokens,$tp+1);
-					 if(!is_array($tokens[$function_name_tp])) 
-						 $function_name_tp = $this->get_next_non_comment($tokens,$function_name_tp+1);
-					 $function_name = $tokens[$function_name_tp][1];
-					 if(!Analyzer::shouldpatch($function_name,$last_class)) {
-					 	$tp++;
-						continue;
-					 }
-					 //Analyzer::$instancenumberfor[$function_name] = 0;
-					 $this->add_tokens_to_be_inserted_after($blockstart+1,"",0);
-					 $blockend = $this->get_pair($tokens,$blockstart);
-					 $children = $this->get_children_from($tokens,$blockstart,$blockend,0,$temp,true);
-					 //Analyzer::$possiblebranches[$function_name] = $children->getPaths();
-				}
-			} 
-				
-			$tp++;
-		}
-		$this->source[$this->current_pass] =  $this->change_stuff();
-	}
-	private function get_children_from_switch($tokens,&$tp,$parent_node,&$last_node = null,$foroutput = false)
-	{
-		$start  = $this->search_token($tokens,$tp,'(',array(';'));
-		$start = $this->get_pair($tokens,$start);
-		$start  = $this->search_token($tokens,$start,'{',array(';'));
-		$end = $this->get_pair($tokens,$start);
-		$this->break_levels[] = $end;
-		$current_node_id = $parent_node;
-		$tree = new tree;
-		while($tp = $this->search_token($tokens,$tp,array('T_CASE','T_DEFAULT'),array('}')) ) {
-		if($this->token_name($tokens[$tp]) == 'T_DEFAULT' ) $founddefault = true;
-
-		//jump over the ternary operators to get the last colon
-		$case_end = $this->get_end_of_case($tokens,$tp+1);
-		
-		if($temp =  $this->search_token($tokens,$tp,array(';','T_CLOSE_TAG'))) {
-			$case_start = $temp;
-			$new_node = $current_node_id = $current_node_id + 1;
-			if(!in_array($parent_node,$this->break_nodes)) $tree->addChild($parent_node,$new_node);
-			$this->add_tokens_to_be_inserted_after($case_start+1,"/*$new_node*/"."\\codespy\\Analyzer::\$executionbranches[__FILE__][__CLASS__][__FUNCTION__][\\codespy\\Analyzer::\$instancenumberfor[__FILE__][__CLASS__][__FUNCTION__]][$new_node] = 1;",$foroutput?$new_node:false);
-			if($children = $this->get_children_from($tokens,$case_start,$case_end,$current_node_id,$current_node_id,$foroutput)) {
-				$tree->addChildren($children);
-
-			}
-		}
-		$tp = $case_end;
-		}
-		$new_node = $current_node_id+1;
-		if(!isset($founddefault))
-			if(!in_array($parent_node,array_merge($this->break_nodes , $this->continue_nodes,$this->return_nodes))) $tree->addChild($parent_node,$new_node);
-		$tree->addChildToAllLeavesOfParent($parent_node,$new_node,array_merge($this->break_nodes , $this->continue_nodes,$this->return_nodes));
-		if(isset($this->jumps[$end])) {
-			foreach($this->jumps[$end] as $jn) {
-				$tree->addChild($jn,$new_node);
-				}
-		}
-		$this->add_tokens_to_be_inserted_after($end+1,"/*$new_node*/"."\\codespy\\Analyzer::\$executionbranches[__FILE__][__CLASS__][__FUNCTION__][\\codespy\\Analyzer::\$instancenumberfor[__FILE__][__CLASS__][__FUNCTION__]][$new_node] = 1;",$foroutput?$new_node:false);
-		$last_node = $new_node;
-		$tp = $end;
-		array_pop($this->break_levels);
-		return $tree;
-
-	}
-
-	private function get_children_from_if($tokens,&$start,$parent_node,&$last_node,$foroutput = false)
-	{
-		$tree = new tree;
-		$current_node_id = $parent_node;
-		$tp = $start;
-		$tree = new tree;
-		while(1) {
-			$token_name = $this->token_name($tokens[$this->get_next_non_comment($tokens,$tp)]);
-			if(in_array($token_name,array('T_IF','T_ELSE','T_ELSEIF'))) {
-					if($token_name == 'T_ELSE') { $elsefound = true;
-						$start  = $this->search_token($tokens,$tp,'{',array(';'));
-					} else {
-						$start  = $this->search_token($tokens,$tp,'(',array(';'));
-						$start = $this->get_pair($tokens,$start);
-						$start  = $this->search_token($tokens,$start,'{',array(';'));
-					}
-					$end = $this->get_pair($tokens,$start);
-
-					$new_node = $current_node_id = $current_node_id + 1;
-					if(!in_array($parent_node,array_merge($this->break_nodes , $this->continue_nodes,$this->return_nodes))) $tree->addChild($parent_node,$new_node);
-					$this->add_tokens_to_be_inserted_after($start+1,"/*$new_node*/"."\\codespy\\Analyzer::\$executionbranches[__FILE__][__CLASS__][__FUNCTION__][\\codespy\\Analyzer::\$instancenumberfor[__FILE__][__CLASS__][__FUNCTION__]][$new_node] = 1;",$foroutput?$new_node:false);
-					if($children = $this->get_children_from($tokens,$start,$end,$current_node_id,$current_node_id,$foroutput)) {
-						$tree->addChildren($children);
-						}
-					$tp = $end+1;
-					} else break;
-
-
-					}
-		$new_node = $current_node_id+1;
-		if(!isset($elsefound)) {
-			if(!in_array($parent_node,array_merge($this->break_nodes , $this->continue_nodes,$this->return_nodes))) $tree->addChild($parent_node,$new_node);
-		}
-		$tree->addChildToAllLeavesOfParent($parent_node,$new_node,array_merge($this->break_nodes , $this->continue_nodes,$this->return_nodes));
-		$this->add_tokens_to_be_inserted_after($end+1,"/*$new_node*/"."\\codespy\\Analyzer::\$executionbranches[__FILE__][__CLASS__][__FUNCTION__][\\codespy\\Analyzer::\$instancenumberfor[__FILE__][__CLASS__][__FUNCTION__]][$new_node] = 1;",$foroutput?$new_node:false);
-		$last_node = $new_node;
-		$start = $end;
-		array_pop($this->break_levels);
-		return $tree;
-	}
-	private function get_children_from_loop($tokens,&$start,$parent_node,&$last_node,$foroutput = false)
-	{
-		$tree = new tree;
-		$current_node_id = $parent_node;
-		$tp = $start;
-		$tree = new tree;
-		$start  = $this->search_token($tokens,$tp,'(',array(';'));
-		$start = $this->get_pair($tokens,$start);
-		if(!($temp= $this->search_token($tokens,$start,'{',array(';')))) return false;
-		$start = $temp;
-		$end = $this->get_pair($tokens,$start);
-		$this->break_levels[] = $end;
-
-		$new_node = $current_node_id = $current_node_id + 1;
-		if(!in_array($parent_node,array_merge($this->break_nodes , $this->continue_nodes,$this->return_nodes))) $tree->addChild($parent_node,$new_node);
-		$this->add_tokens_to_be_inserted_after($start+1,"/*$new_node*/"."\\codespy\\Analyzer::\$executionbranches[__FILE__][__CLASS__][__FUNCTION__][\\codespy\\Analyzer::\$instancenumberfor[__FILE__][__CLASS__][__FUNCTION__]][$new_node] = 1;",$foroutput?$new_node:false);
-		if($children = $this->get_children_from($tokens,$start,$end,$current_node_id,$current_node_id,$foroutput)) {
-			$tree->addChildren($children);
-			}
-		$tp = $end+1;
-		$new_node = $current_node_id+1;
-		if(!in_array($parent_node,$this->break_nodes)) $tree->addChild($parent_node,$new_node);
-		$tree->addChildToAllLeavesOfParent($parent_node,$new_node,array_merge($this->break_nodes , $this->continue_nodes,$this->return_nodes));
-		if(isset($this->jumps[$end])) {
-			foreach($this->jumps[$end] as $jn) {
-				$tree->addChild($jn,$new_node);
-				}
-		}
-		$this->add_tokens_to_be_inserted_after($end+1,"/*$new_node*/"."\\codespy\\Analyzer::\$executionbranches[__FILE__][__CLASS__][__FUNCTION__][\\codespy\\Analyzer::\$instancenumberfor[__FILE__][__CLASS__][__FUNCTION__]][$new_node] = 1;",$foroutput?$new_node:false);
-		$last_node = $new_node;
-		$start = $end;
-		array_pop($this->break_levels);
-		return $tree;
-	}
-	private function get_children_from_do($tokens,&$start,$parent_node,&$last_node,$foroutput = false)
-	{
-		$tree = new tree;
-		$current_node_id = $parent_node;
-		$tp = $start;
-		$tree = new tree;
-		if(!($temp= $this->search_token($tokens,$start,'{',array(';')))) return false;
-		$start = $temp;
-		$end = $this->get_pair($tokens,$start);
-		$this->break_levels[] = $end;
-
-		$new_node = $current_node_id = $current_node_id + 1;
-		if(!in_array($parent_node,array_merge($this->break_nodes , $this->continue_nodes,$this->return_nodes))) $tree->addChild($parent_node,$new_node);
-		$this->add_tokens_to_be_inserted_after($start+1,"/*$new_node*/"."\\codespy\\Analyzer::\$executionbranches[__FILE__][__CLASS__][__FUNCTION__][\\codespy\\Analyzer::\$instancenumberfor[__FILE__][__CLASS__][__FUNCTION__]][$new_node] = 1;",$foroutput?$new_node:false);
-		if($children = $this->get_children_from($tokens,$start,$end,$current_node_id,$current_node_id,$foroutput)) {
-			$tree->addChildren($children);
-			}
-		$tp = $end+1;
-		$tp = $this->search_token($tokens,$tp,'(');
-		$end = $this->get_pair($tokens,$tp)+1;
-		$new_node = $current_node_id+1;
-		if(!in_array($parent_node,$this->break_nodes)) $tree->addChild($parent_node,$new_node);
-		$tree->addChildToAllLeavesOfParent($parent_node,$new_node,array_merge($this->break_nodes , $this->continue_nodes,$this->return_nodes));
-		if(isset($this->jumps[$end])) {
-			foreach($this->jumps[$end] as $jn) {
-				$tree->addChild($jn,$new_node);
-				}
-		}
-		$this->add_tokens_to_be_inserted_after($end+1,"/*$new_node*/"."\\codespy\\Analyzer::\$executionbranches[__FILE__][__CLASS__][__FUNCTION__][\\codespy\\Analyzer::\$instancenumberfor[__FILE__][__CLASS__][__FUNCTION__]][$new_node] = 1;",$foroutput?$new_node:false);
-		$last_node = $new_node;
-		$start = $end;
-		array_pop($this->break_levels);
-		return $tree;
-	}
-
-
-	private function  get_children_from($tokens,$start,$end,$parent_node,&$last_node = null,$foroutput=false)
-	{
-		$branch_points = array('T_IF','T_FOR','T_FOREACH','T_WHILE','T_SWITCH','T_DO');
-		$tp = $start;
-		$tree= new tree;
-		$current_node_id = $parent_node;
-		while($tp<$end) {
-			$token_name = $this->token_name($tokens[$tp]);
-			if($token_name == 'T_FUNCTION') {
-				if($blockstart = $this->search_token($tokens,$tp,'{',array(';'))) {
-					if($tp = $this->get_pair($tokens,$blockstart)) { $tp++;continue;}
-				}
-			} elseif($token_name == 'T_BREAK') {
-				$level = $this->get_break_level($tokens,$tp);
-				$break_target = $this->break_levels[count($this->break_levels)-$level];
-				$this->jumps[$break_target][] = $current_node_id;
-				$this->break_nodes[] = $current_node_id;
-			} elseif($token_name == 'T_CONTINUE') {
-				$this->continue_nodes[] = $current_node_id;
-			} elseif($token_name == 'T_RETURN' || $token_name == 'T_THROW') {
-				$this->return_nodes[] = $current_node_id;
-			}
-			
-			elseif(in_array($token_name, $branch_points)) {
-				if($token_name == 'T_SWITCH') {
-				/*
-				$trace = debug_backtrace(false);
-				foreach ($trace as $t) var_dump($t['function']);
-				*/
-					$node_children = $this->get_children_from_switch($tokens,$tp,$current_node_id,$current_node_id,$foroutput);
-					$tree->addChildren($node_children);
-				}elseif(in_array($token_name,array('T_IF'))) {
-						$temp = $current_node_id;
-						$node_children = $this->get_children_from_if($tokens,$tp,$current_node_id,$current_node_id,$foroutput);
-						$tree->addChildren($node_children);
-					} elseif($token_name == 'T_DO') {
-						if( $node_children = $this->get_children_from_do($tokens,$tp,$current_node_id,$current_node_id,$foroutput))
-						$tree->addChildren($node_children);
-					}
-				 else {
-					if( $node_children = $this->get_children_from_loop($tokens,$tp,$current_node_id,$current_node_id,$foroutput))
-					$tree->addChildren($node_children);
-					}
-				}
-			$tp++;
-		}
-		$last_node = $current_node_id;
-		return $tree;
-	}
-
-	public function get_break_level($tokens,$tp)
-	{
-	if($this->token_name($token = $tokens[$this->get_next_non_comment($tokens,$tp+1)]) == 'T_LNUMBER') return (($temp = $this->token_content($token))>0)?$temp:1; else return 1;
-	}
-
-	public function get_ternary_statement_end($tokens,$start)
-	{
-	$token_count = count($tokens);
-
-	$tp = $start;
-	$qm_count = 0;
-	while($tp<$token_count) {
-	$token_name = $this->token_name($tokens[$tp]);
-	if($token_name ==';' || ($token_name ==':' && $qm_count==0) || $token_name == 'T_CLOSE_TAG') break;
-	elseif($token_name == '?') $qm_count++;
-	elseif($token_name == ':') $qm_count--;
-	elseif($token_name == '(') $tp = $this->get_pair($tokens,$tp);
-	$tp++;
-	}
-	return $tp;
-	}
-	public function get_contents($tokens,$start,$end) 
-	{
-	$return = '';
-	for(;$start<$end;$start++) {
-		if(is_array($tokens[$start])) $return .= $tokens[$start][1];else $return .= $tokens[$start];
-		}
-	return $return;
-	}
-	public function get_ternary_sub_statements($tokens,$start)
-	{
-		$tp =$real_start = $this->get_next_non_comment($tokens,$start+1);
-		$token_count = count($tokens);
-		$qm_count = 0;
-		while(($tp<$token_count) && ( ($token_name = $this->token_name($tokens[$tp])) !=':' || ($qm_count > 0) ) ) {
-			if($token_name == '?') $qm_count++;
-			elseif($token_name == ':') $qm_count--;
-			$tp++;
-		}
-		$mid_segment_end = $tp;
-		$end = $this->get_ternary_statement_end($tokens,$tp+1);
-		return array($start,$mid_segment_end,$end);
-	}
-	private function get_end_of_case($tokens,$start)
-	{
-		$token_count = count($tokens);
-		while($start< $token_count) {
-			$token_name = $this->token_name($tokens[$start]);
-			if($token_name == '}' || $token_name == 'T_BREAK'|| $token_name == 'T_CONTINUE') return $start;
-			elseif($token_name == '{') $start = $this->get_pair($tokens,$start)+1;
-			else $start++;
-		}
-	}
-	private function search_token($tokens,$start,$search,$breakon = array())
-	{
-		$token_count = count($tokens);
-		while($start< $token_count) {
-			$token_name = $this->token_name($tokens[$start]);
-			if($breakon && in_array($token_name,$breakon)) return false;
-			if(is_array($search)) {
-				if(in_array($token_name,$search)) return $start;
-
-			} else {
-				if($token_name == $search) return $start;
-			}
-			$start++;
-		}
-	}
-	private function get_statement_start($tokens,$end)
-	{
-		while($end>0 && in_array($this->token_name($tokens[$end]), array(';','}','T_WHITESPACE'))) $end--; 
-		while($end>0 && !in_array($token_name = $this->token_name($tokens[$end]), array('{',';','T_COMMENT','T_ML_COMMENT','T_DOC_COMMENT'))) {
-			if($token_name != 'T_WHITESPACE') $last_non_whitespace = $end;
-			if($token_name == ')') $end = $this->get_pair($tokens,$end,-1);else $end--;
-			}
-		return $last_non_whitespace;	
-	}
-	private function get_statement_end($tokens,$start)
-	{
-		while(isset($tokens[$start])) {
-			$token_name = $this->token_name($tokens[$start]);
-			if($token_name == 'T_IF') return $this->get_if_end($tokens,$start);
-			if($token_name == ';') 
-				return $start;
-			elseif(in_array($token_name,array('(','[')))
-				$start = $this->get_pair($tokens,$start);
-			elseif($token_name == '{')
-				return $this->get_pair($tokens,$start);
-			else
-				$start++;
-		}
-	}
-	private function get_if_end($tokens,$start,$full=false)
-	{
-	$tp = $start;
-	$next = $this->get_statement_after_if($tokens,$tp);
-	$token_name = $this->token_name($tokens[$next]);
-	if($token_name == 'T_IF' )
-		$end = $this->get_if_end($tokens,$next,true);
-	elseif($token_name == '{' ) 
-		$end = $this->get_pair($tokens,$next);
-	else 
-		$end = $this->get_statement_end($tokens,$next);
-	if(!$full) return $end;
-	while($this->token_name($tokens[$next = $this->get_next_non_comment($tokens,$end+1)]) == 'T_ELSEIF') {
-		$end = $this->get_if_end($tokens,$next);
-	}
-	if($this->token_name($tokens[$next]) == 'T_ELSE') {
-		return $this->get_if_end($tokens,$next);
-	} else return $end;
-
-	}
-	private function get_statement_after_if($tokens,$start)
-	{
-	if($this->token_name( $tokens[$next =$this->get_next_non_comment($tokens,$start+1)]) == '(')
-		return $this->get_next_non_comment($tokens,$this->get_pair($tokens,$next)+1);
-	else 
-		return $this->get_next_non_comment($tokens,$start+1);
-	}
-
-	private function get_pair($tokens,$start,$dir = 1)
-	{
-		$pairs = array('{'=>'}','['=>']','('=>')','}'=>'{',']'=>'[',')'=>'(');
-		$src = $this->token_name($tokens[$start]);
-		if(isset($pairs[$src ])) {
-			$pair = $pairs[$src ];
-			$count = 1;
-			while($count>0) {
-				if($dir == 1) 
-					$start = $next = $this->get_next_non_comment($tokens,++$start);
-				else 
-					$start = $next = $this->get_previous_non_comment($tokens,--$start);
-
-				if($next!==false) 
-					$next = $this->token_name($tokens[$next]); 
-				else 
-					return false;
-				if($next == 'T_CURLY_OPEN' || $next == 'T_DOLLAR_OPEN_CURLY_BRACES' ) $next = '{';
-				if($next == $src) 
-					$count++;
-				elseif($next == $pair) 
-					$count--;
-			}
-			return $start;
-		}
-	}
-	private function token_content($token)
-	{
-		if(is_array($token)) {
-			if(isset($token[0])) {
-				return $token[1];
-				}
-			else 
-				return false;
-			} else {
-				return $token;
-			}
-	}
-	private function token_name($token)
-	{
-		if(is_array($token)) {
-			if(isset($token[0])) {
-				return token_name($token[0]);
-				}
-			else 
-				return false;
-			} else {
-				return $token;
-			}
-	}
-
-	
-}
-class tree{
-private $nodes = array();
-private $paths= array();
-public function __construct($nodes=array())
-	{
-		if($nodes) $this->nodes = $nodes;
-	}
-public function dumpNode($node,$path=array(),$highlightpaths=array())
-{
-	if(isset($this->nodes[$node])) {
-		$path[] = $node;
-		$path_str = join(',',$path);
-		$highlight = false;
-		foreach($highlightpaths as $v) {
-			if(strpos($v,$path_str) === 0) $highlight = true;
-		}
-		if(count($this->nodes[$node]) == 0) {
-		if($highlight)	echo "<span style='color:red'>$node</span>";else echo $node;
-		} else {
-			if($highlight) $cont = "<span style='color:red'>$node</span>";else $cont = $node;
-			echo "<table style='border:solid 1px gray;'><tr><td>$cont</td></tr><tr><td><table><tr>";
-			foreach($this->nodes[$node] as $n) {
-				echo "<td valign=top>";
-				$this->dumpNode($n,$path,$highlightpaths);
-				echo "</td>";
-			}
-			echo "</tr</td></table></td></table>";
-		}
-	}
-}
-
-public function addChildren($tree)
-	{
-		foreach($tree->getNodes() as  $k=>$nodes) {
-			foreach($nodes as $v ) {
-				$this->addChild($k,$v);
-			}
-		}
-	}
-public function addChildToAllLeavesOfParent($parent,$child,$exclude = array())
-	{
-		foreach($this->getLeavesForTreeAt($parent,$exclude) as $leaf) {
-			if(!in_array($leaf,$exclude) && $leaf!=$child) $this->addChild($leaf,$child);
-		}
-
-	}
-public function getLeavesForTreeAt($parent,$exclude = array())
-	{
-		$leaves = array();
-		$paths = $this->getPaths($parent);
-		foreach($paths as $path) {
-			foreach($exclude as $en) if(in_array($en,$path)) continue 2;
-			$leaves[] = end($path);
-		}
-		return $leaves;
-	}
-public function getSiblings($node)
-	{
-	$siblings = array();
-	foreach($this->getParents($node) as $parent) {
-		$siblings = array_merge($siblings,$this->nodes[$parent]);
-	}
-	return $siblings;
-
-	}
-public function getParents($node)
-	{
-	$return = array();
-	foreach($this->nodes as $k=>$v) {
-			if(($found = array_search($node,$v)) !== false  ) {
-				$return[] = $k;
-			}
-		}
-	return $return;
-	}
-public function getNodes()
-	{
-		return $this->nodes;
-	}
-public function addChild($parent,$child)
-	{
-	if(isset($this->nodes[$parent])) {
-		if(in_array($child,$this->nodes[$parent]) === false  ) {
-			array_push($this->nodes[$parent],$child);
-			if(!isset($this->nodes[$child])) $this->nodes[$child] = array();
-			}
-		}
-	else {
-		$this->nodes[$parent] = array($child);
-		if(!isset($this->nodes[$child])) $this->nodes[$child] = array();
-		}
-	}
-public function getPaths($root=0)
-	{
-		$this->paths = array();
-		$this->dfs($root);
-		return ($this->paths);
-	}
-public function dfs($parent,$path = array())
-	{
-		if(!$path) $path = array($parent);
-		$visited = array();
-		if(isset($this->nodes[$parent]) && count($this->nodes[$parent]) >0) {
-			while(($child = $this->getUnvisitedChild($parent,$visited)) !== false )  {
-				$visited[$child]=1;
-				$this->dfs($child,$temp = array_merge($path,array($child)));
-			}
-		} else {
-			$this->paths[] = $path;
-		}
-
-	}
-public function getUnvisitedChild($parent,$visited)
-	{
-		if(isset($this->nodes[$parent])) foreach($this->nodes[$parent] as $v) {
-			if(!isset($visited[$v])) return $v;
-		}
-		return false;
-	}
 }
 stream_wrapper_unregister("file");
 stream_wrapper_register("file", "codespy\str_wrp");
