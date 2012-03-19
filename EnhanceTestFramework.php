@@ -471,7 +471,6 @@ class TextRo{
     public $LineFile = 'Linia {0} in fișierul {1}';
 }
 
-
 class EnhanceTestFramework
 {
     private $FileSystem;
