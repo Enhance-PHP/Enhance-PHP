@@ -9,8 +9,13 @@ Unless required by applicable law or agreed to in writing, software distributed 
 http://www.enhance-php.com/
 https://github.com/Enhance-PHP/Enhance-PHP
 
-v2.1.3 (In Progress)
+v2.1.4 (In Progress)
+
+v2.1.3
 TextPtBr - Brazilian Portuguese translation.
+TextFr - French translation.
+TextRo - Romanian translation.
+TextSp - Spanish translation.
 
 v2.1.2
 Line numbers for errors
