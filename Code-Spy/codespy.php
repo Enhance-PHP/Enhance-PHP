@@ -272,22 +272,32 @@ class analyzer
 		$tokens = token_get_all("<?php $line");
 		$sf =0;
 		$return = '';
+		$semicolon_ended = false;
 		if(isset($from[1])) {
 			$title = join(', ',array_unique($from[1]));
 			$return = "<pre title='$title' style='padding-left:10px;font-family:monospace;display:inline;margin:0px;background-color:".self::$coveredcolor.";font-family:monospace'>";
 		}
 		else $return =  "<pre style='padding-left:10px;font-family:monospace;display:inline;margin:0px;font-family:monospace'>";
+		$token_length = count($tokens) - 2;
 		foreach($tokens as $k=>$t) {
 			if($k==0) continue;
+			$foundsc = false;
+			for($lh=$k;$lh<$token_length;$lh++) {
+				if($tokens[$lh] == ';') $foundsc = true;
+				}
+			if($semicolon_ended) {
+				if(isset($from[$sf-1])) {
+					$title = join(', ',array_unique($from[$sf-1]));
+					if($foundsc) $return .= "<pre  title='$title' style='font-family:monospace;display:inline;margin:0px;background-color:".self::$coveredcolor.";font-family:monospace'>";
+				} elseif($foundsc) $return.="<pre style='font-family:monospace;display:inline;margin:0px;dummy:56'>";
+				$semicolon_ended = false;
+				}
 			$return .= $this->token_content($t);
 			if($t == ';') {
 				$sf++;
 				$return .= "</pre>";
-				if(isset($from[$sf+1])) {
-					$title = join(', ',array_unique($from[$sf+1]));
-					$return .= "<pre  title='$title' style='font-family:monospace;display:inline;margin:0px;background-color:".self::$coveredcolor.";font-family:monospace'>";
-				}
-				else $return.="<pre style='font-family:monospace;display:inline;margin:0px;'>";
+				$semicolon_ended = true;
+
 			}
 		}
 		return  $return;
@@ -378,7 +388,7 @@ EOB;
 				foreach($file_lines as $k=>$line) 
 					if(isset($lines[$k+1])) {
 					//	$output .= "<span  style='font-family:monospace;background-color:#a0ffa0'>".str_pad(($k+1).':'.join(',',array_keys($lines[$k+1])),$maxlen,'0',STR_PAD_LEFT)."</span><pre style='font-family:monospace;display:inline;margin:0px;background-color:".self::$coveredcolor.";font-family:monospace'>".rtrim(preg_replace('/\(codespy-execution-node:([0-9.]+)\)/','<span style=\'color:red;font-weight:bold;font-size:22;padding:10px;\'>\1</span>',$this->wrap_section($line,array_keys[$k+1])))."</pre><br/>";
-						$output .= "<span  style='font-family:monospace;background-color:#a0ffa0'>".str_pad(($k+1)/*.':'.join(',',array_keys($lines[$k+1]))*/,$maxlen,'0',STR_PAD_LEFT)."</span>".rtrim($this->wrap_section($line,$lines[$k+1]))."<br/>";
+						$output .= "<span  style='font-family:monospace;background-color:#a0ffa0'>".str_pad(($k+1)/*.':'.join(',',array_keys($lines[$k+1]))*/,$maxlen,'0',STR_PAD_LEFT)."</span>".rtrim($temp = $this->wrap_section($line,$lines[$k+1]))."<br/>";
 						$covered_statements+=count($lines[$k+1]);
 						$covered_lines+=count($lines[$k+1]);
 					} else
@@ -615,7 +625,7 @@ class patcher
 		$charecter_pos = 0;
 		do{
 			$token_name = $this->token_name($tokens[$tp]);
-			if($token_name == 'T_WHITESPACE' && (ord($tokens[$tp][1])==13 ||  ord($tokens[$tp][1])==10)  ) {
+			if($token_name == 'T_WHITESPACE' && (strpos($tokens[$tp][1],13)!==false ||  strpos($tokens[$tp][1],10)!==false)  ) {
 				return $charecter_pos;
 			} elseif($token_name == ';') {
 				$charecter_pos++;
@@ -791,7 +801,11 @@ class patcher
 				} elseif($token_name == 'T_WHITESPACE') {
 					//var_dump(ord($tokens[$tp][1]));
 					//var_dump(ord("\r"));
-					if(ord($tokens[$tp][1]) == 13) $charecter_pos = 0;
+					//echo ord($tokens[$tp][1]),"\n";
+					//var_dump($tokens[$tp][1]);
+					if((strpos($tokens[$tp][1],13) !==false) || (strpos($tokens[$tp][1],10) !==false)) {
+					$charecter_pos = 0;
+					}
 
 				}
 			$tp++;
