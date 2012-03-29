@@ -346,8 +346,13 @@ ob_start();
 <script>
 function highlight_touched_lines(functionname)
 {
-$('pre').css({fontWeight:'normal'});
-$('pre[title*='+functionname+']').css({fontWeight:'bold'});
+if($('#exclusive:checked').length) {
+	$('pre').css({fontWeight:'normal',color:'black'});
+	$('pre[title='+functionname+']').css({fontWeight:'bold',color:'red'});
+} else {
+	$('pre').css({fontWeight:'normal',color:'black'});
+	$('pre[title*='+functionname+']').css({fontWeight:'bold',color:'red'});
+}
 
 }
 /*! jQuery v1.7.2 jquery.com | jquery.org/license */
@@ -426,9 +431,9 @@ a){var b=F.exec(a);b&&(b[1]=(b[1]||"").toLowerCase(),b[3]=b[3]&&new RegExp("(?:^
 				$report .= "<td><b style='font-size:18px'>Line Coverage=".number_format($coverage)."%</b></td>";
 				$report .= "<td>(Total Lines</b>=".count($file_lines).",&nbsp;";
 				$report .= "Executed Lines</b>=$covered_lines)</td></tr>";
-				$report .= "<tr><td>Select a function</td><td><select onchange='highlight_touched_lines(this.value);' name='testnames'>";
+				$report .= "<tr><td>Select a function</td><td><select onchange='highlight_touched_lines(this.value);' name='testnames'><option value=''>Select</option>";
 				foreach($called_functions as $cf) $report.="<option value='$cf'>$cf</option>";
-				$report .= "</td></tr></table>";
+				$report .= "</select>Exclusive<input onchange='highlight_touched_lines(this.value);' type='checkbox' id='exclusive'/></td></tr></table>";
 				$output = $report.$output;
 				if(self::$outputdir) {
 					file_put_contents(self::$outputdir."/".($visual_report_file[$file] = preg_replace("/[:\\/\\\]/",'-',$file).".cc.html"),$style.$output);
