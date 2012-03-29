@@ -597,7 +597,7 @@ class EnhanceTestFramework
     {
         $start = microtime(true);
         foreach($this->Tests as /** @var Test $test */ $test) {
-			\codespy\Analyzer::$currenttest =  $test->getTestName();
+			if(class_exists('\codespy\Analyzer')) \codespy\Analyzer::$currenttest =  $test->getTestName();
             $result = $test->run();
             if ($result) {
                 $message = $test->getTestName() . ' - ' . $this->Text->Passed;
