@@ -344,12 +344,14 @@ EOB;
 ob_start();
 ?>
 <script>
-function highlight_touched_lines(functionname)
+function highlight_touched_lines()
 {
+var functionname = $('#testnames').val();
 if($('#exclusive:checked').length) {
 	$('pre').css({fontWeight:'normal',color:'black'});
 	$('pre[title='+functionname+']').css({fontWeight:'bold',color:'red'});
 } else {
+console.log(functionname);
 	$('pre').css({fontWeight:'normal',color:'black'});
 	$('pre[title*='+functionname+']').css({fontWeight:'bold',color:'red'});
 }
@@ -418,7 +420,7 @@ a){var b=F.exec(a);b&&(b[1]=(b[1]||"").toLowerCase(),b[3]=b[3]&&new RegExp("(?:^
 					} else
 					//	$output .=  "<span style='font-family:monospace;background-color:#a0ffa0'>".str_pad($k+1,$maxlen,'0',STR_PAD_LEFT)."</span><pre style='font-family:monospace;margin:0px;display:inline'>".rtrim(preg_replace('/\(codespy-execution-node:([0-9.]+)\)/','<span style=\'color:red;font-size:22;font-weight:bold\'>\1</span>',htmlentities($line)))."</pre><br/>";
 						$output .=  "<span style='font-family:monospace;background-color:#a0ffa0'>".str_pad($k+1,$maxlen,'0',STR_PAD_LEFT)."</span><pre style='padding-left:10px;font-family:monospace;margin:0px;display:inline'>".rtrim(htmlentities($line))."</pre><br/>";
-						$called_functions = array_unique($called_functions);
+						$called_functions = array_unique($contained_functions);
 				$coverage = ($covered_lines/count($file_lines))*100;
 				$actual_coverage = ($covered_statements*100/Analyzer::$executable_statements[$file]);
 				$coverages[$file] = $coverage;
@@ -431,9 +433,9 @@ a){var b=F.exec(a);b&&(b[1]=(b[1]||"").toLowerCase(),b[3]=b[3]&&new RegExp("(?:^
 				$report .= "<td><b style='font-size:18px'>Line Coverage=".number_format($coverage)."%</b></td>";
 				$report .= "<td>(Total Lines</b>=".count($file_lines).",&nbsp;";
 				$report .= "Executed Lines</b>=$covered_lines)</td></tr>";
-				$report .= "<tr><td>Select a function</td><td><select onchange='highlight_touched_lines(this.value);' name='testnames'><option value=''>Select</option>";
+				$report .= "<tr><td>Select a function</td><td><select onchange='highlight_touched_lines();' name='testnames' id='testnames'><option value=''>Select</option>";
 				foreach($called_functions as $cf) $report.="<option value='$cf'>$cf</option>";
-				$report .= "</select>Exclusive<input onchange='highlight_touched_lines(this.value);' type='checkbox' id='exclusive'/></td></tr></table>";
+				$report .= "</select>Exclusive<input onchange='highlight_touched_lines();' type='checkbox' id='exclusive'/></td></tr></table>";
 				$output = $report.$output;
 				if(self::$outputdir) {
 					file_put_contents(self::$outputdir."/".($visual_report_file[$file] = preg_replace("/[:\\/\\\]/",'-',$file).".cc.html"),$style.$output);
