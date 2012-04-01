@@ -253,7 +253,7 @@ class analyzer
 	public static $outputdir = '';
 	public static $file_to_cover=array();
 	public static $functions_to_analayze = array();
-	public static $coveredcolor = '#ffc2c2';
+	public static $coveredcolor = '#ebd9b4';
 	public static $currenttest = '';
 	private function token_content($token)
 	{
@@ -275,9 +275,9 @@ class analyzer
 		$semicolon_ended = false;
 		if(isset($from[1])) {
 			$title = join(', ',array_unique($from[1]));
-			$return = "<pre title='$title' style='padding-left:10px;font-family:monospace;display:inline;margin:0px;background-color:".self::$coveredcolor.";font-family:monospace'>";
+			$return = "<pre title='$title' class='pre covered'>";
 		}
-		else $return =  "<pre style='padding-left:10px;font-family:monospace;display:inline;margin:0px;font-family:monospace'>";
+		else $return =  "<pre class='pre'>";
 		$token_length = count($tokens) - 2;
 		foreach($tokens as $k=>$t) {
 			if($k==0) continue;
@@ -288,8 +288,8 @@ class analyzer
 					}
 				if(isset($from[$sf+1]) ) {
 					$title = join(', ',array_unique($from[$sf+1]));
-					if($foundsc) $return .= "<pre  title='$title' style='font-family:monospace;display:inline;margin:0px;background-color:".self::$coveredcolor.";font-family:monospace'>";
-				} elseif($foundsc) $return.="<pre style='font-family:monospace;display:inline;margin:0px;dummy:56'>";
+					if($foundsc) $return .= "<pre  title='$title' class='pre covered'>";
+				} elseif($foundsc) $return.="<pre class='pre'>";
 				$semicolon_ended = false;
 			}
 			$return .= htmlentities($this->token_content($t));
@@ -314,6 +314,7 @@ class analyzer
 			echo var_export(self::$coveredlines,true);
 			echo "Code Coverage percentage=".($covered_lines/count($file_lines))*100;
 		} elseif(self::$outputformat =='html') {
+			$self_covered_color = self::$coveredcolor;
 			$style =<<<EOB
 			<!DOCTYPE html>
 			<style>
@@ -339,6 +340,24 @@ class analyzer
 			padding:3px;
 			background-color:#e5e5e5;
 			}
+			.pre{
+			padding-left:10px;
+			font-family:monospace;
+			display:inline;
+			margin:0px;
+			font-family:monospace;
+			}
+			.highlight{
+			background-color:#ea9b00;
+			}
+			.covered{
+			background-color:$self_covered_color;
+			}
+			.lineno{
+				font-family:monospace;
+				background-color:#666666;
+				color:white;
+			}
 			</style>
 EOB;
 ob_start();
@@ -347,12 +366,16 @@ ob_start();
 function highlight_touched_lines()
 {
 var functionname = $('#testnames').val();
+if(functionname.length == 0 ) {
+	$('pre').removeClass('highlight');
+	return;
+}
 if($('#exclusive:checked').length) {
-	$('pre').css({fontWeight:'normal',color:'black'});
-	$('pre[title='+functionname+']').css({fontWeight:'bold',color:'red'});
+	$('.highlight').removeClass('highlight').addClass('covered');
+	$('pre[title='+functionname+']').removeClass('covered').addClass('highlight');
 } else {
-	$('pre').css({fontWeight:'normal',color:'black'});
-	$('pre[title*='+functionname+']').css({fontWeight:'bold',color:'red'});
+	$('.highlight').removeClass('highlight').addClass('covered');
+	$('pre[title*='+functionname+']').removeClass('covered').addClass('highlight');
 }
 
 }
@@ -415,29 +438,29 @@ $(function() { highlight_touched_lines();} );
 						foreach($lines[$k+1] as $called_functions) $contained_functions = array_merge($contained_functions,$called_functions);
 						
 					//	$output .= "<span  style='font-family:monospace;background-color:#a0ffa0'>".str_pad(($k+1).':'.join(',',array_keys($lines[$k+1])),$maxlen,'0',STR_PAD_LEFT)."</span><pre style='font-family:monospace;display:inline;margin:0px;background-color:".self::$coveredcolor.";font-family:monospace'>".rtrim(preg_replace('/\(codespy-execution-node:([0-9.]+)\)/','<span style=\'color:red;font-weight:bold;font-size:22;padding:10px;\'>\1</span>',$this->wrap_section($line,array_keys[$k+1])))."</pre><br/>";
-						$output .= "<span  style='font-family:monospace;background-color:#a0ffa0'>".str_pad(($k+1)/*.':'.join(',',array_keys($lines[$k+1]))*/,$maxlen,'0',STR_PAD_LEFT)."</span>".rtrim($temp = $this->wrap_section($line,$lines[$k+1]))."<br/>";
+						$output .= "<span class='lineno'>".str_pad(($k+1)/*.':'.join(',',array_keys($lines[$k+1]))*/,$maxlen,'0',STR_PAD_LEFT)."</span>".rtrim($temp = $this->wrap_section($line,$lines[$k+1]))."<br/>";
 						$covered_statements+=count($lines[$k+1]);
 						$covered_lines+=count($lines[$k+1]);
 					} else
 					//	$output .=  "<span style='font-family:monospace;background-color:#a0ffa0'>".str_pad($k+1,$maxlen,'0',STR_PAD_LEFT)."</span><pre style='font-family:monospace;margin:0px;display:inline'>".rtrim(preg_replace('/\(codespy-execution-node:([0-9.]+)\)/','<span style=\'color:red;font-size:22;font-weight:bold\'>\1</span>',htmlentities($line)))."</pre><br/>";
-						$output .=  "<span style='font-family:monospace;background-color:#a0ffa0'>".str_pad($k+1,$maxlen,'0',STR_PAD_LEFT)."</span><pre style='padding-left:10px;font-family:monospace;margin:0px;display:inline'>".rtrim(htmlentities($line))."</pre><br/>";
+						$output .=  "<span class='lineno'>".str_pad($k+1,$maxlen,'0',STR_PAD_LEFT)."</span><pre class='pre'>".rtrim(htmlentities($line))."</pre><br/>";
 						$called_functions = array_unique($contained_functions);
 				$coverage = ($covered_lines/count($file_lines))*100;
 				$actual_coverage = ($covered_statements*100/Analyzer::$executable_statements[$file]);
 				$coverages[$file] = $coverage;
 				$actual_coverages[$file] = $actual_coverage;
-				$report = '<table><tr>';
-				$report .= "<td><b style='font-size:18px'>Statement Coverage=".number_format($actual_coverage,2)."%</b></td>";
+				$report = '<table width="100%"><tr>';
+				$report .= "<td><b style='font-size:18px'>Statement Coverage&nbsp;=&nbsp;&nbsp;<span style='color:red'>".number_format($actual_coverage,2)."%</span></b></td>";
 				$report .= "<td>(Total Executable Statements=".Analyzer::$executable_statements[$file].",&nbsp;";
 				$report .= "Executed Statements=".$covered_statements.")</td>";
 				$report .= "</tr><tr>";
-				$report .= "<td><b style='font-size:18px'>Line Coverage=".number_format($coverage)."%</b></td>";
+				$report .= "<td><b style='font-size:18px'>Line Coverage&nbsp;=&nbsp;&nbsp;".number_format($coverage)."%</b></td>";
 				$report .= "<td>(Total Lines</b>=".count($file_lines).",&nbsp;";
 				$report .= "Executed Lines</b>=$covered_lines)</td></tr>";
-				$report .= "<tr><td>Select a function</td><td><select onchange='highlight_touched_lines();' name='testnames' id='testnames'><option value=''>Select</option>";
+				$report .= "<tr><td colspan='3'>Highlight statements covered by test&nbsp;&nbsp;<select onchange='highlight_touched_lines();' name='testnames' id='testnames'><option value=''>Select</option>";
 				foreach($called_functions as $cf) if(strlen($cf)) $report.="<option value='$cf'>$cf</option>";
-				$report .= "</select>Exclusive<input onchange='highlight_touched_lines();' type='checkbox' id='exclusive'/></td></tr></table>";
-				$output = $report.$output;
+				$report .= "</select>&nbsp;&nbsp;Exclusive<input onchange='highlight_touched_lines();' type='checkbox' id='exclusive'/></td></tr></table>";
+				$output = "<div style='font-family:arial;color:white;position:fixed;top:0px;left:0px;;width:100%;height:75px;background-color:#0a0a0a;'>$report</div><div style='padding-top:75px'>$output</div>";
 				if(self::$outputdir) {
 					file_put_contents(self::$outputdir."/".($visual_report_file[$file] = preg_replace("/[:\\/\\\]/",'-',$file).".cc.html"),$style.$output);
 				}
