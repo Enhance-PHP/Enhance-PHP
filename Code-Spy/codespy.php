@@ -320,6 +320,8 @@ class analyzer
 			<style>
 			body{
 			font: 14px/1 "Lucida Grande","Lucida Sans Unicode",Lucida,Arial,Helvetica,sans-serif;
+			margin-left: 0;
+			margin-top: 0;
 			}
 			table.index {
 			border-spacing:0px;
@@ -449,18 +451,13 @@ $(function() { highlight_touched_lines();} );
 				$actual_coverage = ($covered_statements*100/Analyzer::$executable_statements[$file]);
 				$coverages[$file] = $coverage;
 				$actual_coverages[$file] = $actual_coverage;
-				$report = '<table width="100%"><tr>';
-				$report .= "<td><b style='font-size:18px'>Statement Coverage&nbsp;=&nbsp;&nbsp;<span style='color:red'>".number_format($actual_coverage,2)."%</span></b></td>";
-				$report .= "<td>(Total Executable Statements=".Analyzer::$executable_statements[$file].",&nbsp;";
-				$report .= "Executed Statements=".$covered_statements.")</td>";
-				$report .= "</tr><tr>";
-				$report .= "<td><b style='font-size:18px'>Line Coverage&nbsp;=&nbsp;&nbsp;".number_format($coverage)."%</b></td>";
-				$report .= "<td>(Total Lines</b>=".count($file_lines).",&nbsp;";
-				$report .= "Executed Lines</b>=$covered_lines)</td></tr>";
-				$report .= "<tr><td colspan='3'>Highlight statements covered by test&nbsp;&nbsp;<select onchange='highlight_touched_lines();' name='testnames' id='testnames'><option value=''>Select</option>";
+				$report = '<table width="100%"><tr><td colspan="3">'.$file.'</td></tr><tr>';
+				$report .= "<td><b style='font-size:18px'>Statement Coverage&nbsp;=&nbsp;&nbsp;<span style='color:red'>".number_format($actual_coverage,2)."%</span></b>&nbsp;&nbsp($covered_statements/".Analyzer::$executable_statements[$file].")</td>";
+				$report .= "<td><b style='font-size:18px'>Line Coverage&nbsp;=&nbsp;&nbsp;".number_format($coverage)."%</b>&nbsp;&nbsp;($covered_lines/".count($file_lines).")</td>";
+				$report .= "<td colspan='3'>Highlight statements covered by test&nbsp;&nbsp;<select style='width:200px' onchange='highlight_touched_lines();' name='testnames' id='testnames'><option value=''>Select</option>";
 				foreach($called_functions as $cf) if(strlen($cf)) $report.="<option value='$cf'>$cf</option>";
 				$report .= "</select>&nbsp;&nbsp;Exclusive<input onchange='highlight_touched_lines();' type='checkbox' id='exclusive'/></td></tr></table>";
-				$output = "<div style='font-family:arial;color:white;position:fixed;top:0px;left:0px;;width:100%;height:75px;background-color:#0a0a0a;'>$report</div><div style='padding-top:75px'>$output</div>";
+				$output = "<div style='font-family:arial;color:white;position:fixed;top:0px;left:0px;;width:100%;height:52;background-color:#0a0a0a;'>$report</div><div style='padding-top:52'>$output</div>";
 				if(self::$outputdir) {
 					file_put_contents(self::$outputdir."/".($visual_report_file[$file] = preg_replace("/[:\\/\\\]/",'-',$file).".cc.html"),$style.$output);
 				}
