@@ -267,12 +267,25 @@ class analyzer
 				return $token;
 			}
 	}
+	private function token_name($token)
+	{
+		if(is_array($token)) {
+			if(isset($token[0])) {
+				return token_name($token[0]);
+				}
+			else 
+				return false;
+			} else {
+				return $token;
+			}
+	}
 	public function wrap_section($line,$from)
 	{
 		$tokens = token_get_all("<?php $line");
 		$sf =0;
 		$return = '';
 		$semicolon_ended = false;
+		$start = true;
 		if(isset($from[1])) {
 			$title = join(', ',array_unique($from[1]));
 			$return = "<pre title='$title' class='pre covered'>";
@@ -284,22 +297,38 @@ class analyzer
 			$foundsc = false;
 			if($semicolon_ended) {
 				for($lh=$k;$lh<=$token_length;$lh++) {
-					if($tokens[$lh] == ';') $foundsc = true;
+					if($tokens[$lh] == ';'  ) $foundsc = true;
 					}
 				if(isset($from[$sf+1]) ) {
 					$title = join(', ',array_unique($from[$sf+1]));
-					if($foundsc) $return .= "<pre  title='$title' class='pre covered'>";
-				} elseif($foundsc) $return.="<pre class='pre'>";
+					if($foundsc) {
+					$return .= "<pre  title='$title' class='pre covered'>";
+					$start = true;
+					}
+				} elseif($foundsc) {
+				$return.="<pre class='pre'>";
+				$start = true;
+				}
 				$semicolon_ended = false;
 			}
 			$return .= htmlentities($this->token_content($t));
-			if($t == ';') {
+			if($t == ';' ) {
 				$sf++;
 				$return .= "</pre>";
 				$semicolon_ended = true;
+				$start = false;
 
+			} elseif($t == ':' ) {
+				for($temp = $k;$temp>0;$temp--) if($this->token_name($tokens[$temp]) == 'T_CASE') {
+					$sf++;
+					$return .= "</pre>";
+					$semicolon_ended = true;
+					$start = false;
+					break;
+				}
 			}
 		}
+		if($start) $return = $return."</pre>";
 		return  $return;
 	}
 	public function __destruct()
@@ -467,7 +496,8 @@ $(function() { highlight_touched_lines();} );
 			$rc=0;
 			foreach($coverages as $file=>$coverage) {
 				$coverage = number_format($coverage,2);
-				echo "<tr ".(($rc++%2==1)?"class='odd'":"")."><td>$file</td><td>$coverage %</td><td>{$actual_coverages[$file]} %</td><td><a href='{$visual_report_file[$file]}'>View Coverage</a></td></tr>";
+				$actual_coverage = number_format($actual_coverages[$file],2);
+				echo "<tr ".(($rc++%2==1)?"class='odd'":"")."><td>$file</td><td>$coverage %</td><td>$actual_coverage %</td><td><a href='{$visual_report_file[$file]}'>View Coverage</a></td></tr>";
 			}
 			echo "</table>";
 			$index_content = ob_get_clean();
@@ -738,9 +768,12 @@ class patcher
 				$this->add_tokens_to_be_replaced($this->get_next_non_comment($tokens,$tp+1),' ');
 			} elseif($token_name == 'T_CASE' || $token_name == 'T_DEFAULT') {
 				//jump over the ternary operators to get the last colon
-				if($this->search_token($tokens,$tp,'?',array(';'))) {
-				while($tmp = $this->search_token($tokens,$tp,'?',array(';'))) $tp = $tmp+1;
+				if($this->search_token($tokens,$tp,'?',array(';',':'))) {
+				echo $tp,"\n";
+				while($tmp = $this->search_token($tokens,$tp,'?',array(';',':'))) $tp = $tmp+1;
+				echo $tp,"\n";
 				if($tmp =  $this->search_token($tokens,$tp,':',array(';')))  $tp = $tmp+1;
+				echo $tp,"\n";
 				}
 				if($temp =  $this->search_token($tokens,$tp,':',array(';'))) {
 					$this->add_tokens_to_be_replaced($temp ,';');
