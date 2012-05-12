@@ -982,7 +982,7 @@ class Scenario
         }
 
         if ($exceptionText !== ''){
-            throw new \Exception($exceptionText, 0);
+            throw new TestException($exceptionText, 0);
         }
     }
 }
