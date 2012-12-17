@@ -836,7 +836,7 @@ class Mock
                     }
                 }
 
-                throw new \Exception(
+                throw new TestException(
                     $this->Text->ExpectationFailed . ' ' .
                         $this->ClassName . '->' . $expectation->MethodName . '(' . $Arguments . ') ' .
                         $this->Text->Expected . ' #' . $expectation->ExpectedCalls . ' ' .
