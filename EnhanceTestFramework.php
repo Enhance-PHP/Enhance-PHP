@@ -740,7 +740,7 @@ class Test
         try {
             $testClass->{$this->TestName}();
             $result = true;
-        } catch (TestException $e) {
+        } catch (\Exception $e) {
             $this->Message = $e->getMessage();
             $this->Line = $e->getLine();
             $this->File = pathinfo($e->getFile(), PATHINFO_BASENAME);
