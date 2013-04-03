@@ -353,6 +353,36 @@ class TextFr
     public $ScenarioWithExpectMismatch = 'Les scenarios doivent être initialisé avec le même nombre d\'appel à "with" et "expect"';
     public $LineFile = 'Ligne {0} dans le fichier {1}';
 }
+
+class TextDa
+{
+    public $FormatForTestRunTook = 'Test kørsel tog {0} sekunder';
+    public $FormatForExpectedButWas = 'Forventede {0} men var {1}';
+    public $FormatForExpectedNotButWas = 'Forventede IKKE {0} men var {1}';
+    public $FormatForExpectedContainsButWas = 'Forventede at indeholde {0} men var {1}';
+    public $FormatForExpectedNotContainsButWas = 'Forventede IKKE at indholde {0} men var {1}';
+    public $EnhanceTestFramework = 'Enhance Test Framework';
+    public $EnhanceTestFrameworkFull = 'Enhance PHP Unit Testing Framework';
+    public $TestResults = 'Test resultater';
+    public $Test = 'Test';
+    public $TestPassed = 'Test Bestået';
+    public $TestFailed = 'Test Dumpet';
+    public $Passed = 'Bestået';
+    public $Failed = 'Dumpet';
+    public $ExpectationFailed = 'Forventning fejlede';
+    public $Expected = 'Forventede';
+    public $Called = 'Kaldt';
+    public $InconclusiveOrNotImplemented = 'Usikkert resultat eller ikke implementeret';
+    public $Times = 'Gange';
+    public $MethodCoverage = 'Metode dækning';
+    public $Copyright = 'Ophavsret';
+    public $ExpectedExceptionNotThrown = 'Forventet undtagelse blev ikke kastet';
+    public $CannotCallVerifyOnStub = 'Kan ikke kalde VerifyExpectations på en stub';
+    public $ReturnsOrThrowsNotBoth = 'Du må kun kræve en enkelt returværdi (1 returns() eller 1 throws())';
+    public $ScenarioWithExpectMismatch = 'Scenario skal være initialiseret med det samme nummer af "with" og "expect" kald';
+    public $LineFile = 'Linje {0} i fil {1}';
+}
+
 class TextDe
 {
     public $FormatForTestRunTook = 'Fertig nach {0} Sekunden';
