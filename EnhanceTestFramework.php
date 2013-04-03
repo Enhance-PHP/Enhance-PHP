@@ -1818,8 +1818,9 @@ class TemplateType
 
 class Language
 {
-    const French = "Fr";
+    const French = 'Fr';
     const English = 'En';
+    const Danish = 'Da';
     const Deutsch = 'De';
     const BrazilianPortuguese = 'PtBr';
     const Spanish = 'Sp';
