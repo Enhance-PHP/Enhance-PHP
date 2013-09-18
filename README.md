@@ -19,26 +19,7 @@ updating it all the time :)
 v2.1.4
 Bug fixes
 
-v2.1.3
-TextPtBr - Brazilian Portuguese translation.
-TextFr - French translation.
-TextRo - Romanian translation.
-TextSp - Spanish translation.
-
-v2.1.2
-Line numbers for errors
-Type assertions
-Code coverage fix (for constructors)
-* Big thanks to Lewis Wright for these contributions
-
-v2.1.1
-TAP Template output
-CLI exit codes
-
-v2.1.0
-PHP namespaces added - usage updated. View the documentation on our website: http://www.enhance-php.com/
-Sample:
-\Enhance\Core::runTests();
+...
 
 ________________________________________________________________
 
@@ -50,40 +31,7 @@ v2.0.2
 When running from command line (for example within you IDE) the message "Test Passed" or "Test Failed" appears both top and bottom of the result set.
 See issue #1 - hidden files should be excluded from auto discovery on MAC OS.
 
-v2.0.1
-Improvements to auto-discovery to allow recursion to be specified and to allow directories to be excluded.
-
-v2.0.0
-Localisation and improvements to mocks. Minor bug fixes.
-
-v1.9
-Fixed auto-discovery to make it recursive, with the option for it not to be
-
-v1.8
-Fixed case sensitivity for setUp and tearDown methods as not everyone will follow normal PHP conventions
-
-v1.7
-Fixed auto-discovery bug
-
-v1.6
-Test scenarios code and tests
-
-v1.5
-Auto-detect code and tests
-
-v1.4
-EnhanceTestFixture base class to marking test classes
-
-v1.3
-Adjustments to meet PHP coding standards
-
-v1.2
-Output factory
-Output template interface
-
-v1.1
-Command Line Output
-XML Output
+...
 
 v1.0
 First official release
