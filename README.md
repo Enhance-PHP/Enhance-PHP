@@ -9,6 +9,10 @@ Unless required by applicable law or agreed to in writing, software distributed 
 http://www.enhance-php.com/
 https://github.com/Enhance-PHP/Enhance-PHP
 
+Note - this project is still active. I know you check the revision dates, but we 
+have kept Enhance lightweight and stable, which means we don't need to keep
+updating it all the time :)
+
 v2.1.4
 Bug fixes
 
