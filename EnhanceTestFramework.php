@@ -584,11 +584,11 @@ class EnhanceTestFramework
     {
         $classes = get_declared_classes();
         foreach($classes as $className) {
-            $this->AddClassIfTest($className);
+            $this->addClassIfTest($className);
         }
     }
 
-    private function AddClassIfTest($className)
+    private function addClassIfTest($className)
     {
         $parentClassName = get_parent_class($className);
         if ($parentClassName === 'Enhance\TestFixture') {
