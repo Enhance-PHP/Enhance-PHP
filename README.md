@@ -16,28 +16,3 @@ Note - this project is still active. I know you check the revision dates, but we
 have kept Enhance lightweight and stable, which means we don't need to keep
 updating it all the time :)
 
-v2.1.4
-Bug fixes
-
-...
-
-________________________________________________________________
-
-Important Note, version 2.1.0 onwards requires PHP 5.3 or above.
-Please use version 2.0.2 for older versions of PHP 5.
-________________________________________________________________
-
-v2.0.2
-When running from command line (for example within you IDE) the message "Test Passed" or "Test Failed" appears both top and bottom of the result set.
-See issue #1 - hidden files should be excluded from auto discovery on MAC OS.
-
-...
-
-v1.0
-First official release
-Assertions
-Mocks
-Stubs
-Method Coverage
-HTML Output
-
