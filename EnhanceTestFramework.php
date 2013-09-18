@@ -590,6 +590,11 @@ class EnhanceTestFramework
 
     private function addClassIfTest($className)
     {
+    	$reflectionClass = new ReflectionClass($className);
+        if ($reflectionClass->isAbstract()) {
+            return;
+        }
+    	
         $parentClassName = get_parent_class($className);
         if ($parentClassName === 'Enhance\TestFixture') {
             $instance = new $className();
