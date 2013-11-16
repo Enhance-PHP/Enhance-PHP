@@ -1581,7 +1581,7 @@ class HtmlTemplate implements iOutputTemplate
                 </article>
         
                 <footer>
-                    <p><a href="http://www.enhance-php.com/">' . $this->Text->EnhanceTestFrameworkFull . '</a> ' .
+                    <p><a href="http://https://github.com/Enhance-PHP/Enhance-PHP/">' . $this->Text->EnhanceTestFrameworkFull . '</a> ' .
             $this->Text->Copyright . ' &copy;2011 - ' . date('Y') .
             ' <a href="http://www.stevefenton.co.uk/">Steve Fenton</a>.</p>
                 </footer>
