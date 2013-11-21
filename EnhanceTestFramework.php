@@ -873,6 +873,12 @@ class Mock
             if ($Expectation->ReturnException) {
                 throw new \Exception($Expectation->ReturnValue);
             }
+            
+            $ReturnValueCount = count($Expectation->ReturnValues);
+            
+            if ($Expectation->ActualCalls - 1 < $ReturnValueCount) {
+                return $Expectation->ReturnValues[$Expectation->ActualCalls - 1];
+            }
             return $Expectation->ReturnValue;
         }
 
@@ -1007,7 +1013,8 @@ class Expectation
         $this->ExpectArguments = false;
         $this->ExpectTimes = false;
         $this->ReturnException = false;
-        $this->ReturnValue = null;
+        $this->ReturnValue = null; // For backwards compatibility
+        $this->ReturnValues = array();
         $textFactory = new TextFactory();
         $this->Text = $textFactory->getLanguageText($language);
     }
@@ -1042,10 +1049,8 @@ class Expectation
 
     public function returns($returnValue)
     {
-        if ($this->ReturnValue !== null) {
-            throw new \Exception($this->Text->ReturnsOrThrowsNotBoth);
-        }
         $this->ReturnValue = $returnValue;
+        $this->ReturnValues[] = $returnValue;
         return $this;
     }
 

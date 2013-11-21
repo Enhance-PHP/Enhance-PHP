@@ -13,6 +13,23 @@ class MockTestFixture extends \Enhance\TestFixture
         $mock->verifyExpectations();
     }
     
+    public function createMockWithFluentChainOfReturnValuesExpectCorrectReturnValues() {
+        /** @var IMockExample $mock */
+        $mock = \Enhance\MockFactory::createMock('ExampleClass');
+        $mock->addExpectation(\Enhance\Expect::method('doSomething')->with('hello', 3, 'world')->returns('Some Value')->returns('Second Value')->returns('Third Value')->times(3));
+
+        $result = $mock->doSomething('hello', 3, 'world');
+        \Enhance\Assert::areIdentical('Some Value', $result);
+        
+        $result = $mock->doSomething('hello', 3, 'world');
+        \Enhance\assert::areIdentical('Second Value', $result);
+         
+        $result = $mock->doSomething('hello', 3, 'world');
+        \Enhance\assert::areIdentical('Third Value', $result);
+         
+        $mock->verifyExpectations();
+    }
+    
     public function createMockWithNoRequiredArgumentsAndOneTimeExpectReturnValueAndVerifies()
     {
         /** @var IMockExample $mock */
@@ -63,7 +80,8 @@ class MockTestFixture extends \Enhance\TestFixture
         $verifyFailed = false;
         try {
             $mock->verifyExpectations();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $verifyFailed = true;
         }
         
@@ -81,7 +99,8 @@ class MockTestFixture extends \Enhance\TestFixture
         $verifyFailed = false;
         try {
             $mock->verifyExpectations();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $verifyFailed = true;
         }
         
@@ -99,7 +118,8 @@ class MockTestFixture extends \Enhance\TestFixture
         $verifyFailed = false;
         try {
             $mock->verifyExpectations();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $verifyFailed = true;
         }
         
@@ -115,7 +135,8 @@ class MockTestFixture extends \Enhance\TestFixture
         $verifyFailed = false;
         try {
             $mock->doSomething('hello', 3, 'world');
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $verifyFailed = true;
         }
         
@@ -131,7 +152,8 @@ class MockTestFixture extends \Enhance\TestFixture
 
         try {
             $mock->doSomething();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $verifyFailed = true;
         }
 
