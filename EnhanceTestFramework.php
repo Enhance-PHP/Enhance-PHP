@@ -911,16 +911,21 @@ class Mock
             
             $ReturnValueCount = count($Expectation->ReturnValues);
             
+            if ($ReturnValueCount === 0) {
+                return null;
+            }
+            
             if ($Expectation->ActualCalls - 1 < $ReturnValueCount) {
                 return $Expectation->ReturnValues[$Expectation->ActualCalls - 1];
+            } else {
+                return $Expectation->ReturnValues[$ReturnValueCount - 1];
             }
-            return $Expectation->ReturnValue;
         }
 
         if ($this->IsMock)  {
             throw new \Exception(
                 $this->Text->ExpectationFailed . ' ' .
-                    $this->ClassName . '->' . $methodName . '(' . $args . ') ' .
+                    $this->ClassName . '->' . $methodName . '(' . implode(', ', $args) . ') ' .
                     $this->Text->Expected . ' #0 ' .
                     $this->Text->Called . ' #1', 0);
         }
@@ -1048,7 +1053,6 @@ class Expectation
         $this->ExpectArguments = false;
         $this->ExpectTimes = false;
         $this->ReturnException = false;
-        $this->ReturnValue = null; // For backwards compatibility
         $this->ReturnValues = array();
         $textFactory = new TextFactory();
         $this->Text = $textFactory->getLanguageText($language);
@@ -1084,17 +1088,13 @@ class Expectation
 
     public function returns($returnValue)
     {
-        $this->ReturnValue = $returnValue;
         $this->ReturnValues[] = $returnValue;
         return $this;
     }
 
     public function throws($errorMessage)
     {
-        if ($this->ReturnValue !== null) {
-            throw new \Exception($this->Text->ReturnsOrThrowsNotBoth);
-        }
-        $this->ReturnValue = $errorMessage;
+        $this->ReturnValues[] = $errorMessage;
         $this->ReturnException = true;
         return $this;
     }
@@ -1431,6 +1431,8 @@ class Assertions
             return get_class($mixed);
         } else if (is_bool($mixed)){
             return $mixed ? 'true' : 'false';
+        } else if (is_array($mixed)) {
+              return implode(', ', $mixed);
         } else {
             return (string) $mixed;
         }

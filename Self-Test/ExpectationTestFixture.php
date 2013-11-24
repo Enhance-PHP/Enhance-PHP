@@ -9,7 +9,7 @@ class ExpectationTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isTrue($target->ExpectTimes);
         \Enhance\Assert::areIdentical('A', $target->MethodArguments[0]);
         \Enhance\Assert::areIdentical('B', $target->MethodArguments[1]);
-        \Enhance\Assert::areIdentical('TestC', $target->ReturnValue);
+        \Enhance\Assert::areIdentical('TestC', $target->ReturnValues[0]);
         \Enhance\Assert::areIdentical(1, $target->ExpectedCalls);
     }
     
@@ -21,7 +21,7 @@ class ExpectationTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isFalse($target->ExpectTimes);
         \Enhance\Assert::areIdentical('A', $target->MethodArguments[0]);
         \Enhance\Assert::areIdentical('B', $target->MethodArguments[1]);
-        \Enhance\Assert::areIdentical('TestC', $target->ReturnValue);
+        \Enhance\Assert::areIdentical('TestC', $target->ReturnValues[0]);
         \Enhance\Assert::areIdentical(-1, $target->ExpectedCalls);
     }
     
@@ -31,7 +31,7 @@ class ExpectationTestFixture extends \Enhance\TestFixture
         
         \Enhance\Assert::isFalse($target->ExpectArguments);
         \Enhance\Assert::isTrue($target->ExpectTimes);
-        \Enhance\Assert::areIdentical('TestC', $target->ReturnValue);
+        \Enhance\Assert::areIdentical('TestC', $target->ReturnValues[0]);
         \Enhance\Assert::areIdentical(1, $target->ExpectedCalls);
     }
     
