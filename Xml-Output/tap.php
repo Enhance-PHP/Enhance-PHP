@@ -2,7 +2,7 @@
 namespace XmlOutput;
 
 // Example XML output
-include('../EnhanceTestFramework.php');
+include_once('../EnhanceTestFramework.php');
 
 class ExampleClass
 {

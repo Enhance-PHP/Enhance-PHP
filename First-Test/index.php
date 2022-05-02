@@ -1,6 +1,6 @@
 <?php
 // Include the test framework
-include('../EnhanceTestFramework.php');
+include_once('../EnhanceTestFramework.php');
 // Set the language
 \Enhance\Core::setLanguage(\Enhance\Language::BrazilianPortuguese);
 // Find the tests - '.' is the current folder

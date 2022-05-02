@@ -2,7 +2,7 @@
 namespace TestDriven;
 
 // Example built using TDD
-include('../EnhanceTestFramework.php');
+include_once('../EnhanceTestFramework.php');
 
 class ExampleClass 
 {
