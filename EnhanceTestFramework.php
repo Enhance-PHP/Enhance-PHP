@@ -599,7 +599,7 @@ class EnhanceTestFramework
         if ($parentClassName === 'Enhance\TestFixture') {
             $instance = new $className();
             $this->addFixture($instance);
-        } else {
+        } elseif (is_string($parentClassName)) {
             $ancestorClassName = get_parent_class($parentClassName);
             if ($ancestorClassName === 'Enhance\TestFixture') {
                 $instance = new $className();
