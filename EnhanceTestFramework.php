@@ -11,7 +11,7 @@ class Core
     private static $Instance;
     private static $Language = Language::English;
 
-    /** @return Language */
+    /** @return string */
     public static function getLanguage()
     {
         return self::$Language;
@@ -1392,7 +1392,7 @@ class Assertions
             throw new TestException(
                 str_replace('{0}', $expected,
                     str_replace('{1}', $actualType, $this->Text->FormatForExpectedButWas)), 0);
-        };
+        }
     }
 
     public function isNotInstanceOfType($expected, $actual)
@@ -1402,7 +1402,7 @@ class Assertions
             throw new TestException(
                 str_replace('{0}', $expected,
                     str_replace('{1}', $actualType, $this->Text->FormatForExpectedNotButWas)), 0);
-        };
+        }
     }
 
     public function throws($class, $methodName, $args = null)
@@ -1716,7 +1716,7 @@ class CliTemplate implements iOutputTemplate
             $resultMessage = $text->TestFailed . $this->CR;
         }
 
-        $message = $this->CR .
+        return $this->CR .
             $resultMessage .
             $this->CR .
             $this->getBadResults($errors) .
@@ -1726,8 +1726,6 @@ class CliTemplate implements iOutputTemplate
             $this->CR .
             $resultMessage .
             str_replace('{0}', $duration, $text->FormatForTestRunTook) . $this->CR;
-
-        return $message;
     }
 
     public function getBadResults($errors)
@@ -1804,16 +1802,12 @@ class TemplateFactory
         switch ($type) {
             case TemplateType::Xml:
                 return new XmlTemplate($language);
-                break;
             case TemplateType::Html:
                 return new HtmlTemplate($language);
-                break;
             case TemplateType::Cli:
                 return new CliTemplate($language);
-                break;
             case TemplateType::Tap:
                 return new TapTemplate($language);
-                break;
         }
 
         return new HtmlTemplate($language);
@@ -1843,4 +1837,3 @@ class Localisation
 {
     public $Language = Language::English;
 }
-?>
