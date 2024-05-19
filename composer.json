@@ -5,7 +5,9 @@
     "keywords": ["php", "testing", "unit", "mocks", "stubs"],
     "type": "library",
     "license": "Apache-2.0",
-    "autoload-dev": {
-        "files": ["EnhanceTestFramework.php"]
+    "autoload": {
+        "files": [
+            "EnhanceTestFramework.php"
+        ]
     }
 }
