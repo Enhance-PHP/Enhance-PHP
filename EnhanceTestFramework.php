@@ -599,7 +599,7 @@ class EnhanceTestFramework
         if ($parentClassName === 'Enhance\TestFixture') {
             $instance = new $className();
             $this->addFixture($instance);
-        } else {
+        } elseif (is_string($parentClassName)) {
             $ancestorClassName = get_parent_class($parentClassName);
             if ($ancestorClassName === 'Enhance\TestFixture') {
                 $instance = new $className();
@@ -730,10 +730,10 @@ class Test
     {
         $className = get_class($class);
         $this->ClassName = $className;
-        $this->TestMethod = array($className, $method);
-        $this->SetUpMethod = array($className, 'setUp');
-        $this->TearDownMethod = array($className, 'tearDown');
-        $this->TestName = $method;
+        $this->TestMethod = $method;
+        $this->SetUpMethod = 'setUp';
+        $this->TearDownMethod = 'tearDown';
+        $this->TestName = $method; // redundant
     }
 
     public function getTestName()
@@ -767,13 +767,13 @@ class Test
         $testClass = new $this->ClassName();
 
         try {
-            if (is_callable($this->SetUpMethod)) {
-                $testClass->setUp();
+            if (method_exists($testClass, $this->SetUpMethod)) {
+                $testClass->{$this->SetUpMethod}();
             }
         } catch (\Exception $e) { }
 
         try {
-            $testClass->{$this->TestName}();
+            $testClass->{$this->TestMethod}();
             $result = true;
         } catch (\Exception $e) {
             $this->Message = $e->getMessage();
@@ -783,8 +783,8 @@ class Test
         }
 
         try {
-            if (is_callable($this->TearDownMethod)) {
-                $testClass->tearDown();
+            if (method_exists($testClass, $this->TearDownMethod)) {
+                $testClass->{$this->TearDownMethod}();
             }
         } catch (\Exception $e) { }
 
