@@ -1038,6 +1038,7 @@ class Expectation
     public $MethodName;
     public $MethodArguments;
     public $ReturnValue;
+    public $ReturnValues;
     public $ReturnException;
     public $ExpectedCalls;
     public $ActualCalls;
@@ -1053,6 +1054,7 @@ class Expectation
         $this->ExpectArguments = false;
         $this->ExpectTimes = false;
         $this->ReturnException = false;
+        $this->ReturnValue = '';
         $this->ReturnValues = array();
         $textFactory = new TextFactory();
         $this->Text = $textFactory->getLanguageText($language);
