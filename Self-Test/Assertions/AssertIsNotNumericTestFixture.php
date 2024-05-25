@@ -47,4 +47,3 @@ class AssertIsNotNumericTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isTrue($verifyFailed);
     }
 }
-?>

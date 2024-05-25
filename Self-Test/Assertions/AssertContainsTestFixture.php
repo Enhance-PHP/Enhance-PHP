@@ -35,4 +35,3 @@ class AssertContainsTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isTrue($verifyFailed);
     }
 }
-?>

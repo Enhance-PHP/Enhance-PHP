@@ -28,4 +28,3 @@ class ExampleClassTests extends \Enhance\TestFixture
 }
 
 Enhance\Core::runTests();
-?>

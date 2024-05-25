@@ -22,4 +22,3 @@ class ExampleAnotherClass
         return $x;
     }
 }
-?>

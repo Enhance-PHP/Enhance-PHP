@@ -25,4 +25,3 @@ class AssertIsNullTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isTrue($verifyFailed);
     }
 }
-?>

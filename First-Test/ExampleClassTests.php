@@ -23,4 +23,3 @@ class ExampleClassTests extends \Enhance\TestFixture
                 \Enhance\Assert::areIdentical(6, $result);
         }
 }
-?>

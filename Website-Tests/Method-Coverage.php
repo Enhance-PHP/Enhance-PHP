@@ -15,9 +15,7 @@ class ExampleClassTests extends \Enhance\TestFixture
                 \Enhance\Assert::areIdentical(6, $result);
         }
 }
-?>
 
-<?php
 class ExampleClassTests  extends \Enhance\TestFixture
 {
         public function addTwoNumbersWith3and2Expect5Test()
@@ -34,8 +32,5 @@ class ExampleClassTests  extends \Enhance\TestFixture
                 \Enhance\Assert::areIdentical(6, $result);
         }
 }
-?>
 
-<?php
 $target = \Enhance\Core::getCodeCoverageWrapper('ExampleClassWithConstructor', array(1, 'ArgumentTwo'));
-?>

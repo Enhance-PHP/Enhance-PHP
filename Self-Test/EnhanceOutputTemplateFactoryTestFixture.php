@@ -22,4 +22,3 @@ class EnhanceOutputTemplateFactoryTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::areIdentical(\Enhance\TemplateType::Cli, $output->getTemplateType());
     }    
 }
-?>

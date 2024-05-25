@@ -38,5 +38,3 @@ class ExampleTestFixture extends \Enhance\TestFixture
 }
 
 \Enhance\Core::runTests();
-?>
-

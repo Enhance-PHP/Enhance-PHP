@@ -7,4 +7,3 @@ include_once('../EnhanceTestFramework.php');
  \Enhance\Core::discoverTests('.');
 // Run the tests
 \Enhance\Core::runTests();
-?>

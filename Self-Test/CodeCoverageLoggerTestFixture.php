@@ -42,4 +42,3 @@ class CodeCoverageLoggerTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::areIdentical(8, $result);
     }
 }
-?>
