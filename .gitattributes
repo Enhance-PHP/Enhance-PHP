@@ -1,0 +1,6 @@
+# Auto detect text files and perform LF normalization
+*         text=auto
+
+# PHP files
+*.php     text eol=lf diff=php
+*.zip    binary
