@@ -8,4 +8,3 @@ class CreateOutputTemplateTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::areIdentical(\Enhance\TemplateType::Xml, $output->getTemplateType());
     }    
 }
-?>

@@ -8,4 +8,3 @@ class ExampleClass
         return $a + $b;
     }
 }
-?>

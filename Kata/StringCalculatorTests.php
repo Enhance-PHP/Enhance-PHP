@@ -15,4 +15,3 @@ class StringCalculatorTests extends \Enhance\TestFixture
 
         }
 }
-?>

@@ -63,4 +63,3 @@ class AssertIsBoolTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isTrue($verifyFailed);
     }
 }
-?>

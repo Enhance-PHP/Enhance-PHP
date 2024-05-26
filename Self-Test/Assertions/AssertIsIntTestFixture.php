@@ -36,4 +36,3 @@ class AssertIsIntTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isTrue($verifyFailed);
     }
 }
-?>

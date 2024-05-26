@@ -44,4 +44,3 @@ class AssertIsNotArrayTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isTrue($verifyFailed);
     }
 }
-?>

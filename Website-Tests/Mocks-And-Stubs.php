@@ -15,4 +15,3 @@ class ExampleDependencyClassTests extends \Enhance\TestFixture
                 $mock->verifyExpectations();
         }
 }
-?>

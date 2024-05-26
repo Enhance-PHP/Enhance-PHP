@@ -47,4 +47,3 @@ class AssertNotContainsTestFixture extends \Enhance\TestFixture
         $this->target->notContains('Test', 'Some Other String');
     }
 }
-?>

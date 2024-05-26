@@ -26,4 +26,3 @@ class AssertIsObjectTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isTrue($verifyFailed);
     }
 }
-?>

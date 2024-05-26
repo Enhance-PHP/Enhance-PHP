@@ -32,4 +32,3 @@ class AssertIsInstanceOfTypeTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isTrue($verifyFailed);
     }
 }
-?>
