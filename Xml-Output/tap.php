@@ -38,5 +38,3 @@ class ExampleClassTests extends \Enhance\TestFixture
 }
 
 \Enhance\Core::runTests(\Enhance\TemplateType::Tap);
-?>
-

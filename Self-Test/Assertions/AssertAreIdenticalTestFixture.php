@@ -62,4 +62,3 @@ class AssertAreIdenticalTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isTrue($verifyFailed);
     }
 }
-?>

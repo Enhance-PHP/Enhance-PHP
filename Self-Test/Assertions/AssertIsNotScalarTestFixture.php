@@ -54,4 +54,3 @@ class AssertIsNotScalarTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isTrue($verifyFailed);
     }
 }
-?>

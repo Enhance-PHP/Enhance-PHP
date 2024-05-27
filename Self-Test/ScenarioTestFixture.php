@@ -84,4 +84,3 @@ class ScenarioTestFixture extends \Enhance\TestFixture
 		}
 	}
 }
-?>

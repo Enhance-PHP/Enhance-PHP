@@ -20,4 +20,3 @@ class AssertInconclusiveTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isTrue($verifyFailed);
     }
 }
-?>

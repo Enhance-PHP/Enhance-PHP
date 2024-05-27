@@ -12,4 +12,3 @@ include_once('../EnhanceTestFramework.php');
 \Enhance\Core::discoverTests('.', true, array('Exclusion'));
 // Run the tests
 \Enhance\Core::runTests();
-?>

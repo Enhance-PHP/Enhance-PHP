@@ -72,4 +72,3 @@ class AssertThrowsTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isTrue($verifyFailed);
     }
 }
-?>

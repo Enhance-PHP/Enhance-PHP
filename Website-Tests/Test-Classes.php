@@ -5,9 +5,7 @@ include_once('../EnhanceTestFramework.php');
 \Enhance\Core::discoverTests('.');
 // Run the tests
 \Enhance\Core::runTests();
-?>
 
-<?php
 class ExampleClassTests extends \Enhance\TestFixture
 {
         private $target;
@@ -29,5 +27,3 @@ class ExampleClassTests extends \Enhance\TestFixture
                 \Enhance\Assert::areIdentical(6, $result);
         }
 }
-?>
-

@@ -50,5 +50,3 @@ class ExampleClassTests extends \Enhance\TestFixture
 
 // Run the tests
 \Enhance\Core::runTests();
-?>
-

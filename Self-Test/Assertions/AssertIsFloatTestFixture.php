@@ -36,4 +36,3 @@ class AssertIsFloatTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isTrue($verifyFailed);
     }
 }
-?>

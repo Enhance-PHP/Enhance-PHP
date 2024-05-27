@@ -246,4 +246,3 @@ interface IMockExample
     function anotherMethod();
     function callNotExpectedMethod();
 }
-?>

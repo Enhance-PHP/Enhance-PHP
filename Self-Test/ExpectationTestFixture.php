@@ -44,4 +44,3 @@ class ExpectationTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::areIdentical(1, $target->ExpectedCalls);
     }
 }
-?>
