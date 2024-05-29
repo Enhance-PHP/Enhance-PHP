@@ -114,7 +114,7 @@ class Assert
     /** @var Assertions $EnhanceAssertions */
     private static $EnhanceAssertions;
 
-    private static function GetEnhanceAssertionsInstance()
+    private static function getEnhanceAssertionsInstance()
     {
         if(self::$EnhanceAssertions === null) {
             self::$EnhanceAssertions = new Assertions(Core::getLanguage());
@@ -124,157 +124,157 @@ class Assert
 
     public static function areIdentical($expected, $actual)
     {
-        self::GetEnhanceAssertionsInstance()->areIdentical($expected, $actual);
+        self::getEnhanceAssertionsInstance()->areIdentical($expected, $actual);
     }
 
     public static function areNotIdentical($expected, $actual)
     {
-        self::GetEnhanceAssertionsInstance()->areNotIdentical($expected, $actual);
+        self::getEnhanceAssertionsInstance()->areNotIdentical($expected, $actual);
     }
 
     public static function isTrue($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isTrue($actual);
+        self::getEnhanceAssertionsInstance()->isTrue($actual);
     }
 
     public static function isFalse($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isFalse($actual);
+        self::getEnhanceAssertionsInstance()->isFalse($actual);
     }
 
     public static function isNull($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isNull($actual);
+        self::getEnhanceAssertionsInstance()->isNull($actual);
     }
 
     public static function isNotNull($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isNotNull($actual);
+        self::getEnhanceAssertionsInstance()->isNotNull($actual);
     }
 
     public static function isArray($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isArray($actual);
+        self::getEnhanceAssertionsInstance()->isArray($actual);
     }
 
     public static function isNotArray($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isNotArray($actual);
+        self::getEnhanceAssertionsInstance()->isNotArray($actual);
     }
 
     public static function isBool($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isBool($actual);
+        self::getEnhanceAssertionsInstance()->isBool($actual);
     }
 
     public static function isNotBool($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isNotBool($actual);
+        self::getEnhanceAssertionsInstance()->isNotBool($actual);
     }
 
     public static function isFloat($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isFloat($actual);
+        self::getEnhanceAssertionsInstance()->isFloat($actual);
     }
 
     public static function isNotFloat($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isNotFloat($actual);
+        self::getEnhanceAssertionsInstance()->isNotFloat($actual);
     }
 
     public static function isInt($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isInt($actual);
+        self::getEnhanceAssertionsInstance()->isInt($actual);
     }
 
     public static function isNotInt($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isNotInt($actual);
+        self::getEnhanceAssertionsInstance()->isNotInt($actual);
     }
 
     public static function isNumeric($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isNumeric($actual);
+        self::getEnhanceAssertionsInstance()->isNumeric($actual);
     }
 
     public static function isNotNumeric($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isNotNumeric($actual);
+        self::getEnhanceAssertionsInstance()->isNotNumeric($actual);
     }
 
     public static function isObject($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isObject($actual);
+        self::getEnhanceAssertionsInstance()->isObject($actual);
     }
 
     public static function isNotObject($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isNotObject($actual);
+        self::getEnhanceAssertionsInstance()->isNotObject($actual);
     }
 
     public static function isResource($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isResource($actual);
+        self::getEnhanceAssertionsInstance()->isResource($actual);
     }
 
     public static function isNotResource($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isNotResource($actual);
+        self::getEnhanceAssertionsInstance()->isNotResource($actual);
     }
 
     public static function isScalar($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isScalar($actual);
+        self::getEnhanceAssertionsInstance()->isScalar($actual);
     }
 
     public static function isNotScalar($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isNotScalar($actual);
+        self::getEnhanceAssertionsInstance()->isNotScalar($actual);
     }
 
     public static function isString($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isString($actual);
+        self::getEnhanceAssertionsInstance()->isString($actual);
     }
 
     public static function isNotString($actual)
     {
-        self::GetEnhanceAssertionsInstance()->isNotString($actual);
+        self::getEnhanceAssertionsInstance()->isNotString($actual);
     }
 
     public static function contains($expected, $actual)
     {
-        self::GetEnhanceAssertionsInstance()->contains($expected, $actual);
+        self::getEnhanceAssertionsInstance()->contains($expected, $actual);
     }
 
     public static function notContains($expected, $actual)
     {
-        self::GetEnhanceAssertionsInstance()->notContains($expected, $actual);
+        self::getEnhanceAssertionsInstance()->notContains($expected, $actual);
     }
 
     public static function fail()
     {
-        self::GetEnhanceAssertionsInstance()->fail();
+        self::getEnhanceAssertionsInstance()->fail();
     }
 
     public static function inconclusive()
     {
-        self::GetEnhanceAssertionsInstance()->inconclusive();
+        self::getEnhanceAssertionsInstance()->inconclusive();
     }
 
     public static function isInstanceOfType($expected, $actual)
     {
-        self::GetEnhanceAssertionsInstance()->isInstanceOfType($expected, $actual);
+        self::getEnhanceAssertionsInstance()->isInstanceOfType($expected, $actual);
     }
 
     public static function isNotInstanceOfType($expected, $actual)
     {
-        self::GetEnhanceAssertionsInstance()->isNotInstanceOfType($expected, $actual);
+        self::getEnhanceAssertionsInstance()->isNotInstanceOfType($expected, $actual);
     }
 
     public static function throws($class, $methodName, $args = null)
     {
-        self::GetEnhanceAssertionsInstance()->throws($class, $methodName, $args);
+        self::getEnhanceAssertionsInstance()->throws($class, $methodName, $args);
     }
 }
 
