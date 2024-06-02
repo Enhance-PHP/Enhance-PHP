@@ -41,8 +41,8 @@ jobs:
       - name: Run Kata Example
         run: cd Kata && php index.php
 
-      - name: Run tempo Example
-        run: cd tempo && php index.php
+      - name: Run Tempo Example
+        run: cd Tempo && php index.php
 
       - name: Run Test-Driven Example
         run: cd Test-Driven && php index.php
