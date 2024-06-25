@@ -4,9 +4,12 @@ A unit testing framework with mocks and stubs. Built for PHP, in PHP!
 
 Quick Start: Just add `EnhanceTestFramework.php` and you are ready to go. 
 
-[Check out the documentation](https://github.com/Enhance-PHP/Enhance-PHP/wiki) for more: 
+- [Documentation](https://github.com/Enhance-PHP/Enhance-PHP/wiki)
+- [View the changelog](https://github.com/Enhance-PHP/Enhance-PHP/blob/main/CHANGELOG.md)
 
 ## Supported PHP Versions
+
+We track [officially supported PHP versions](https://www.php.net/supported-versions.php).
 
 - PHP 8.4 nightly
 - PHP 8.3
